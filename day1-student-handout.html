@@ -1,0 +1,2402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 1 · Student Handout — Workspace Data Ops & Work OS Setup</title>
+<style>
+:root{
+  --bg:#F5F3EE;
+  --surface:#FFFFFF;
+  --surface-2:#EDEAE3;
+  --ink:#1A1824;
+  --ink-2:#4A4760;
+  --ink-muted:#8E8C9A;
+  --navy:#1D3557;
+  --navy-light:#2A4A73;
+  --accent:#C74B2C;
+  --green:#2A7251;
+  --disc-blue:#1A56A0;
+  --disc-blue-bg:#EEF4FB;
+  --border:#DDD9D0;
+  --bad:#8B2635;
+  --bad-bg:#FFF5F5;
+  --bad-border:#EAABAB;
+  --good-bg:#F1FAF5;
+  --good-border:#8EC9A8;
+  --sh:0 1px 3px rgba(0,0,0,.05),0 4px 16px rgba(0,0,0,.04);
+  --sh-md:0 2px 8px rgba(0,0,0,.07),0 10px 32px rgba(0,0,0,.06);
+  --r:10px;
+  --rl:16px;
+  --t:all .2s ease;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+  font-size:15px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── STICKY PROGRESS BAR ── */
+.progress-bar{
+  position:fixed;top:0;left:0;right:0;z-index:300;
+  height:3px;background:var(--surface-2);
+}
+.progress-fill{
+  height:100%;width:0%;
+  background:linear-gradient(90deg,var(--accent),var(--navy));
+  transition:width .2s ease;
+}
+
+/* ── TOP NAV ── */
+.topnav{
+  position:fixed;top:3px;left:0;right:0;z-index:200;
+  height:48px;background:rgba(26,24,36,.94);
+  backdrop-filter:blur(12px);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;border-bottom:1px solid rgba(255,255,255,.05);
+}
+.topnav-brand{
+  font-size:11px;letter-spacing:.13em;text-transform:uppercase;
+  color:rgba(255,255,255,.45);white-space:nowrap;
+}
+.topnav-brand strong{color:rgba(255,255,255,.75);font-weight:600;}
+.topnav-pill{
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  font-weight:700;color:rgba(255,255,255,.38);
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:100px;padding:4px 12px;
+}
+
+/* ── LAYOUT ── */
+.page-section{padding:72px 24px 80px;scroll-margin-top:60px;}
+.wrap{max-width:960px;margin:0 auto;}
+.wrap-sm{max-width:720px;margin:0 auto;}
+.sec-warm{background:var(--bg);}
+.sec-white{background:var(--surface);}
+.sec-dark{background:var(--navy);}
+
+/* ── SECTION LABEL ── */
+.sec-label{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  font-weight:700;color:var(--ink-muted);margin-bottom:18px;
+}
+.sec-num{
+  width:22px;height:22px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;color:#fff;flex-shrink:0;
+}
+
+/* ── TYPOGRAPHY ── */
+.section-title{
+  font-family:Georgia,'Times New Roman',serif;
+  font-size:clamp(22px,3.5vw,38px);
+  font-weight:normal;color:var(--ink);
+  line-height:1.2;letter-spacing:-.015em;margin-bottom:12px;
+}
+.section-sub{
+  font-size:clamp(14px,1.8vw,16px);
+  color:var(--ink-2);line-height:1.6;margin-bottom:28px;
+  max-width:640px;
+}
+h3.card-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+p.card-body{font-size:13px;color:var(--ink-2);line-height:1.55;margin:0;}
+
+/* ── CARD ── */
+.card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);padding:18px 20px;
+  box-shadow:var(--sh);
+}
+.card.accent-top { border-top:3px solid var(--accent); }
+.card.navy-top   { border-top:3px solid var(--navy); }
+.card.green-top  { border-top:3px solid var(--green); }
+.card.blue-top   { border-top:3px solid var(--disc-blue); }
+
+/* ── GRID ── */
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:20px 0;}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:20px 0;}
+.grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:20px 0;}
+
+/* ── CALLOUT ── */
+.callout{
+  border-radius:var(--r);padding:16px 20px;margin:20px 0;
+  font-size:14px;line-height:1.55;
+}
+.callout.navy{ background:var(--navy);color:#fff; }
+.callout.green{ background:rgba(42,114,81,.09);border:1px solid var(--good-border);color:var(--green); }
+.callout.red{ background:var(--bad-bg);border:1px solid var(--bad-border);color:var(--bad); }
+.callout.blue{ background:var(--disc-blue-bg);border:1px solid rgba(26,86,160,.2);color:var(--disc-blue); }
+.callout.warm{ background:rgba(199,75,44,.07);border:1px solid rgba(199,75,44,.18);color:var(--accent); }
+.callout strong{font-weight:700;}
+
+/* ── TAG ── */
+.tag{
+  display:inline-block;font-size:10px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  border-radius:4px;padding:2px 8px;
+}
+.tag.navy  { background:rgba(29,53,87,.1);color:var(--navy); }
+.tag.green { background:rgba(42,114,81,.1);color:var(--green); }
+.tag.red   { background:var(--bad-bg);color:var(--bad);border:1px solid var(--bad-border); }
+.tag.blue  { background:var(--disc-blue-bg);color:var(--disc-blue); }
+.tag.accent{ background:rgba(199,75,44,.09);color:var(--accent); }
+.tag.muted { background:var(--surface-2);color:var(--ink-muted); }
+
+/* ── HERO ── */
+#hero{
+  background:var(--navy);
+  padding:96px 24px 72px;
+  position:relative;overflow:hidden;
+}
+#hero::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 70% at 10% 60%,rgba(199,75,44,.2) 0%,transparent 65%),
+    radial-gradient(ellipse 50% 60% at 90% 15%,rgba(42,114,81,.12) 0%,transparent 55%),
+    radial-gradient(ellipse 80% 40% at 50% 100%,rgba(0,0,0,.25) 0%,transparent 60%);
+}
+.hero-inner{position:relative;z-index:1;}
+.hero-eyebrow{
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  font-weight:700;color:rgba(255,255,255,.38);margin-bottom:16px;
+  display:flex;align-items:center;gap:10px;
+}
+.hero-eyebrow::after{content:'';display:block;width:32px;height:1px;background:rgba(255,255,255,.2);}
+.hero-title{
+  font-family:Georgia,'Times New Roman',serif;
+  font-size:clamp(28px,5vw,54px);
+  font-weight:normal;color:#fff;
+  line-height:1.12;letter-spacing:-.02em;
+  margin-bottom:14px;max-width:680px;
+}
+.hero-sub{
+  font-size:clamp(14px,1.8vw,18px);
+  color:rgba(255,255,255,.55);max-width:520px;
+  line-height:1.6;margin-bottom:36px;
+}
+.hero-badges{display:flex;gap:8px;flex-wrap:wrap;}
+.hero-badge{
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  font-weight:700;color:rgba(255,255,255,.5);
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:100px;padding:5px 14px;
+}
+
+/* ── ROADMAP ── */
+.roadmap-wrap{margin:28px 0;}
+.roadmap-row{
+  display:flex;align-items:stretch;gap:0;
+  overflow-x:auto;padding-bottom:4px;
+}
+.roadmap-item{
+  flex:1;min-width:90px;cursor:pointer;
+  border:1px solid var(--border);
+  border-right:none;
+  background:var(--surface);
+  padding:12px 10px 10px;
+  text-align:center;
+  transition:var(--t);
+  position:relative;
+}
+.roadmap-item:first-child{border-radius:var(--r) 0 0 var(--r);}
+.roadmap-item:last-child{border-right:1px solid var(--border);border-radius:0 var(--r) var(--r) 0;}
+.roadmap-item:hover,.roadmap-item.active{background:var(--navy);border-color:var(--navy);}
+.roadmap-item:hover .rm-num,.roadmap-item.active .rm-num{color:rgba(255,255,255,.4);}
+.roadmap-item:hover .rm-name,.roadmap-item.active .rm-name{color:#fff;}
+.rm-num{font-size:10px;font-weight:700;color:var(--ink-muted);letter-spacing:.08em;margin-bottom:4px;}
+.rm-name{font-size:11px;font-weight:700;color:var(--ink);line-height:1.2;}
+.roadmap-preview{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);padding:16px 20px;
+  margin-top:10px;min-height:60px;
+  font-size:13.5px;color:var(--ink-2);line-height:1.55;
+  display:none;
+}
+.roadmap-preview.visible{display:block;}
+.roadmap-preview strong{color:var(--navy);}
+
+/* ── NOT/YES ORIENTATION ── */
+.orientation-grid{
+  display:grid;grid-template-columns:1fr auto 1fr;
+  gap:16px;align-items:stretch;margin:24px 0;
+}
+.orient-col{border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);}
+.orient-head{padding:10px 16px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;}
+.orient-head.not{background:var(--bad-bg);color:var(--bad);border-bottom:1px solid var(--bad-border);}
+.orient-head.yes{background:rgba(42,114,81,.08);color:var(--green);border-bottom:1px solid var(--good-border);}
+.orient-body{background:var(--surface);padding:4px 0;}
+.orient-body li{
+  list-style:none;padding:8px 16px;border-bottom:1px solid var(--border);
+  font-size:13.5px;color:var(--ink-2);line-height:1.4;
+}
+.orient-body li:last-child{border-bottom:none;}
+.orient-divider{
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;color:var(--ink-muted);font-weight:300;
+}
+
+/* ── FIELD CARDS ── */
+.field-strip{
+  display:flex;gap:8px;flex-wrap:wrap;margin:16px 0;
+}
+.field-pill{
+  padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;
+  cursor:pointer;transition:var(--t);border:1.5px solid var(--border);
+  background:var(--surface);color:var(--ink);
+  display:flex;flex-direction:column;align-items:flex-start;gap:3px;
+  min-width:120px;
+}
+.field-pill:hover,.field-pill.open{border-color:var(--navy);background:var(--navy);color:#fff;}
+.field-pill:hover .fp-type,.field-pill.open .fp-type{color:rgba(255,255,255,.55);}
+.fp-name{font-size:13px;font-weight:700;}
+.fp-type{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted);}
+.field-reveal{
+  display:none;margin:8px 0 0;padding:12px 16px;
+  background:rgba(29,53,87,.06);border-radius:var(--r);
+  font-size:13px;color:var(--ink-2);line-height:1.55;
+  border:1px solid rgba(29,53,87,.1);
+}
+.field-pill.open + .field-reveal{display:block;}
+
+/* ── FV BLOCK ── */
+.fv-row{
+  display:flex;gap:10px;align-items:stretch;margin:20px 0;
+  flex-wrap:wrap;
+}
+.fv-box{
+  flex:1;min-width:160px;border-radius:var(--r);padding:16px 18px;
+}
+.fv-box.field-b{background:rgba(29,53,87,.08);border:1px solid rgba(29,53,87,.15);}
+.fv-box.value-b{background:rgba(199,75,44,.08);border:1px solid rgba(199,75,44,.2);}
+.fv-box.rule-b {background:rgba(42,114,81,.07);border:1px solid var(--good-border);}
+.fv-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;margin-bottom:6px;}
+.fv-box.field-b .fv-label{color:var(--navy);}
+.fv-box.value-b .fv-label{color:var(--accent);}
+.fv-box.rule-b  .fv-label{color:var(--green);}
+.fv-main{font-size:18px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+.fv-note{font-size:12px;color:var(--ink-muted);}
+.fv-arrow{
+  display:flex;align-items:center;font-size:20px;
+  color:var(--ink-muted);padding:0 4px;flex-shrink:0;
+}
+
+/* ── SPREADSHEET MOCKUP ── */
+.sheet-mock{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);overflow:hidden;
+  box-shadow:var(--sh-md);margin:20px 0;overflow-x:auto;
+}
+.sheet-tabs{
+  display:flex;background:var(--surface-2);
+  border-bottom:1px solid var(--border);
+  padding:0 0 0 12px;
+}
+.sheet-tab{
+  padding:8px 16px;font-size:12px;font-weight:600;
+  border-radius:6px 6px 0 0;cursor:pointer;
+  color:var(--ink-muted);transition:var(--t);
+}
+.sheet-tab.active{
+  background:var(--surface);color:var(--navy);
+  border:1px solid var(--border);border-bottom:none;
+  margin-bottom:-1px;
+}
+table.sheet-table{width:100%;border-collapse:collapse;font-size:12px;}
+table.sheet-table thead th{
+  background:var(--navy);color:#fff;
+  padding:8px 12px;text-align:left;
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;
+  white-space:nowrap;
+}
+table.sheet-table thead th.ctrl{background:var(--green);}
+table.sheet-table thead th.support{background:var(--disc-blue);opacity:.7;}
+table.sheet-table tbody td{
+  padding:8px 12px;border-bottom:1px solid var(--border);
+  color:var(--ink-2);white-space:nowrap;
+}
+table.sheet-table tbody tr:last-child td{border-bottom:none;}
+table.sheet-table td.ctrl-cell{
+  background:rgba(42,114,81,.05);
+  border-left:2px solid var(--green);
+}
+.ctrl-badge{
+  display:inline-block;font-size:9px;font-weight:700;
+  background:rgba(42,114,81,.12);color:var(--green);
+  border:1px solid var(--good-border);border-radius:3px;
+  padding:1px 5px;margin-left:4px;letter-spacing:.05em;
+}
+
+/* ── TWO-COL COMPARE ── */
+.compare-2{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:14px;margin:20px 0;
+}
+.compare-col{border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);}
+.compare-head{
+  padding:9px 16px;font-size:11px;letter-spacing:.1em;
+  text-transform:uppercase;font-weight:700;
+}
+.compare-head.bad {background:var(--bad-bg);color:var(--bad);border-bottom:1px solid var(--bad-border);}
+.compare-head.good{background:rgba(42,114,81,.08);color:var(--green);border-bottom:1px solid var(--good-border);}
+.compare-body{background:var(--surface);}
+.compare-body li{
+  list-style:none;padding:8px 16px;border-bottom:1px solid var(--border);
+  font-size:13px;color:var(--ink-2);line-height:1.4;
+}
+.compare-body li.bad-item{color:var(--bad);font-style:italic;}
+.compare-body li.good-item{color:var(--green);font-weight:500;}
+.compare-body li:last-child{border-bottom:none;}
+
+/* ── REFERENCE TABLE ── */
+.ref-table-wrap{overflow-x:auto;margin:16px 0;}
+table.ref-table{
+  border-collapse:collapse;background:var(--surface);
+  border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh-md);width:100%;
+}
+table.ref-table thead th{
+  background:var(--green);color:#fff;
+  padding:9px 16px;text-align:left;
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;
+}
+table.ref-table tbody td{
+  padding:9px 16px;font-size:13px;
+  border-bottom:1px solid var(--border);color:var(--ink-2);
+}
+table.ref-table tbody tr:last-child td{border-bottom:none;}
+table.ref-table tbody td:first-child{font-weight:700;color:var(--ink);}
+
+/* ── FORMULA ANATOMY ── */
+.formula-display{
+  background:var(--ink);border-radius:var(--r);
+  padding:14px 18px;margin:12px 0;
+  font-family:'Courier New',monospace;font-size:13px;
+  color:#A8D5FF;overflow-x:auto;
+}
+.formula-display .f-fn {color:#FFD580;}
+.formula-display .f-ref{color:#A8D5FF;}
+.formula-display .f-num{color:#B5E3C0;}
+.formula-part-row{
+  display:flex;gap:10px;flex-wrap:wrap;margin:10px 0;
+}
+.formula-part{
+  border-radius:var(--r);padding:10px 14px;flex:1;min-width:140px;cursor:pointer;
+  transition:var(--t);border:1.5px solid var(--border);background:var(--surface);
+}
+.formula-part:hover,.formula-part.open{border-color:var(--navy);background:var(--navy);}
+.formula-part:hover .fp-part,.formula-part.open .fp-part{color:rgba(255,255,255,.5);}
+.formula-part:hover .fp-code,.formula-part.open .fp-code{color:#FFD580;}
+.formula-part:hover .fp-desc,.formula-part.open .fp-desc{color:rgba(255,255,255,.8);}
+.fp-part{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:4px;}
+.fp-code{font-family:'Courier New',monospace;font-size:12px;font-weight:700;color:var(--navy);margin-bottom:4px;}
+.fp-desc{font-size:12px;color:var(--ink-2);line-height:1.4;}
+
+/* ── FLOW DIAGRAM ── */
+.flow-row{
+  display:flex;align-items:center;gap:0;
+  flex-wrap:wrap;margin:16px 0;overflow-x:auto;
+}
+.flow-step{
+  padding:10px 16px;font-size:13px;font-weight:700;
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:8px;white-space:nowrap;text-align:center;
+  min-width:100px;
+}
+.flow-step.highlight{background:var(--navy);color:#fff;border-color:var(--navy);}
+.flow-step.green-step{background:var(--green);color:#fff;border-color:var(--green);}
+.flow-step.accent-step{background:var(--accent);color:#fff;border-color:var(--accent);}
+.flow-step.blue-step{background:var(--disc-blue);color:#fff;border-color:var(--disc-blue);}
+.flow-arrow{font-size:18px;color:var(--ink-muted);padding:0 8px;flex-shrink:0;}
+
+/* ── BOARD MOCKUP ── */
+.board-mock{
+  display:flex;gap:8px;overflow-x:auto;margin:16px 0;padding-bottom:4px;
+}
+.board-col{
+  flex:1;min-width:140px;background:var(--surface-2);
+  border-radius:var(--r);border:1px solid var(--border);overflow:hidden;
+}
+.board-col-head{
+  padding:8px 12px;font-size:10px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  border-bottom:1px solid var(--border);
+}
+.bc-todo   {background:rgba(29,53,87,.07);color:var(--navy);}
+.bc-prog   {background:rgba(26,86,160,.08);color:var(--disc-blue);}
+.bc-review {background:rgba(199,75,44,.08);color:var(--accent);}
+.bc-done   {background:rgba(42,114,81,.08);color:var(--green);}
+.board-cards{padding:6px;}
+.board-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:8px;padding:8px 10px;margin-bottom:6px;
+  box-shadow:var(--sh);
+}
+.board-card:last-child{margin-bottom:0;}
+.bc-name{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:5px;line-height:1.3;}
+.bc-meta{display:flex;flex-wrap:wrap;gap:3px;}
+.bc-owner{font-size:9px;font-weight:700;background:rgba(29,53,87,.09);color:var(--navy);border-radius:3px;padding:2px 6px;}
+.bc-date {font-size:9px;color:var(--ink-muted);background:var(--surface-2);border-radius:3px;padding:2px 6px;border:1px solid var(--border);}
+.bc-lbl  {font-size:9px;font-weight:700;border-radius:3px;padding:2px 6px;}
+.lbl-c{background:rgba(42,114,81,.1);color:var(--green);}
+.lbl-d{background:rgba(26,86,160,.1);color:var(--disc-blue);}
+.lbl-a{background:rgba(199,75,44,.1);color:var(--accent);}
+.lbl-p{background:rgba(29,53,87,.1);color:var(--navy);}
+
+/* ── WORKSPACE TREE ── */
+.ws-tree{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh-md);
+  margin:16px 0;
+}
+.ws-item{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:10px 16px;border-bottom:1px solid var(--border);
+}
+.ws-item:last-child{border-bottom:none;}
+.ws-item.child{padding-left:38px;}
+.ws-ico{
+  width:22px;height:22px;border-radius:5px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:11px;margin-top:1px;
+}
+.wi-page{background:rgba(29,53,87,.08);color:var(--navy);}
+.wi-db  {background:rgba(42,114,81,.1);color:var(--green);}
+.wi-tmpl{background:rgba(199,75,44,.1);color:var(--accent);}
+.wi-sop {background:rgba(26,86,160,.1);color:var(--disc-blue);}
+.ws-name{font-size:13.5px;font-weight:600;color:var(--ink);}
+.ws-desc{font-size:12px;color:var(--ink-muted);margin-top:2px;}
+
+/* ── AUTOMATION CARDS ── */
+.auto-decision{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:10px;margin:16px 0;
+}
+.ad-card{
+  border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);
+  border:1px solid var(--border);
+}
+.ad-head{
+  padding:8px 14px;font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;font-weight:700;
+}
+.ad-head.yes {background:rgba(42,114,81,.08);color:var(--green);border-bottom:1px solid var(--good-border);}
+.ad-head.maybe{background:rgba(26,86,160,.08);color:var(--disc-blue);border-bottom:1px solid rgba(26,86,160,.2);}
+.ad-head.no  {background:var(--bad-bg);color:var(--bad);border-bottom:1px solid var(--bad-border);}
+.ad-body{background:var(--surface);padding:4px 0;}
+.ad-body li{
+  list-style:none;padding:6px 14px;border-bottom:1px solid var(--border);
+  font-size:12.5px;color:var(--ink-2);line-height:1.4;
+}
+.ad-body li:last-child{border-bottom:none;}
+
+/* ── TRIGGER FLOW ── */
+.trigger-flow{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh-md);
+  margin:16px 0;
+}
+.tf-row{
+  display:flex;align-items:stretch;
+  border-bottom:1px solid var(--border);
+}
+.tf-row:last-child{border-bottom:none;}
+.tf-step{
+  padding:11px 16px;flex:1;font-size:13px;color:var(--ink-2);
+  border-right:1px solid var(--border);
+  display:flex;align-items:center;gap:8px;
+}
+.tf-step:last-child{border-right:none;}
+.tf-arrow-cell{
+  padding:11px 10px;display:flex;align-items:center;
+  font-size:16px;color:var(--ink-muted);flex-shrink:0;
+  border-right:1px solid var(--border);
+}
+.tf-badge{
+  font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  border-radius:3px;padding:2px 6px;flex-shrink:0;
+}
+.tf-badge.edit  {background:rgba(26,86,160,.1);color:var(--disc-blue);}
+.tf-badge.write {background:rgba(42,114,81,.1);color:var(--green);}
+.tf-badge.status{background:rgba(199,75,44,.1);color:var(--accent);}
+
+/* ── THREE TOOL COMPARE ── */
+.three-tool{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:0;margin:20px 0;border-radius:var(--rl);
+  overflow:hidden;box-shadow:var(--sh-md);border:1px solid var(--border);
+}
+.tt-col-head{
+  padding:11px 18px;font-size:11px;font-weight:700;
+  letter-spacing:.11em;text-transform:uppercase;
+}
+.tt-sheets{background:var(--green);color:#fff;}
+.tt-notion{background:var(--navy);color:#fff;}
+.tt-board {background:var(--accent);color:#fff;}
+.tt-body{background:var(--surface);}
+.tt-body li{
+  list-style:none;padding:8px 18px;font-size:13px;color:var(--ink-2);
+  border-bottom:1px solid var(--border);line-height:1.35;
+  display:flex;gap:7px;align-items:flex-start;
+}
+.tt-body li:last-child{border-bottom:none;}
+.tt-body li::before{content:'→';font-size:10px;color:var(--ink-muted);flex-shrink:0;margin-top:2px;}
+
+/* ── AI IO BLOCK ── */
+.ai-io{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh-md);margin:16px 0;
+}
+.ai-io-pane{padding:12px 18px;border-bottom:1px solid var(--border);}
+.ai-io-pane:last-child{border-bottom:none;}
+.aio-label{
+  font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  margin-bottom:8px;display:flex;align-items:center;gap:5px;
+}
+.aio-label::before{content:'◆';font-size:7px;}
+.aio-label.input {color:var(--ink-muted);}
+.aio-label.output{color:var(--green);}
+.aio-label.human {color:var(--disc-blue);}
+.aio-text{font-size:13px;color:var(--ink-2);line-height:1.55;}
+.aio-text.rough{font-style:italic;color:var(--ink-muted);}
+
+/* ── SECTION DIVIDER ── */
+.section-divider{
+  height:3px;margin:0;
+  background:linear-gradient(90deg,var(--border) 0%,transparent 100%);
+}
+
+/* ── FULL SYSTEM MAP ── */
+.system-map{
+  display:flex;align-items:center;flex-wrap:wrap;
+  gap:4px;margin:24px 0;justify-content:center;
+}
+.sm-block{
+  text-align:center;padding:12px 14px;
+  border-radius:var(--r);min-width:90px;flex:1;
+}
+.sm-block .sm-num{font-size:10px;font-weight:700;letter-spacing:.1em;margin-bottom:4px;}
+.sm-block .sm-name{font-size:12px;font-weight:700;line-height:1.2;}
+.sm-block .sm-tool{font-size:10px;opacity:.7;margin-top:3px;}
+.sm-1{background:rgba(29,53,87,.1);color:var(--navy);}
+.sm-2{background:rgba(42,114,81,.1);color:var(--green);}
+.sm-3{background:rgba(42,114,81,.15);color:var(--green);}
+.sm-4{background:rgba(26,86,160,.1);color:var(--disc-blue);}
+.sm-5{background:rgba(29,53,87,.08);color:var(--navy);}
+.sm-6{background:rgba(199,75,44,.1);color:var(--accent);}
+.sm-7{background:rgba(139,38,53,.09);color:var(--bad);}
+.sm-8{background:rgba(26,86,160,.08);color:var(--disc-blue);}
+.sm-arrow{font-size:16px;color:var(--ink-muted);flex-shrink:0;}
+
+/* ── CHEAT SHEET ── */
+.cheat-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:12px;margin:20px 0;
+}
+.cheat-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);padding:16px 18px;box-shadow:var(--sh);
+}
+.cheat-card .cc-title{
+  font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--navy);margin-bottom:10px;border-bottom:2px solid var(--navy);
+  padding-bottom:6px;
+}
+.cheat-card ul{list-style:none;}
+.cheat-card ul li{
+  font-size:13px;color:var(--ink-2);
+  padding:4px 0 4px 14px;position:relative;
+  border-bottom:1px solid var(--border);line-height:1.4;
+}
+.cheat-card ul li:last-child{border-bottom:none;}
+.cheat-card ul li::before{
+  content:'·';position:absolute;left:3px;
+  font-size:18px;color:var(--ink-muted);line-height:1.1;
+}
+
+/* ── MISTAKES ── */
+.mistake-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:12px;margin:20px 0;
+}
+.mistake-card{
+  background:var(--bad-bg);border:1px solid var(--bad-border);
+  border-radius:var(--r);padding:16px 18px;
+}
+.mc-icon{font-size:18px;margin-bottom:6px;}
+.mc-title{font-size:13px;font-weight:700;color:var(--bad);margin-bottom:5px;}
+.mc-fix{font-size:12px;color:var(--ink-2);line-height:1.4;}
+.mc-fix strong{color:var(--green);}
+
+/* ── GLOSSARY ACCORDION ── */
+.glossary-list{margin:16px 0;}
+.gloss-item{
+  border-bottom:1px solid var(--border);
+}
+.gloss-item:first-child{border-top:1px solid var(--border);}
+.gloss-trigger{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:11px 4px;cursor:pointer;
+  font-size:14px;font-weight:700;color:var(--ink);
+  transition:var(--t);user-select:none;
+}
+.gloss-trigger:hover{color:var(--navy);}
+.gloss-trigger .gt-arrow{
+  font-size:18px;color:var(--ink-muted);
+  transition:transform .2s ease;line-height:1;
+}
+.gloss-item.open .gt-arrow{transform:rotate(45deg);}
+.gloss-def{
+  display:none;padding:0 0 12px 0;
+  font-size:13.5px;color:var(--ink-2);line-height:1.6;
+}
+.gloss-item.open .gloss-def{display:block;}
+
+/* ── SELF CHECK ── */
+.self-check-list{list-style:none;margin:16px 0;}
+.self-check-list li{
+  display:flex;gap:12px;align-items:flex-start;
+  padding:12px 0;border-bottom:1px solid var(--border);
+  font-size:14px;color:var(--ink-2);line-height:1.5;cursor:pointer;
+  transition:var(--t);
+}
+.self-check-list li:last-child{border-bottom:none;}
+.self-check-list li:hover{color:var(--navy);}
+.sc-box{
+  width:20px;height:20px;border:2px solid var(--border);
+  border-radius:4px;flex-shrink:0;display:flex;
+  align-items:center;justify-content:center;
+  font-size:11px;transition:var(--t);margin-top:1px;
+}
+.self-check-list li.checked .sc-box{
+  background:var(--green);border-color:var(--green);color:#fff;
+}
+
+/* ── BEFORE/AFTER TOGGLE ── */
+.ba-wrap{margin:16px 0;}
+.ba-tabs{display:flex;gap:0;margin-bottom:0;}
+.ba-tab{
+  flex:1;padding:8px;text-align:center;
+  font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  cursor:pointer;border:1.5px solid var(--border);
+  background:var(--surface-2);color:var(--ink-muted);
+  transition:var(--t);
+}
+.ba-tab:first-child{border-radius:var(--r) 0 0 0;}
+.ba-tab:last-child{border-radius:0 var(--r) 0 0;}
+.ba-tab.active.before{background:var(--bad-bg);color:var(--bad);border-color:var(--bad-border);}
+.ba-tab.active.after {background:rgba(42,114,81,.08);color:var(--green);border-color:var(--good-border);}
+.ba-panel{
+  display:none;border:1.5px solid var(--border);
+  border-top:none;border-radius:0 0 var(--r) var(--r);
+  padding:16px;background:var(--surface);
+}
+.ba-panel.active{display:block;}
+
+/* ── HANDOFF FLOW ── */
+.handoff-chain{
+  display:flex;flex-direction:column;gap:8px;margin:16px 0;
+}
+.hf-item{
+  background:var(--surface);border:1px solid var(--border);
+  border-left:4px solid var(--navy);border-radius:var(--r);
+  padding:12px 16px;
+}
+.hf-item.hf-design{border-left-color:var(--disc-blue);}
+.hf-item.hf-approval{border-left-color:var(--accent);}
+.hf-item.hf-publish{border-left-color:var(--green);}
+.hf-stage{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:5px;}
+.hf-rule{font-size:13px;color:var(--ink-2);line-height:1.45;}
+
+/* ── STRIP/STRIPE ── */
+.strip{
+  border-radius:var(--r);padding:14px 20px;margin:16px 0;
+  font-size:14px;font-weight:600;text-align:center;line-height:1.45;
+}
+.strip.navy {background:var(--navy);color:#fff;}
+.strip.green{background:var(--green);color:#fff;}
+.strip.ink  {background:var(--ink);color:#fff;}
+.strip.blue {background:var(--disc-blue);color:#fff;}
+.strip.accent{background:var(--accent);color:#fff;}
+
+/* ── PROMPT COMPARE ── */
+.prompt-compare{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:12px;margin:16px 0;
+}
+.pc-card{border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);border:1px solid var(--border);}
+.pc-head{padding:8px 14px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;}
+.pc-head.weak  {background:var(--bad-bg);color:var(--bad);border-bottom:1px solid var(--bad-border);}
+.pc-head.strong{background:rgba(42,114,81,.08);color:var(--green);border-bottom:1px solid var(--good-border);}
+.pc-body{background:var(--surface);padding:14px 16px;}
+.pc-prompt{
+  font-size:13px;font-style:italic;color:var(--ink);
+  border-left:3px solid var(--border);padding-left:10px;
+  margin-bottom:10px;line-height:1.55;
+}
+.pc-why{font-size:12px;color:var(--ink-muted);line-height:1.5;}
+
+/* ── FINAL HERO ── */
+.final-hero{
+  background:var(--navy);border-radius:var(--rl);
+  padding:32px 36px;margin:28px 0;
+  position:relative;overflow:hidden;box-shadow:var(--sh-md);
+}
+.final-hero::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 60% at 90% 10%,rgba(42,114,81,.18) 0%,transparent 55%),
+    radial-gradient(ellipse 50% 50% at 5% 90%,rgba(26,86,160,.15) 0%,transparent 50%);
+}
+.final-hero-inner{position:relative;z-index:1;}
+.fh-eyebrow{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:12px;}
+.fh-title{
+  font-family:Georgia,'Times New Roman',serif;
+  font-size:clamp(18px,3vw,28px);font-weight:normal;
+  color:#fff;margin-bottom:20px;line-height:1.2;
+}
+.fh-list{list-style:none;}
+.fh-list li{
+  display:flex;gap:12px;align-items:flex-start;
+  padding:8px 0;border-bottom:1px solid rgba(255,255,255,.1);
+  font-size:13px;color:rgba(255,255,255,.7);line-height:1.4;
+}
+.fh-list li:last-child{border-bottom:none;}
+.fh-num{font-size:10px;font-weight:700;color:rgba(255,255,255,.35);width:20px;flex-shrink:0;padding-top:1px;}
+.fh-final{
+  margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.12);
+  font-family:Georgia,serif;font-size:clamp(14px,2vw,18px);
+  color:#fff;font-style:italic;
+}
+
+/* ── FOOTER ── */
+.page-footer{
+  background:var(--ink);color:rgba(255,255,255,.4);
+  padding:32px 24px;text-align:center;
+  font-size:12px;letter-spacing:.05em;
+}
+
+/* ── BELONGS CLASSIFY (S5) ── */
+.belongs-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:10px;margin:16px 0;
+}
+.belongs-item{
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:var(--r);padding:12px 16px;cursor:pointer;
+  transition:var(--t);position:relative;
+}
+.belongs-item:hover{border-color:var(--navy);}
+.belongs-item .bi-text{font-size:13px;color:var(--ink);font-weight:600;margin-bottom:6px;}
+.belongs-item .bi-hint{font-size:11px;color:var(--ink-muted);}
+.belongs-item .bi-reveal{
+  display:none;margin-top:8px;padding:6px 10px;
+  border-radius:5px;font-size:12px;font-weight:700;
+}
+.belongs-item.revealed .bi-reveal{display:block;}
+.belongs-item.yes-item.revealed{border-color:var(--green);}
+.belongs-item.yes-item .bi-reveal{background:rgba(42,114,81,.09);color:var(--green);}
+.belongs-item.no-item.revealed{border-color:var(--bad);}
+.belongs-item.no-item .bi-reveal{background:var(--bad-bg);color:var(--bad);}
+.belongs-hint{font-size:12px;color:var(--ink-muted);margin-bottom:10px;font-style:italic;}
+
+/* ── SPOT THE GAP (S6) ── */
+.gap-card-wrap{margin:16px 0;}
+.gap-card{
+  background:var(--bad-bg);border:1.5px solid var(--bad-border);
+  border-radius:var(--r);padding:14px 18px;margin-bottom:10px;
+}
+.gap-card-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--bad);margin-bottom:10px;}
+.gap-card .bc-name{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:8px;}
+.gap-fields{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+.gap-missing{
+  font-size:12px;padding:4px 10px;border-radius:5px;
+  background:rgba(139,38,53,.08);border:1px dashed var(--bad);
+  color:var(--bad);font-style:italic;
+}
+.gap-reveal-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 14px;border:1.5px solid var(--border);
+  border-radius:var(--r);background:var(--surface);
+  font-size:12px;font-weight:700;color:var(--navy);cursor:pointer;
+  transition:var(--t);
+}
+.gap-reveal-btn:hover{border-color:var(--navy);}
+.gap-answer{
+  display:none;margin-top:12px;padding:12px 14px;
+  background:rgba(42,114,81,.07);border:1px solid var(--good-border);
+  border-radius:var(--r);font-size:13px;color:var(--green);line-height:1.5;
+}
+.gap-answer.shown{display:block;}
+
+/* ── AUTO/MANUAL QUIZ (S7) ── */
+.am-quiz{margin:16px 0;}
+.am-quiz-intro{font-size:13px;color:var(--ink-muted);margin-bottom:12px;font-style:italic;}
+.amq-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;}
+.amq-item{
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:var(--r);padding:11px 14px;cursor:pointer;
+  transition:var(--t);
+}
+.amq-item:hover{border-color:var(--navy);}
+.amq-text{font-size:13px;color:var(--ink);margin-bottom:6px;line-height:1.4;}
+.amq-badge{
+  display:none;font-size:10px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;border-radius:4px;padding:2px 8px;
+}
+.amq-item.revealed .amq-badge{display:inline-block;}
+.amq-item.auto-item.revealed{border-color:var(--green);}
+.amq-item.auto-item .amq-badge{background:rgba(42,114,81,.1);color:var(--green);}
+.amq-item.manual-item.revealed{border-color:var(--disc-blue);}
+.amq-item.manual-item .amq-badge{background:rgba(26,86,160,.1);color:var(--disc-blue);}
+
+/* ── HUMAN REVIEW CHECKLIST (S8) ── */
+.hr-check-list{list-style:none;margin:14px 0;}
+.hr-check-list li{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:9px 0;border-bottom:1px solid var(--border);
+  font-size:13.5px;color:var(--ink-2);line-height:1.45;cursor:pointer;
+  transition:var(--t);
+}
+.hr-check-list li:last-child{border-bottom:none;}
+.hr-box{
+  width:18px;height:18px;border:2px solid var(--border);border-radius:4px;
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:10px;transition:var(--t);margin-top:2px;
+}
+.hr-check-list li.hrc-checked .hr-box{background:var(--disc-blue);border-color:var(--disc-blue);color:#fff;}
+
+/* ── RESOURCES SECTION ── */
+.resource-cats{display:flex;flex-direction:column;gap:20px;margin:24px 0;}
+.resource-cat{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh);
+}
+.resource-cat-head{
+  padding:12px 20px;
+  display:flex;align-items:center;gap:10px;
+}
+.resource-cat-head.sheets-h { background:var(--green); }
+.resource-cat-head.script-h { background:var(--disc-blue); }
+.resource-cat-head.notion-h { background:var(--navy); }
+.resource-cat-head.trello-h { background:var(--accent); }
+.resource-cat-head.clickup-h{ background:#7B68EE; }
+.resource-cat-icon{
+  width:28px;height:28px;border-radius:6px;
+  background:rgba(255,255,255,.15);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;flex-shrink:0;
+}
+.resource-cat-name{font-size:13px;font-weight:700;color:#fff;letter-spacing:.02em;}
+.resource-items{padding:4px 0;}
+.resource-item{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:12px 20px;border-bottom:1px solid var(--border);
+}
+.resource-item:last-child{border-bottom:none;}
+.ri-icon{
+  width:24px;height:24px;border-radius:5px;flex-shrink:0;margin-top:2px;
+  display:flex;align-items:center;justify-content:center;font-size:12px;
+  background:var(--surface-2);border:1px solid var(--border);
+}
+.ri-body{flex:1;}
+.ri-title{font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.ri-desc{font-size:12px;color:var(--ink-muted);line-height:1.4;margin-bottom:6px;}
+.ri-link{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--navy);text-decoration:none;
+  border-bottom:1px solid rgba(29,53,87,.2);padding-bottom:1px;
+  transition:var(--t);
+}
+.ri-link:hover{color:var(--accent);border-bottom-color:var(--accent);}
+.ri-link::after{content:'→';font-size:10px;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:680px){
+  .page-section{padding:52px 16px 60px;}
+  .orientation-grid{grid-template-columns:1fr;}
+  .orient-divider{display:none;}
+  .roadmap-row{gap:4px;}
+  .roadmap-item{min-width:70px;}
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<nav class="topnav">
+  <span class="topnav-brand"><strong>Day 1</strong> Student Handout</span>
+  <span class="topnav-pill">Workspace Data Ops</span>
+</nav>
+
+<!-- ══════════════════════════════════════
+     HERO
+══════════════════════════════════════ -->
+<section id="hero">
+  <div class="wrap">
+    <div class="hero-inner">
+      <div class="hero-eyebrow">Day 1 · Student Handout</div>
+      <h1 class="hero-title">Workspace Data Ops<br>&amp; Work OS Setup</h1>
+      <p class="hero-sub">Everything you need to understand, remember, and use from today's session. One connected system — built step by step.</p>
+      <div class="hero-badges">
+        <span class="hero-badge">8 sections</span>
+        <span class="hero-badge">1 campaign use case</span>
+        <span class="hero-badge">3 tools + rules + AI</span>
+        <span class="hero-badge">cheat sheet + glossary</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     ROADMAP
+══════════════════════════════════════ -->
+<section class="page-section sec-white" id="roadmap">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--ink);">↓</span> Day Roadmap</div>
+    <h2 class="section-title">Eight steps. One system.</h2>
+    <p class="section-sub" style="margin-bottom:16px;">Click any section to see what it covers.</p>
+
+    <div class="roadmap-wrap">
+      <div class="roadmap-row" id="roadmapRow">
+        <div class="roadmap-item active" data-idx="0">
+          <div class="rm-num">S1</div>
+          <div class="rm-name">Structure</div>
+        </div>
+        <div class="roadmap-item" data-idx="1">
+          <div class="rm-num">S2</div>
+          <div class="rm-name">Sheets</div>
+        </div>
+        <div class="roadmap-item" data-idx="2">
+          <div class="rm-num">S3</div>
+          <div class="rm-name">Lookups</div>
+        </div>
+        <div class="roadmap-item" data-idx="3">
+          <div class="rm-num">S4</div>
+          <div class="rm-name">Automation</div>
+        </div>
+        <div class="roadmap-item" data-idx="4">
+          <div class="rm-num">S5</div>
+          <div class="rm-name">Notion</div>
+        </div>
+        <div class="roadmap-item" data-idx="5">
+          <div class="rm-num">S6</div>
+          <div class="rm-name">Board</div>
+        </div>
+        <div class="roadmap-item" data-idx="6">
+          <div class="rm-num">S7</div>
+          <div class="rm-name">Rules</div>
+        </div>
+        <div class="roadmap-item" data-idx="7">
+          <div class="rm-num">S8</div>
+          <div class="rm-name">AI</div>
+        </div>
+      </div>
+      <div class="roadmap-preview visible" id="roadmapPreview"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     ORIENTATION
+══════════════════════════════════════ -->
+<section class="page-section sec-warm" id="orientation">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--ink);">!</span> Important</div>
+    <h2 class="section-title">This is not a tool lesson. It is a system lesson.</h2>
+    <p class="section-sub">Today is not about learning features. It is about building one connected workplace workflow — and understanding why each part exists in the order it does.</p>
+
+    <div class="orientation-grid">
+      <div class="orient-col">
+        <div class="orient-head not">✕ Not this</div>
+        <ul class="orient-body">
+          <li>Learning Sheets in isolation</li>
+          <li>Learning Notion separately</li>
+          <li>Learning board tools as a hobby</li>
+          <li>Tips and tricks for each app</li>
+          <li>Random AI prompts</li>
+        </ul>
+      </div>
+      <div class="orient-divider">→</div>
+      <div class="orient-col">
+        <div class="orient-head yes">✓ Yes this</div>
+        <ul class="orient-body">
+          <li>One workflow system across tools</li>
+          <li>Structure agreed before anything is built</li>
+          <li>Each tool has one job, not three</li>
+          <li>Rules that keep the system usable</li>
+          <li>AI supports the system — doesn't replace it</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout navy" style="margin-top:8px;">
+      <strong>The key sequence:</strong> Structure → Tracking → Connected data → Automation → Workspace context → Execution visibility → Operating rules → AI support
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     USE CASE
+══════════════════════════════════════ -->
+<section class="page-section sec-white" id="usecase">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--ink);">📋</span> Use Case</div>
+    <h2 class="section-title">The same team. The same campaign. All day.</h2>
+    <p class="section-sub">Every example today comes from this scenario. Keep it in mind as you build.</p>
+
+    <div class="grid-2">
+      <div class="card navy-top">
+        <h3 class="card-title">The team</h3>
+        <p class="card-body" style="margin-bottom:10px;">A small marketing team preparing a product launch campaign. Four people.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;">
+          <span class="tag navy">Mona · Content</span>
+          <span class="tag blue">Tareq · Design</span>
+          <span class="tag accent">Danielle · Approval</span>
+          <span class="tag green">Lina · Publishing</span>
+        </div>
+      </div>
+      <div class="card accent-top">
+        <h3 class="card-title">Five recurring tasks</h3>
+        <p class="card-body" style="margin-bottom:10px;">These tasks appear throughout the day as examples.</p>
+        <div style="display:flex;flex-direction:column;gap:4px;margin-top:6px;">
+          <div style="font-size:12.5px;color:var(--ink-2);padding:4px 0;border-bottom:1px solid var(--border);">📝 Write Instagram caption</div>
+          <div style="font-size:12.5px;color:var(--ink-2);padding:4px 0;border-bottom:1px solid var(--border);">🎨 Design launch banner</div>
+          <div style="font-size:12.5px;color:var(--ink-2);padding:4px 0;border-bottom:1px solid var(--border);">✅ Approve banner copy</div>
+          <div style="font-size:12.5px;color:var(--ink-2);padding:4px 0;border-bottom:1px solid var(--border);">📅 Schedule Instagram post</div>
+          <div style="font-size:12.5px;color:var(--ink-2);padding:4px 0;">🚀 Publish landing page update</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════
+     S1 — STRUCTURE
+══════════════════════════════════════ -->
+<section class="page-section sec-warm" id="s1">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--navy);">1</span> Section 1</div>
+    <h2 class="section-title">Shared Workspace Structure</h2>
+    <p class="section-sub">Agree on the minimum before opening any tool. Six fields. Clear meaning. Consistent rules.</p>
+
+    <div class="callout navy">
+      <strong>Core idea:</strong> Structure before tools. If the team hasn't agreed on what to track and what each field means, every tool they build into will drift.
+    </div>
+
+    <!-- 6 fields -->
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:22px 0 10px;">The 6 minimum fields — click each to see what it means</h3>
+    <div class="field-strip" id="fieldStrip">
+      <div>
+        <div class="field-pill" onclick="toggleField(this)">
+          <span class="fp-name">Reference ID</span>
+          <span class="fp-type">Unique identity</span>
+        </div>
+        <div class="field-reveal">A stable unique code for each task. Used to match a task across tools, files, and conversations. Example: <strong>LC-001</strong> for Launch Campaign task 1.</div>
+      </div>
+      <div>
+        <div class="field-pill" onclick="toggleField(this)">
+          <span class="fp-name">Task Name</span>
+          <span class="fp-type">Free text</span>
+        </div>
+        <div class="field-reveal">What the work is — specific enough for anyone on the team to understand. Not "email thing." Try: <strong>"Write Instagram caption — product launch"</strong>.</div>
+      </div>
+      <div>
+        <div class="field-pill" onclick="toggleField(this)">
+          <span class="fp-name">Owner</span>
+          <span class="fp-type">Controlled</span>
+        </div>
+        <div class="field-reveal">One person accountable for moving the task forward. Must come from the agreed list — not a team, not "TBD." <strong>Mona / Tareq / Danielle / Lina.</strong></div>
+      </div>
+      <div>
+        <div class="field-pill" onclick="toggleField(this)">
+          <span class="fp-name">Status</span>
+          <span class="fp-type">Controlled</span>
+        </div>
+        <div class="field-reveal">Where the work stands — agreed values only. <strong>To Do / In Progress / In Review / Done.</strong> No "almost done," no "nearly there."</div>
+      </div>
+      <div>
+        <div class="field-pill" onclick="toggleField(this)">
+          <span class="fp-name">Due Date</span>
+          <span class="fp-type">Real date</span>
+        </div>
+        <div class="field-reveal">A real calendar date — not "ASAP" or "next week." A date that can be filtered, sorted, and matched to a calendar. Example: <strong>April 15</strong>.</div>
+      </div>
+      <div>
+        <div class="field-pill" onclick="toggleField(this)">
+          <span class="fp-name">Priority</span>
+          <span class="fp-type">Controlled</span>
+        </div>
+        <div class="field-reveal">An agreed urgency level — <strong>Low / Medium / High / Critical.</strong> Not "urgent!!!" — that is not a filterable value.</div>
+      </div>
+    </div>
+
+    <!-- field / value / rule -->
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 10px;">Field · Value · Rule — three different things</h3>
+    <div class="fv-row">
+      <div class="fv-box field-b">
+        <div class="fv-label">Field</div>
+        <div class="fv-main">Status</div>
+        <div class="fv-note">The column label — what category of information it is</div>
+      </div>
+      <div class="fv-arrow">→</div>
+      <div class="fv-box value-b">
+        <div class="fv-label">Value</div>
+        <div class="fv-main">In Review</div>
+        <div class="fv-note">The specific entry that goes inside the field</div>
+      </div>
+      <div class="fv-arrow">→</div>
+      <div class="fv-box rule-b">
+        <div class="fv-label">Rule</div>
+        <div class="fv-main">"Only move to In Review once the brief is complete"</div>
+        <div class="fv-note">The agreed behaviour for how the value is used</div>
+      </div>
+    </div>
+
+    <div class="compare-2">
+      <div class="compare-col">
+        <div class="compare-head bad">⚠ Without structure</div>
+        <ul class="compare-body">
+          <li class="bad-item">"almost done" / "in progress" / "doing" — all the same stage</li>
+          <li class="bad-item">Mona / Mona H. / Mona Hamza — all the same person</li>
+          <li class="bad-item">"next week" / "ASAP" / "April" — all the same kind of deadline</li>
+        </ul>
+      </div>
+      <div class="compare-col">
+        <div class="compare-head good">✓ With structure</div>
+        <ul class="compare-body">
+          <li class="good-item">Status: In Progress — one agreed value, filterable</li>
+          <li class="good-item">Owner: Mona — one agreed name, consistent everywhere</li>
+          <li class="good-item">Due Date: 15 April — one real date, sortable</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="strip navy">Key takeaway: The 6 fields are the minimum. Team + Role are <em>not</em> part of this minimum — they come later as optional support columns.</div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════
+     S2 — SHEETS
+══════════════════════════════════════ -->
+<section class="page-section sec-white" id="s2">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--green);">2</span> Section 2</div>
+    <h2 class="section-title">Building the Sheets Tracking Layer</h2>
+    <p class="section-sub">The Main Tracker in Google Sheets is the operational record. Two tabs. Clear roles. Controlled fields.</p>
+
+    <!-- Spreadsheet mockup -->
+    <div class="sheet-mock">
+      <div class="sheet-tabs">
+        <div class="sheet-tab active" onclick="switchTab('tracker',this)">Main Tracker</div>
+        <div class="sheet-tab" onclick="switchTab('lists',this)">Lists / Reference</div>
+      </div>
+      <div id="tab-tracker">
+        <table class="sheet-table">
+          <thead>
+            <tr>
+              <th>Reference ID</th>
+              <th>Task Name</th>
+              <th class="ctrl">Owner ✓</th>
+              <th class="ctrl">Status ✓</th>
+              <th>Due Date</th>
+              <th class="ctrl">Priority ✓</th>
+              <th>Notes</th>
+              <th class="support">Team ↗</th>
+              <th class="support">Role ↗</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>LC-001</td>
+              <td>Write Instagram caption</td>
+              <td class="ctrl-cell">Mona <span class="ctrl-badge">dropdown</span></td>
+              <td class="ctrl-cell">In Progress <span class="ctrl-badge">dropdown</span></td>
+              <td>Apr 12</td>
+              <td class="ctrl-cell">High <span class="ctrl-badge">dropdown</span></td>
+              <td>For launch week</td>
+              <td style="color:var(--disc-blue);font-style:italic;">Content</td>
+              <td style="color:var(--disc-blue);font-style:italic;">Writer</td>
+            </tr>
+            <tr>
+              <td>LC-002</td>
+              <td>Design launch banner</td>
+              <td class="ctrl-cell">Tareq <span class="ctrl-badge">dropdown</span></td>
+              <td class="ctrl-cell">To Do <span class="ctrl-badge">dropdown</span></td>
+              <td>Apr 10</td>
+              <td class="ctrl-cell">Critical <span class="ctrl-badge">dropdown</span></td>
+              <td>—</td>
+              <td style="color:var(--disc-blue);font-style:italic;">Design</td>
+              <td style="color:var(--disc-blue);font-style:italic;">Designer</td>
+            </tr>
+            <tr>
+              <td>LC-003</td>
+              <td>Approve banner copy</td>
+              <td class="ctrl-cell">Danielle <span class="ctrl-badge">dropdown</span></td>
+              <td class="ctrl-cell">In Review <span class="ctrl-badge">dropdown</span></td>
+              <td>Apr 11</td>
+              <td class="ctrl-cell">High <span class="ctrl-badge">dropdown</span></td>
+              <td>Legal cleared</td>
+              <td style="color:var(--disc-blue);font-style:italic;">Approval</td>
+              <td style="color:var(--disc-blue);font-style:italic;">Reviewer</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="tab-lists" style="display:none;">
+        <table class="sheet-table">
+          <thead>
+            <tr>
+              <th style="background:var(--navy);">Status</th>
+              <th style="background:var(--navy);">Priority</th>
+              <th style="background:var(--navy);">Owners</th>
+              <th style="background:var(--disc-blue);">Owner</th>
+              <th style="background:var(--disc-blue);">Team</th>
+              <th style="background:var(--disc-blue);">Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>To Do</td><td>Low</td><td>Mona</td><td>Mona</td><td>Content</td><td>Content Writer</td></tr>
+            <tr><td>In Progress</td><td>Medium</td><td>Tareq</td><td>Tareq</td><td>Design</td><td>Designer</td></tr>
+            <tr><td>In Review</td><td>High</td><td>Danielle</td><td>Danielle</td><td>Approval</td><td>Brand Reviewer</td></tr>
+            <tr><td>Done</td><td>Critical</td><td>Lina</td><td>Lina</td><td>Publishing</td><td>Publishing Coord.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="grid-3" style="margin-top:4px;">
+      <div class="card">
+        <div class="tag green" style="margin-bottom:8px;">Controlled</div>
+        <h3 class="card-title">Owner · Status · Priority</h3>
+        <p class="card-body">Choose from an agreed list. Cannot be typed freely. This makes filters, lookups, and automation reliable.</p>
+      </div>
+      <div class="card">
+        <div class="tag muted" style="margin-bottom:8px;">Free text</div>
+        <h3 class="card-title">Task Name · Notes · Reference ID</h3>
+        <p class="card-body">Typed freely — unique per task. Cannot be standardised to a dropdown. Still need naming discipline.</p>
+      </div>
+      <div class="card">
+        <div class="tag blue" style="margin-bottom:8px;">Optional support</div>
+        <h3 class="card-title">Team · Role</h3>
+        <p class="card-body">Not part of the minimum six. Pulled automatically via lookup in Section 3 — not typed manually row by row.</p>
+      </div>
+    </div>
+
+    <div class="strip green">Two tabs: Main Tracker (daily task data) · Lists tab (source of controlled values and support reference data). When tools disagree on task status, ownership, or dates — update Sheets first. It is the task record.</div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════
+     S3 — LOOKUPS
+══════════════════════════════════════ -->
+<section class="page-section sec-warm" id="s3">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--green);">3</span> Section 3</div>
+    <h2 class="section-title">Lookup Logic and Connected Data</h2>
+    <p class="section-sub">Stable support data — like Team and Role — should be entered once and pulled automatically. Not retyped into every row.</p>
+
+    <!-- Before/After toggle -->
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:0 0 10px;">Without vs with a reference table</h3>
+    <div class="ba-wrap">
+      <div class="ba-tabs">
+        <div class="ba-tab active before" onclick="toggleBA('ba1','before',this)">Without lookup</div>
+        <div class="ba-tab after" onclick="toggleBA('ba1','after',this)">With lookup</div>
+      </div>
+      <div class="ba-panel active" id="ba1-before">
+        <ul style="list-style:none;">
+          <li style="padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--bad);font-style:italic;">Tareq — Design — Designer (row 3)</li>
+          <li style="padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--bad);font-style:italic;">Tareq — Publishing — Publishing Coord. (row 4, after move)</li>
+          <li style="padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--bad);font-style:italic;">Danielle — "design review" (row 5 — wrong team name typed)</li>
+          <li style="padding:6px 0;font-size:12px;color:var(--ink-muted);">Result: Tareq appears as two people. Filters break. Reports are wrong.</li>
+        </ul>
+      </div>
+      <div class="ba-panel" id="ba1-after">
+        <ul style="list-style:none;">
+          <li style="padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--green);font-weight:500;">Tareq → lists lookup → Team: Design, Role: Designer (always accurate)</li>
+          <li style="padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--green);font-weight:500;">When Tareq moves to Publishing: update one row in Lists tab → all rows update</li>
+          <li style="padding:6px 0;font-size:12px;color:var(--ink-muted);">Result: one source of truth. Zero manual retyping. No drift.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Reference table -->
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:20px 0 10px;">The reference table — in the Lists tab</h3>
+    <div class="ref-table-wrap">
+      <table class="ref-table">
+        <thead><tr><th>Owner (lookup key)</th><th>Team</th><th>Role</th></tr></thead>
+        <tbody>
+          <tr><td>Mona</td><td>Content</td><td>Content Writer</td></tr>
+          <tr><td>Tareq</td><td>Design</td><td>Designer</td></tr>
+          <tr><td>Danielle</td><td>Approval</td><td>Brand Reviewer</td></tr>
+          <tr><td>Lina</td><td>Publishing</td><td>Publishing Coordinator</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Formula anatomy -->
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:20px 0 8px;">VLOOKUP — click each part to understand it</h3>
+    <div class="formula-display">
+      <span class="f-fn">IFERROR</span>( <span class="f-fn">VLOOKUP</span>(<span class="f-ref">C2</span>, <span class="f-ref">Lists!$E$2:$G$5</span>, <span class="f-num">2</span>, <span class="f-fn">FALSE</span>), <span style="color:#F4A97E;">"Not found"</span> )
+    </div>
+    <div class="formula-part-row">
+      <div class="formula-part" onclick="toggleFP(this)">
+        <div class="fp-part">Search key</div>
+        <div class="fp-code">C2</div>
+        <div class="fp-desc">The Owner cell in this row — the value to look for in the reference table</div>
+      </div>
+      <div class="formula-part" onclick="toggleFP(this)">
+        <div class="fp-part">Range</div>
+        <div class="fp-code">Lists!$E$2:$G$5</div>
+        <div class="fp-desc">The Owner/Team/Role table in the Lists tab — locked with $ so it doesn't shift when copied</div>
+      </div>
+      <div class="formula-part" onclick="toggleFP(this)">
+        <div class="fp-part">Index</div>
+        <div class="fp-code">2</div>
+        <div class="fp-desc">Return column 2 of the range — Team. Use 3 for Role.</div>
+      </div>
+      <div class="formula-part" onclick="toggleFP(this)">
+        <div class="fp-part">Exact match</div>
+        <div class="fp-code">FALSE</div>
+        <div class="fp-desc">Only return a result if the owner name matches exactly — no guessing</div>
+      </div>
+    </div>
+
+    <div class="strip green">Owner is the lookup key because it is controlled. A controlled key = reliable lookup. A free-typed key = broken lookup.</div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════
+     S4 — AUTOMATION
+══════════════════════════════════════ -->
+<section class="page-section sec-white" id="s4">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--disc-blue);">4</span> Section 4</div>
+    <h2 class="section-title">Automation with Google Apps Script</h2>
+    <p class="section-sub">Automation comes <em>after</em> the data is structured, controlled, and connected. Never before.</p>
+
+    <div class="callout blue"><strong>The rule:</strong> Automate repeated actions. Do not automate human judgment.</div>
+
+    <!-- What to automate -->
+    <div class="auto-decision">
+      <div class="ad-card">
+        <div class="ad-head yes">✓ Automate now</div>
+        <ul class="ad-body">
+          <li>Last Updated At — timestamp on every edit</li>
+          <li>Review Started At — when Status → In Review</li>
+          <li>Completed At — when Status → Done</li>
+          <li>Deadline reminder emails</li>
+        </ul>
+      </div>
+      <div class="ad-card">
+        <div class="ad-head maybe">→ Maybe later</div>
+        <ul class="ad-body">
+          <li>Reminder emails (need reliable owner email data)</li>
+          <li>Status summaries to Slack/email</li>
+        </ul>
+      </div>
+      <div class="ad-card">
+        <div class="ad-head no">✕ Never automate</div>
+        <ul class="ad-body">
+          <li>Deciding priority level</li>
+          <li>Assigning task ownership</li>
+          <li>Deciding if work is ready for approval</li>
+          <li>Anything that needs business judgment</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Trigger flow -->
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:22px 0 10px;">How onEdit automation works</h3>
+    <div class="trigger-flow">
+      <div class="tf-row">
+        <div class="tf-step"><span class="tf-badge edit">Trigger</span>Someone edits a task cell (cols B–G)</div>
+        <div class="tf-arrow-cell">→</div>
+        <div class="tf-step"><span class="tf-badge write">Write</span>Last Updated At fills with current time</div>
+      </div>
+      <div class="tf-row">
+        <div class="tf-step"><span class="tf-badge status">Trigger</span>Status column changes to <strong>In Review</strong></div>
+        <div class="tf-arrow-cell">→</div>
+        <div class="tf-step"><span class="tf-badge write">Write</span>Review Started At fills with current time</div>
+      </div>
+      <div class="tf-row">
+        <div class="tf-step"><span class="tf-badge status">Trigger</span>Status column changes to <strong>Done</strong></div>
+        <div class="tf-arrow-cell">→</div>
+        <div class="tf-step"><span class="tf-badge write">Write</span>Completed At fills with current time</div>
+      </div>
+    </div>
+
+    <!-- Why now -->
+    <div class="flow-row" style="margin-top:20px;">
+      <div class="flow-step">S1: Agreed<br>status values</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">S2: Status<br>controlled</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">S3: Owner<br>reliable</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step highlight">S4: Script<br>can act safely</div>
+    </div>
+    <div style="font-size:12px;color:var(--ink-muted);margin-top:6px;">Remove any earlier step and the automation breaks. That is why order matters.</div>
+
+    <div class="strip ink">Automation on a messy sheet doesn't clean the mess — it makes the mess run faster.</div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════
+     S5 — NOTION
+══════════════════════════════════════ -->
+<section class="page-section sec-warm" id="s5">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--navy);">5</span> Section 5</div>
+    <h2 class="section-title">The Notion Workspace Layer</h2>
+    <p class="section-sub">Sheets tracks the work. Notion organizes the workspace <em>around</em> the work — context, briefs, templates, and process notes.</p>
+
+    <div class="three-tool">
+      <div>
+        <div class="tt-col-head tt-sheets">Google Sheets</div>
+        <ul class="tt-body">
+          <li>Task records</li>
+          <li>Owner / Status / Date</li>
+          <li>Lookup data</li>
+          <li>Automation timestamps</li>
+        </ul>
+      </div>
+      <div>
+        <div class="tt-col-head tt-notion">Notion</div>
+        <ul class="tt-body">
+          <li>Campaign homepage</li>
+          <li>Briefs and templates</li>
+          <li>Process notes / SOPs</li>
+          <li>Supporting links</li>
+          <li>Workspace views</li>
+        </ul>
+      </div>
+      <div>
+        <div class="tt-col-head tt-board" style="background:var(--ink-muted);">Not in Notion</div>
+        <ul class="tt-body">
+          <li>Rebuilding the Sheets tracker</li>
+          <li>Different status values</li>
+          <li>Different owner names</li>
+          <li>A second task-tracking system</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Workspace tree -->
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:22px 0 10px;">What the workspace contains</h3>
+    <div class="ws-tree">
+      <div class="ws-item">
+        <div class="ws-ico wi-page">🏠</div>
+        <div><div class="ws-name">Workspace Home</div><div class="ws-desc">Top-level orientation, links, quick navigation</div></div>
+      </div>
+      <div class="ws-item">
+        <div class="ws-ico wi-page">📋</div>
+        <div><div class="ws-name">Campaign Homepage</div><div class="ws-desc">Objective · Audience · Key message · Stakeholders · Links</div></div>
+      </div>
+      <div class="ws-item">
+        <div class="ws-ico wi-db">⊞</div>
+        <div><div class="ws-name">Briefs &amp; Work Items — Database</div><div class="ws-desc">Same field names as Sheets. Views for Content, Design, Approval, Publishing.</div></div>
+      </div>
+      <div class="ws-item child">
+        <div class="ws-ico wi-page">👁</div>
+        <div><div class="ws-name">Content / Design / Approval views</div><div class="ws-desc">Filtered views of the same database — not separate copies</div></div>
+      </div>
+      <div class="ws-item">
+        <div class="ws-ico wi-tmpl">◻</div>
+        <div><div class="ws-name">Templates</div><div class="ws-desc">Content Brief · Design Request · Approval Page — reusable starting structures</div></div>
+      </div>
+      <div class="ws-item">
+        <div class="ws-ico wi-sop">📄</div>
+        <div><div class="ws-name">Process &amp; SOP Pages</div><div class="ws-desc">Naming rules · Approval steps · Handoff expectations — written once, maintained centrally</div></div>
+      </div>
+    </div>
+
+    <div class="callout blue"><strong>Critical rule:</strong> The Notion database must use the same status values (To Do / In Progress / In Review / Done) and the same owner names (Mona / Tareq / Danielle / Lina) as Sheets. Different names across tools = coordination tax every day.</div>
+
+    <!-- Student moment: belongs / doesn't belong -->
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 6px;">Quick check — click each item to see where it belongs</h3>
+    <div class="belongs-hint">Does this belong in Notion — or does it belong somewhere else?</div>
+    <div class="belongs-grid">
+      <div class="belongs-item yes-item" onclick="revealBelongs(this)">
+        <div class="bi-text">Campaign objective</div>
+        <div class="bi-hint">Click to check</div>
+        <div class="bi-reveal">✓ Notion — Campaign Homepage. Stable context the whole team needs to find.</div>
+      </div>
+      <div class="belongs-item no-item" onclick="revealBelongs(this)">
+        <div class="bi-text">Task Status = In Review</div>
+        <div class="bi-hint">Click to check</div>
+        <div class="bi-reveal">✕ Not Notion — this is a Sheets field and a board stage. Notion shouldn't duplicate it.</div>
+      </div>
+      <div class="belongs-item yes-item" onclick="revealBelongs(this)">
+        <div class="bi-text">Content Brief for Instagram caption</div>
+        <div class="bi-hint">Click to check</div>
+        <div class="bi-reveal">✓ Notion — Brief database. Created from the Content Brief template.</div>
+      </div>
+      <div class="belongs-item no-item" onclick="revealBelongs(this)">
+        <div class="bi-text">Due Date: April 15</div>
+        <div class="bi-hint">Click to check</div>
+        <div class="bi-reveal">✕ Not Notion as the record — Due Date lives in Sheets. Notion brief may reference it, but Sheets owns it.</div>
+      </div>
+      <div class="belongs-item yes-item" onclick="revealBelongs(this)">
+        <div class="bi-text">Handoff checklist steps</div>
+        <div class="bi-hint">Click to check</div>
+        <div class="bi-reveal">✓ Notion — Process / SOP page. Written once, maintained centrally, easy to find.</div>
+      </div>
+      <div class="belongs-item no-item" onclick="revealBelongs(this)">
+        <div class="bi-text">Priority = High</div>
+        <div class="bi-hint">Click to check</div>
+        <div class="bi-reveal">✕ Not Notion — Priority is a controlled Sheets field. Notion tracks it by reference, not as its own record.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════
+     S6 — BOARD
+══════════════════════════════════════ -->
+<section class="page-section sec-white" id="s6">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--accent);">6</span> Section 6</div>
+    <h2 class="section-title">Trello / ClickUp — Execution Flow</h2>
+    <p class="section-sub">The board makes execution visible. Not where data lives — where you see work moving, who owns it, what's due, and what's stuck.</p>
+
+    <div class="three-tool" style="margin-bottom:20px;">
+      <div>
+        <div class="tt-col-head tt-sheets">Sheets</div>
+        <ul class="tt-body"><li>Records the work</li><li>Data history</li></ul>
+      </div>
+      <div>
+        <div class="tt-col-head tt-notion">Notion</div>
+        <ul class="tt-body"><li>Explains the work</li><li>Context &amp; briefs</li></ul>
+      </div>
+      <div>
+        <div class="tt-col-head tt-board">Board</div>
+        <ul class="tt-body"><li>Shows the work moving</li><li>Ownership · stages · blockers</li></ul>
+      </div>
+    </div>
+
+    <!-- Board mockup -->
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:0 0 10px;">The execution board</h3>
+    <div class="board-mock">
+      <div class="board-col">
+        <div class="board-col-head bc-todo">To Do</div>
+        <div class="board-cards">
+          <div class="board-card">
+            <div class="bc-name">Write Instagram caption</div>
+            <div class="bc-meta"><span class="bc-lbl lbl-c">Content</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="board-col">
+        <div class="board-col-head bc-prog">In Progress</div>
+        <div class="board-cards">
+          <div class="board-card">
+            <div class="bc-name">Design launch banner</div>
+            <div class="bc-meta"><span class="bc-owner">Tareq</span><span class="bc-lbl lbl-d">Design</span><span class="bc-date">Apr 10</span></div>
+          </div>
+          <div class="board-card">
+            <div class="bc-name">Publish landing page update</div>
+            <div class="bc-meta"><span class="bc-owner">Lina</span><span class="bc-lbl lbl-p">Publishing</span><span class="bc-date">Apr 14</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="board-col">
+        <div class="board-col-head bc-review">Review</div>
+        <div class="board-cards">
+          <div class="board-card">
+            <div class="bc-name">Approve banner copy</div>
+            <div class="bc-meta"><span class="bc-owner">Danielle</span><span class="bc-lbl lbl-a">Approval</span><span class="bc-date">Apr 11</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="board-col">
+        <div class="board-col-head bc-done">Done</div>
+        <div class="board-cards">
+          <div class="board-card">
+            <div class="bc-name">Schedule Instagram post</div>
+            <div class="bc-meta"><span class="bc-owner">Lina</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage rule -->
+    <div class="callout warm" style="margin-top:4px;"><strong>Stage rule:</strong> Start with To Do → In Progress → Review → Done. Add a stage only if it represents a genuinely different execution action — not just a label.</div>
+
+    <!-- Card anatomy -->
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:20px 0 10px;">What belongs on a card</h3>
+    <div class="grid-4">
+      <div class="card"><div class="tag navy" style="margin-bottom:6px;">Required</div><h3 class="card-title">Task Name</h3><p class="card-body">Exact same name used in Sheets and Notion.</p></div>
+      <div class="card"><div class="tag navy" style="margin-bottom:6px;">Active work</div><h3 class="card-title">Owner</h3><p class="card-body">One person. From the agreed list. Same name as Sheets.</p></div>
+      <div class="card"><div class="tag navy" style="margin-bottom:6px;">Active work</div><h3 class="card-title">Due Date</h3><p class="card-body">Same date as in Sheets. Add when work becomes active.</p></div>
+      <div class="card"><div class="tag navy" style="margin-bottom:6px;">Filtering</div><h3 class="card-title">Label</h3><p class="card-body">Content / Design / Approval / Publishing. Helps filter — not a stage.</p></div>
+    </div>
+
+    <div class="strip accent">If the board uses different names than the tracker, the system will drift. Same language everywhere — always.</div>
+
+    <!-- Student moment: spot the gap -->
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 8px;">Spot the gap — what is missing from this card?</h3>
+    <div class="gap-card-wrap">
+      <div class="gap-card">
+        <div class="gap-card-label">⚠ Task card — as submitted by a team member</div>
+        <div class="bc-name">Instagram thing</div>
+        <div class="gap-fields">
+          <span class="gap-missing">No owner</span>
+          <span class="gap-missing">No due date</span>
+          <span class="gap-missing">No label</span>
+          <span style="font-size:9px;font-weight:700;border-radius:3px;padding:2px 6px;background:rgba(139,38,53,.06);color:var(--bad);border:1px solid var(--bad-border);">In Progress</span>
+        </div>
+        <button class="gap-reveal-btn" onclick="revealGap(this)">↓ Show what needs fixing</button>
+        <div class="gap-answer">
+          <strong>Three things are missing:</strong><br>
+          1. <strong>Task name</strong> — "Instagram thing" is not specific. Try: "Write Instagram caption — product launch"<br>
+          2. <strong>Owner</strong> — without one person named, nobody is accountable for moving this card forward<br>
+          3. <strong>Label</strong> — no label means this card can't be filtered by team or type<br>
+          <br>Due date can wait until the work becomes active — but the name and owner must be added before the card is useful.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════
+     S7 — RULES
+══════════════════════════════════════ -->
+<section class="page-section sec-warm" id="s7">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--bad);">7</span> Section 7</div>
+    <h2 class="section-title">Process Rules and Handoff Logic</h2>
+    <p class="section-sub">Tools don't stay aligned by themselves. A short operating note keeps the three-tool workflow consistent and owned.</p>
+
+    <div class="callout red"><strong>Without operating rules:</strong> Status changes in one tool but not others. Task names drift. Due dates disagree. Nobody knows who owns the next step.</div>
+
+    <!-- Update matrix -->
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:22px 0 10px;">Who updates what — and when</h3>
+    <div style="overflow-x:auto;margin:0 0 20px;">
+      <table style="width:100%;border-collapse:collapse;background:var(--surface);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh-md);">
+        <thead>
+          <tr>
+            <th style="background:var(--ink);color:#fff;padding:10px 14px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;text-align:left;">When</th>
+            <th style="background:var(--green);color:#fff;padding:10px 14px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;text-align:left;">Sheets</th>
+            <th style="background:var(--navy);color:#fff;padding:10px 14px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;text-align:left;">Notion</th>
+            <th style="background:var(--accent);color:#fff;padding:10px 14px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;text-align:left;">Board</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:9px 14px;border-bottom:1px solid var(--border);font-size:13px;font-weight:600;color:var(--ink);">New task created</td>
+            <td style="padding:9px 14px;border-bottom:1px solid var(--border);font-size:12.5px;color:var(--ink-2);">Add row — all 6 fields</td>
+            <td style="padding:9px 14px;border-bottom:1px solid var(--border);font-size:12.5px;color:var(--ink-2);">Add brief if needed</td>
+            <td style="padding:9px 14px;border-bottom:1px solid var(--border);font-size:12.5px;color:var(--ink-2);">Add card — same name as Sheets</td>
+          </tr>
+          <tr>
+            <td style="padding:9px 14px;border-bottom:1px solid var(--border);font-size:13px;font-weight:600;color:var(--ink);">Status changes</td>
+            <td style="padding:9px 14px;border-bottom:1px solid var(--border);font-size:12.5px;color:var(--ink-2);">Update Status ← task record (update Sheets first)</td>
+            <td style="padding:9px 14px;border-bottom:1px solid var(--border);font-size:12.5px;color:var(--ink-2);">Only if brief outcome changes</td>
+            <td style="padding:9px 14px;border-bottom:1px solid var(--border);font-size:12.5px;color:var(--ink-2);">Move card to match Sheets status</td>
+          </tr>
+          <tr>
+            <td style="padding:9px 14px;font-size:13px;font-weight:600;color:var(--ink);">Due date changes</td>
+            <td style="padding:9px 14px;font-size:12.5px;color:var(--ink-2);">Update Due Date ← agreed record</td>
+            <td style="padding:9px 14px;font-size:12.5px;color:var(--ink-2);">Update if brief references it</td>
+            <td style="padding:9px 14px;font-size:12.5px;color:var(--ink-2);">Update card date to match Sheets</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Handoff chain -->
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:0 0 10px;">Handoff logic — stage by stage</h3>
+    <div class="handoff-chain">
+      <div class="hf-item">
+        <div class="hf-stage">Content → Design</div>
+        <div class="hf-rule">Copy approved internally · Brief includes audience, message, format · Designer assigned and notified · Sheets → In Review</div>
+      </div>
+      <div class="hf-item hf-design">
+        <div class="hf-stage">Design → Approval</div>
+        <div class="hf-rule">Final asset linked in brief · Handoff note added: what was delivered, what to review, any risk · Reviewer named and notified · Sheets → In Review</div>
+      </div>
+      <div class="hf-item hf-approval">
+        <div class="hf-stage">Approval → Publishing</div>
+        <div class="hf-rule">Approval outcome recorded in brief · Any changes completed · Sheets → Done · Publishing team receives asset + brief link + publication date</div>
+      </div>
+      <div class="hf-item hf-publish">
+        <div class="hf-stage">Publishing → Complete</div>
+        <div class="hf-rule">Published link added to brief · Sheets confirmed Done · Board card moved to Done and closed</div>
+      </div>
+    </div>
+
+    <div class="callout green"><strong>Naming rule:</strong> Same task name in Sheets, Notion, and the board — no variations. Same status values exactly. Same owner names. If names drift, the system stops matching itself.</div>
+
+    <!-- Student moment: auto vs manual quiz -->
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 6px;">Quick decision — click each action to see if it is automatic or manual</h3>
+    <div class="am-quiz">
+      <div class="am-quiz-intro">Which of these actions happen automatically — and which ones still need a human?</div>
+      <div class="amq-grid">
+        <div class="amq-item auto-item" onclick="revealAMQ(this)">
+          <div class="amq-text">Last Updated At fills when a task row is edited</div>
+          <div class="amq-badge">⚙ Automatic</div>
+        </div>
+        <div class="amq-item manual-item" onclick="revealAMQ(this)">
+          <div class="amq-text">Move the board card when Sheets status changes</div>
+          <div class="amq-badge">✋ Manual</div>
+        </div>
+        <div class="amq-item auto-item" onclick="revealAMQ(this)">
+          <div class="amq-text">Review Started At fills when Status → In Review</div>
+          <div class="amq-badge">⚙ Automatic</div>
+        </div>
+        <div class="amq-item manual-item" onclick="revealAMQ(this)">
+          <div class="amq-text">Write the handoff note before status changes</div>
+          <div class="amq-badge">✋ Manual</div>
+        </div>
+        <div class="amq-item auto-item" onclick="revealAMQ(this)">
+          <div class="amq-text">Deadline reminder email 24 hours before due date</div>
+          <div class="amq-badge">⚙ Automatic</div>
+        </div>
+        <div class="amq-item manual-item" onclick="revealAMQ(this)">
+          <div class="amq-text">Confirm approval outcome before marking Done</div>
+          <div class="amq-badge">✋ Manual</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strip ink">A handoff is not only a status change. It is a transfer of usable context — so the next person can act without asking.</div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════
+     S8 — AI
+══════════════════════════════════════ -->
+<section class="page-section sec-white" id="s8">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--disc-blue);">8</span> Section 8</div>
+    <h2 class="section-title">Using AI to Support the Workflow</h2>
+    <p class="section-sub">AI comes last — on purpose. It is most useful when the workflow already exists. AI drafts, summarizes, transforms, and suggests. It does not own, approve, or decide.</p>
+
+    <!-- AI role -->
+    <div class="compare-2">
+      <div class="compare-col">
+        <div class="compare-head good">✓ AI should help with</div>
+        <ul class="compare-body">
+          <li class="good-item">Rewriting vague task titles into clear cards</li>
+          <li class="good-item">Drafting first-pass handoff notes</li>
+          <li class="good-item">Summarizing a long brief into bullet points</li>
+          <li class="good-item">Suggesting pre-publishing checklists</li>
+          <li class="good-item">First drafts of process notes / SOP sections</li>
+          <li class="good-item">Formula help or script drafting in Sheets</li>
+        </ul>
+      </div>
+      <div class="compare-col">
+        <div class="compare-head bad">✕ AI should not own</div>
+        <ul class="compare-body">
+          <li class="bad-item">Deciding if work is ready for approval</li>
+          <li class="bad-item">Assigning final task ownership</li>
+          <li class="bad-item">Changing status to Done without human confirmation</li>
+          <li class="bad-item">Setting final priority without business context</li>
+          <li class="bad-item">Replacing the handoff note requirement</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Prompt compare -->
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:22px 0 10px;">Weak vs strong AI request</h3>
+    <div class="prompt-compare">
+      <div class="pc-card">
+        <div class="pc-head weak">⚠ Weak request</div>
+        <div class="pc-body">
+          <div class="pc-prompt">"Write a task."</div>
+          <div class="pc-why">No context. No format. No constraints. AI will guess — and guess wrong.</div>
+        </div>
+      </div>
+      <div class="pc-card">
+        <div class="pc-head strong">✓ Stronger request</div>
+        <div class="pc-body">
+          <div class="pc-prompt">"Rewrite 'Email thing for launch' into a clear board card title under 10 words. Add a one-sentence scope note. Owner: Mona. Tool: Trello."</div>
+          <div class="pc-why">Context + task + format + constraints + input. Output is useful with light editing.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI IO example -->
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:20px 0 8px;">AI flow: draft → human review → final output</h3>
+    <div class="ai-io">
+      <div class="ai-io-pane">
+        <div class="aio-label input">Rough input to AI</div>
+        <div class="aio-text rough">"launch email - mona is doing copy, goes out april 15, cta is sign up page, danielle approves, maybe legal too"</div>
+      </div>
+      <div class="ai-io-pane">
+        <div class="aio-label output">AI first draft</div>
+        <div class="aio-text"><strong>Objective:</strong> Send launch email on April 15 to drive sign-ups.<br><strong>Owner:</strong> Mona. <strong>Approver:</strong> Danielle. <strong>CTA:</strong> Sign-up page.<br><strong>Legal review:</strong> [TBC]</div>
+      </div>
+      <div class="ai-io-pane">
+        <div class="aio-label human">Human checks before using</div>
+        <div class="aio-text">Confirm sign-up page URL · Confirm legal requirement · Verify April 15 matches Sheets · Add exact CTA wording once copy approved</div>
+      </div>
+    </div>
+
+    <!-- Human review checklist -->
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 6px;">After every AI draft — what still needs human review?</h3>
+    <p style="font-size:13px;color:var(--ink-muted);margin-bottom:12px;font-style:italic;">Click each item to confirm you have checked it before using the AI output.</p>
+    <ul class="hr-check-list" id="hrChecklist">
+      <li onclick="this.classList.toggle('hrc-checked')"><div class="hr-box">✓</div><span>Owner name — is it from the agreed list (Mona / Tareq / Danielle / Lina)?</span></li>
+      <li onclick="this.classList.toggle('hrc-checked')"><div class="hr-box">✓</div><span>Status value — does it use the exact agreed wording (To Do / In Progress / In Review / Done)?</span></li>
+      <li onclick="this.classList.toggle('hrc-checked')"><div class="hr-box">✓</div><span>Due date — does it match the date already in Sheets, or is it an AI-invented date?</span></li>
+      <li onclick="this.classList.toggle('hrc-checked')"><div class="hr-box">✓</div><span>Factual accuracy — has AI invented any details that are not in the original input?</span></li>
+      <li onclick="this.classList.toggle('hrc-checked')"><div class="hr-box">✓</div><span>Any [TBC] flags — have unresolved uncertainties been confirmed with a real person?</span></li>
+      <li onclick="this.classList.toggle('hrc-checked')"><div class="hr-box">✓</div><span>Readiness for next stage — has a human confirmed the work is actually ready, not just the description?</span></li>
+    </ul>
+
+    <div class="strip blue">The workflow comes first. AI becomes useful because the workflow already exists.</div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════
+     FULL DAY SYSTEM MAP
+══════════════════════════════════════ -->
+<section class="page-section sec-warm" id="systemmap">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--ink);">∞</span> Full Day System</div>
+    <h2 class="section-title">One connected system — built in the right order</h2>
+    <p class="section-sub">Each layer depends on the layer before it. Structure is not step one because it is easiest — it is step one because everything else breaks without it.</p>
+
+    <div class="system-map">
+      <div class="sm-block sm-1"><div class="sm-num">S1</div><div class="sm-name">Structure</div><div class="sm-tool">6 agreed fields</div></div>
+      <div class="sm-arrow">→</div>
+      <div class="sm-block sm-2"><div class="sm-num">S2</div><div class="sm-name">Sheets</div><div class="sm-tool">Tracker + Lists</div></div>
+      <div class="sm-arrow">→</div>
+      <div class="sm-block sm-3"><div class="sm-num">S3</div><div class="sm-name">Lookups</div><div class="sm-tool">VLOOKUP / reference</div></div>
+      <div class="sm-arrow">→</div>
+      <div class="sm-block sm-4"><div class="sm-num">S4</div><div class="sm-name">Automation</div><div class="sm-tool">Apps Script</div></div>
+      <div class="sm-arrow">→</div>
+      <div class="sm-block sm-5"><div class="sm-num">S5</div><div class="sm-name">Notion</div><div class="sm-tool">Workspace layer</div></div>
+      <div class="sm-arrow">→</div>
+      <div class="sm-block sm-6"><div class="sm-num">S6</div><div class="sm-name">Board</div><div class="sm-tool">Execution visibility</div></div>
+      <div class="sm-arrow">→</div>
+      <div class="sm-block sm-7"><div class="sm-num">S7</div><div class="sm-name">Rules</div><div class="sm-tool">Operating note</div></div>
+      <div class="sm-arrow">→</div>
+      <div class="sm-block sm-8"><div class="sm-num">S8</div><div class="sm-name">AI</div><div class="sm-tool">Support layer</div></div>
+    </div>
+
+    <div class="final-hero">
+      <div class="final-hero-inner">
+        <div class="fh-eyebrow">Day 1 — Complete System</div>
+        <h3 class="fh-title">Everything built today works together.</h3>
+        <ul class="fh-list">
+          <li><span class="fh-num">01</span><span><strong>Structure</strong> — 6 fields. Agreed meaning. Consistent rules. Nothing works without this.</span></li>
+          <li><span class="fh-num">02</span><span><strong>Sheets</strong> — Operational task record. Controlled fields. Lists tab as source of controlled values.</span></li>
+          <li><span class="fh-num">03</span><span><strong>Lookups</strong> — Team + Role pulled automatically. One source. No repeated typing.</span></li>
+          <li><span class="fh-num">04</span><span><strong>Automation</strong> — Timestamps. Status-based markers. Repetition handled. Judgment stays with humans.</span></li>
+          <li><span class="fh-num">05</span><span><strong>Notion</strong> — Briefs, templates, process notes. Context the tracker can't carry.</span></li>
+          <li><span class="fh-num">06</span><span><strong>Board</strong> — Work made visible. Movement. Ownership. Waiting states.</span></li>
+          <li><span class="fh-num">07</span><span><strong>Rules</strong> — Operating note. Update rules. Handoff logic. Manual vs automated.</span></li>
+          <li><span class="fh-num">08</span><span><strong>AI</strong> — Draft, summarize, transform, suggest. Inside the system. Never instead of it.</span></li>
+        </ul>
+        <div class="fh-final">"The workflow comes first. AI becomes useful because the workflow already exists."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     CHEAT SHEET
+══════════════════════════════════════ -->
+<section class="page-section sec-white" id="cheatsheet">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--navy);">📋</span> Cheat Sheet</div>
+    <h2 class="section-title">Quick reference — the key rules</h2>
+    <div class="cheat-grid">
+      <div class="cheat-card">
+        <div class="cc-title">The 6 minimum fields</div>
+        <ul>
+          <li>Reference ID — unique task identity</li>
+          <li>Task Name — what the work is</li>
+          <li>Owner — one person accountable</li>
+          <li>Status — agreed stage: To Do / In Progress / In Review / Done</li>
+          <li>Due Date — a real calendar date</li>
+          <li>Priority — agreed level: Low / Medium / High / Critical</li>
+        </ul>
+      </div>
+      <div class="cheat-card">
+        <div class="cc-title" style="color:var(--green);border-bottom-color:var(--green);">Tool roles</div>
+        <ul>
+          <li>Sheets — task records, status, dates, owner data</li>
+          <li>Notion — briefs, context, process notes (source for workspace knowledge)</li>
+          <li>Board — execution visibility, movement, ownership</li>
+          <li>Lists tab — source of controlled values and reference data</li>
+          <li>When tools disagree on task data → update Sheets first</li>
+        </ul>
+      </div>
+      <div class="cheat-card">
+        <div class="cc-title" style="color:var(--disc-blue);border-bottom-color:var(--disc-blue);">Lookup rule</div>
+        <ul>
+          <li>Owner is the lookup key because it is controlled</li>
+          <li>Team + Role are pulled via VLOOKUP from Lists tab</li>
+          <li>Team + Role are NOT part of the minimum 6</li>
+          <li>Change Team/Role in Lists tab → all rows update</li>
+        </ul>
+      </div>
+      <div class="cheat-card">
+        <div class="cc-title" style="color:var(--accent);border-bottom-color:var(--accent);">Automation rule</div>
+        <ul>
+          <li>Automate: timestamps, status-based markers</li>
+          <li>Never automate: priority, ownership, approval</li>
+          <li>Last Updated At → onEdit trigger</li>
+          <li>Review Started At / Completed At → status trigger</li>
+        </ul>
+      </div>
+      <div class="cheat-card">
+        <div class="cc-title" style="color:var(--bad);border-bottom-color:var(--bad);">Handoff rule</div>
+        <ul>
+          <li>Handoff = status change + note + next owner assigned</li>
+          <li>Note must include: what delivered, what to review, any risk</li>
+          <li>Next owner must be named and notified — not assumed</li>
+          <li>Completion confirmed by receiver, not self-reported</li>
+        </ul>
+      </div>
+      <div class="cheat-card">
+        <div class="cc-title" style="color:var(--disc-blue);border-bottom-color:var(--disc-blue);">AI rule</div>
+        <ul>
+          <li>AI: draft, summarize, transform, suggest</li>
+          <li>AI never: approve, assign, decide readiness</li>
+          <li>Good request = context + task + format + constraints</li>
+          <li>Always human-review before using AI output</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     COMMON MISTAKES
+══════════════════════════════════════ -->
+<section class="page-section sec-warm" id="mistakes">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--bad);">⚠</span> Common Mistakes</div>
+    <h2 class="section-title">What goes wrong — and how to fix it</h2>
+    <div class="mistake-grid">
+      <div class="mistake-card">
+        <div class="mc-icon">🔴</div>
+        <div class="mc-title">Confusing field with value</div>
+        <div class="mc-fix">"Status" is the field. "In Progress" is the value. Agreeing on field names is not enough — agree on the values too. <strong>Fix: define both before building.</strong></div>
+      </div>
+      <div class="mistake-card">
+        <div class="mc-icon">🔴</div>
+        <div class="mc-title">Free-typing where control is needed</div>
+        <div class="mc-fix">Status, Owner, and Priority typed freely = filters break, lookups fail, reports lie. <strong>Fix: data validation dropdowns from the Lists tab.</strong></div>
+      </div>
+      <div class="mistake-card">
+        <div class="mc-icon">🔴</div>
+        <div class="mc-title">Retyping stable support data</div>
+        <div class="mc-fix">Team and Role typed manually in every row = drift when someone changes teams. <strong>Fix: reference table + VLOOKUP. Enter once, reuse everywhere.</strong></div>
+      </div>
+      <div class="mistake-card">
+        <div class="mc-icon">🔴</div>
+        <div class="mc-title">Automating judgment calls</div>
+        <div class="mc-fix">Automating priority or approval readiness = the system overrides human decisions it can't make. <strong>Fix: only automate timestamps and trigger-based markers.</strong></div>
+      </div>
+      <div class="mistake-card">
+        <div class="mc-icon">🔴</div>
+        <div class="mc-title">Building Notion as a second tracker</div>
+        <div class="mc-fix">Different status values, different owner names in Notion = two systems the team must maintain. <strong>Fix: Notion is context. Sheets is the record. Same names everywhere.</strong></div>
+      </div>
+      <div class="mistake-card">
+        <div class="mc-icon">🔴</div>
+        <div class="mc-title">No operating rules</div>
+        <div class="mc-fix">Tools without rules drift within days — status in one place, different status elsewhere. <strong>Fix: write the operating note. Make update rules and handoff logic explicit.</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     GLOSSARY
+══════════════════════════════════════ -->
+<section class="page-section sec-white" id="glossary">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--navy);">A–Z</span> Glossary</div>
+    <h2 class="section-title">Key terms — plain language</h2>
+    <div class="wrap-sm">
+      <div class="glossary-list" id="glossList"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SELF CHECK
+══════════════════════════════════════ -->
+<section class="page-section sec-warm" id="selfcheck">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--green);">✓</span> Self-Check</div>
+    <h2 class="section-title">Can you explain these?</h2>
+    <p class="section-sub" style="margin-bottom:20px;">Click each item when you feel confident you can explain it clearly. These are the core ideas from today.</p>
+    <div class="wrap-sm">
+      <ul class="self-check-list" id="selfCheckList"></ul>
+    </div>
+    <div style="margin-top:16px;padding:14px 18px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);font-size:13px;color:var(--ink-muted);">
+      <span id="checkCount">0</span> of <span id="checkTotal">0</span> items checked — <span id="checkMsg">keep going</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     OFFICIAL RESOURCES
+══════════════════════════════════════ -->
+<section class="page-section sec-white" id="resources">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--navy);">→</span> After Class</div>
+    <h2 class="section-title">Official resources — continue learning</h2>
+    <p class="section-sub" style="margin-bottom:28px;">Where to go when you want to practice, look something up, or go deeper on any tool from today. Official sources only.</p>
+
+    <div class="resource-cats">
+
+      <!-- Google Sheets -->
+      <div class="resource-cat">
+        <div class="resource-cat-head sheets-h">
+          <div class="resource-cat-icon">📊</div>
+          <div class="resource-cat-name">Google Sheets</div>
+        </div>
+        <div class="resource-items">
+          <div class="resource-item">
+            <div class="ri-icon">🔽</div>
+            <div class="ri-body">
+              <div class="ri-title">Data Validation — Dropdowns and controlled input</div>
+              <div class="ri-desc">How to create dropdown lists from a range or fixed list. Directly covers the controlled fields built in Section 2.</div>
+              <a class="ri-link" href="https://support.google.com/docs/answer/186103" target="_blank" rel="noopener">Open official guide</a>
+            </div>
+          </div>
+          <div class="resource-item">
+            <div class="ri-icon">🔍</div>
+            <div class="ri-body">
+              <div class="ri-title">VLOOKUP — Official function reference</div>
+              <div class="ri-desc">The full syntax, parameters, and worked examples for the VLOOKUP function used in Section 3.</div>
+              <a class="ri-link" href="https://support.google.com/docs/answer/3093318" target="_blank" rel="noopener">Open official guide</a>
+            </div>
+          </div>
+          <div class="resource-item">
+            <div class="ri-icon">🛡</div>
+            <div class="ri-body">
+              <div class="ri-title">Protect sheets and ranges</div>
+              <div class="ri-desc">How to lock headers, the Lists tab, and formula columns so team edits can't break the structure.</div>
+              <a class="ri-link" href="https://support.google.com/docs/answer/1218656" target="_blank" rel="noopener">Open official guide</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Apps Script -->
+      <div class="resource-cat">
+        <div class="resource-cat-head script-h">
+          <div class="resource-cat-icon">⚙</div>
+          <div class="resource-cat-name">Google Apps Script</div>
+        </div>
+        <div class="resource-items">
+          <div class="resource-item">
+            <div class="ri-icon">📖</div>
+            <div class="ri-body">
+              <div class="ri-title">Apps Script overview — official developer docs</div>
+              <div class="ri-desc">The starting point for everything Apps Script. Covers what it is, what it can do, and how to get started.</div>
+              <a class="ri-link" href="https://developers.google.com/apps-script/overview" target="_blank" rel="noopener">Open official docs</a>
+            </div>
+          </div>
+          <div class="resource-item">
+            <div class="ri-icon">📋</div>
+            <div class="ri-body">
+              <div class="ri-title">Extending Google Sheets with Apps Script</div>
+              <div class="ri-desc">How to read and write Sheets data from a script — the foundation of the onEdit automation built in Section 4.</div>
+              <a class="ri-link" href="https://developers.google.com/apps-script/guides/sheets" target="_blank" rel="noopener">Open official docs</a>
+            </div>
+          </div>
+          <div class="resource-item">
+            <div class="ri-icon">⚡</div>
+            <div class="ri-body">
+              <div class="ri-title">Installable triggers — onEdit and time-driven</div>
+              <div class="ri-desc">How triggers work, when they fire, and the difference between simple and installable triggers. Covers everything from Section 4 onEdit demos.</div>
+              <a class="ri-link" href="https://developers.google.com/apps-script/guides/triggers" target="_blank" rel="noopener">Open official docs</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notion -->
+      <div class="resource-cat">
+        <div class="resource-cat-head notion-h">
+          <div class="resource-cat-icon">📝</div>
+          <div class="resource-cat-name">Notion</div>
+        </div>
+        <div class="resource-items">
+          <div class="resource-item">
+            <div class="ri-icon">🏠</div>
+            <div class="ri-body">
+              <div class="ri-title">Notion Help Center</div>
+              <div class="ri-desc">The official starting point for all Notion documentation — pages, databases, views, templates, and workspace setup.</div>
+              <a class="ri-link" href="https://www.notion.so/help" target="_blank" rel="noopener">Open help center</a>
+            </div>
+          </div>
+          <div class="resource-item">
+            <div class="ri-icon">⊞</div>
+            <div class="ri-body">
+              <div class="ri-title">Intro to databases in Notion</div>
+              <div class="ri-desc">How databases work, how to add properties, and how to set up views — covers the Briefs &amp; Work Items database from Section 5.</div>
+              <a class="ri-link" href="https://www.notion.so/help/intro-to-databases" target="_blank" rel="noopener">Open official guide</a>
+            </div>
+          </div>
+          <div class="resource-item">
+            <div class="ri-icon">◻</div>
+            <div class="ri-body">
+              <div class="ri-title">Using templates in Notion</div>
+              <div class="ri-desc">How to create, apply, and manage database templates — the foundation of the Content Brief template built in Section 5.</div>
+              <a class="ri-link" href="https://www.notion.so/help/using-templates-in-a-database" target="_blank" rel="noopener">Open official guide</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trello -->
+      <div class="resource-cat">
+        <div class="resource-cat-head trello-h">
+          <div class="resource-cat-icon">📌</div>
+          <div class="resource-cat-name">Trello</div>
+        </div>
+        <div class="resource-items">
+          <div class="resource-item">
+            <div class="ri-icon">🚀</div>
+            <div class="ri-body">
+              <div class="ri-title">Trello 101 — official getting started guide</div>
+              <div class="ri-desc">Boards, lists, cards, and labels — covers everything needed to build and use the execution board from Section 6.</div>
+              <a class="ri-link" href="https://trello.com/guide/trello-101" target="_blank" rel="noopener">Open official guide</a>
+            </div>
+          </div>
+          <div class="resource-item">
+            <div class="ri-icon">🏷</div>
+            <div class="ri-body">
+              <div class="ri-title">Labels, filters, and card organisation</div>
+              <div class="ri-desc">How to add labels (Content / Design / Approval / Publishing) and filter the board by them — directly supports the card structure from Section 6.</div>
+              <a class="ri-link" href="https://support.atlassian.com/trello/docs/adding-labels-to-cards/" target="_blank" rel="noopener">Open official support</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ClickUp -->
+      <div class="resource-cat">
+        <div class="resource-cat-head clickup-h">
+          <div class="resource-cat-icon">✔</div>
+          <div class="resource-cat-name">ClickUp</div>
+        </div>
+        <div class="resource-items">
+          <div class="resource-item">
+            <div class="ri-icon">📚</div>
+            <div class="ri-body">
+              <div class="ri-title">ClickUp Help Center</div>
+              <div class="ri-desc">Official documentation for tasks, statuses, views, and workspace setup — covers the ClickUp side of the execution board from Section 6.</div>
+              <a class="ri-link" href="https://help.clickup.com" target="_blank" rel="noopener">Open help center</a>
+            </div>
+          </div>
+          <div class="resource-item">
+            <div class="ri-icon">📊</div>
+            <div class="ri-body">
+              <div class="ri-title">Views in ClickUp — Board, List, Calendar</div>
+              <div class="ri-desc">How to switch between Board view for execution movement, List view for scanning, and Calendar view for schedule awareness.</div>
+              <a class="ri-link" href="https://help.clickup.com/hc/en-us/articles/6310539488023-Views-overview" target="_blank" rel="noopener">Open official guide</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="callout navy" style="margin-top:8px;">
+      <strong>Rule for using these:</strong> When something from today's session isn't working as expected, check the official documentation first — before asking or guessing. The answers are usually there.
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     FOOTER
+══════════════════════════════════════ -->
+<footer class="page-footer">
+  Day 1 · Workspace Data Ops &amp; Work OS Setup · Student Handout
+</footer>
+
+<script>
+// ── ROADMAP DATA ──
+const RM_DATA = [
+  {name:'Structure', anchor:'s1', desc:'<strong>Section 1 — Shared Workspace Structure.</strong> Why structure comes before tools. The 6 minimum fields every team must agree on. What each field means, and what the values should be.'},
+  {name:'Sheets', anchor:'s2', desc:'<strong>Section 2 — Google Sheets Tracking Layer.</strong> Building the Main Tracker. Controlled vs free-text fields. The Lists tab as the source of controlled values. Optional support columns (Team, Role).'},
+  {name:'Lookups', anchor:'s3', desc:'<strong>Section 3 — Lookup Logic and Connected Data.</strong> Why stable support data should be entered once and pulled automatically. The reference table. VLOOKUP anatomy. Owner as the lookup key.'},
+  {name:'Automation', anchor:'s4', desc:'<strong>Section 4 — Automation with Google Apps Script.</strong> Automate repeated actions, not judgment. OnEdit triggers for timestamps. Status-based automation. Why automation only works after the data is structured.'},
+  {name:'Notion', anchor:'s5', desc:'<strong>Section 5 — Notion Workspace Layer.</strong> Notion holds context, briefs, templates, and process notes — not the task tracker. Campaign homepage. Database with the same field names as Sheets. Views and templates.'},
+  {name:'Board', anchor:'s6', desc:'<strong>Section 6 — Trello / ClickUp Execution Flow.</strong> The board shows work moving — not where data lives. Four core stages. Card anatomy. Ownership and due dates on active work. When to add a waiting state.'},
+  {name:'Rules', anchor:'s7', desc:'<strong>Section 7 — Process Rules and Handoff Logic.</strong> Operating rules that keep three tools aligned. Who updates what and when. Naming discipline. Handoff logic — status change + note + next owner. Manual vs automated updates.'},
+  {name:'AI', anchor:'s8', desc:'<strong>Section 8 — AI Support.</strong> AI comes last because the workflow already exists. AI drafts, summarizes, transforms, suggests. Humans still own correctness, approval, and judgment. Good vs weak AI requests.'},
+];
+
+const roadmapRow = document.getElementById('roadmapRow');
+const roadmapPreview = document.getElementById('roadmapPreview');
+
+roadmapRow.querySelectorAll('.roadmap-item').forEach((item, i) => {
+  item.addEventListener('click', () => {
+    // Update active state and preview
+    roadmapRow.querySelectorAll('.roadmap-item').forEach(el => el.classList.remove('active'));
+    item.classList.add('active');
+    roadmapPreview.innerHTML = RM_DATA[i].desc + ' <a href="#' + RM_DATA[i].anchor + '" style="display:inline-block;margin-top:8px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--navy);text-decoration:none;border-bottom:1px solid rgba(29,53,87,.25);">↓ Jump to section</a>';
+    roadmapPreview.classList.add('visible');
+    // Scroll to section (offset for sticky nav)
+    const target = document.getElementById(RM_DATA[i].anchor);
+    if (target) {
+      const top = target.getBoundingClientRect().top + window.scrollY - 64;
+      window.scrollTo({top, behavior:'smooth'});
+    }
+  });
+});
+// Show first by default
+roadmapPreview.innerHTML = RM_DATA[0].desc + ' <a href="#s1" style="display:inline-block;margin-top:8px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--navy);text-decoration:none;border-bottom:1px solid rgba(29,53,87,.25);">↓ Jump to section</a>';
+
+// ── FIELD PILLS ──
+function toggleField(pill) {
+  const isOpen = pill.classList.contains('open');
+  document.querySelectorAll('.field-pill').forEach(p => p.classList.remove('open'));
+  if (!isOpen) pill.classList.add('open');
+}
+
+// ── FORMULA PARTS ──
+function toggleFP(el) {
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.formula-part').forEach(p => p.classList.remove('open'));
+  if (!isOpen) el.classList.add('open');
+}
+
+// ── SHEET TABS ──
+function switchTab(tab, btn) {
+  document.getElementById('tab-tracker').style.display = tab === 'tracker' ? '' : 'none';
+  document.getElementById('tab-lists').style.display   = tab === 'lists'   ? '' : 'none';
+  document.querySelectorAll('.sheet-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ── BEFORE/AFTER TOGGLE ──
+function toggleBA(id, state, btn) {
+  const wrap = btn.closest('.ba-wrap');
+  wrap.querySelectorAll('.ba-tab').forEach(t => t.classList.remove('active'));
+  wrap.querySelectorAll('.ba-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(id + '-' + state).classList.add('active');
+}
+
+// ── GLOSSARY ──
+const TERMS = [
+  {term:'Field', def:'A named column in the tracker — the label for a category of information. Example: "Status" is a field. "In Progress" is not.'},
+  {term:'Value', def:'The specific information that goes inside a field. Example: "In Review" is the value inside the "Status" field.'},
+  {term:'Rule', def:'The agreed behaviour for how a field or value should be used. Example: "Only move to In Review after the brief is complete."'},
+  {term:'Controlled value', def:'A value that can only be selected from a pre-approved list — not typed freely. Status, Owner, and Priority are controlled in the Main Tracker.'},
+  {term:'Reference table', def:'A structured table in the Lists tab that stores stable information — like Owner, Team, and Role — so it can be looked up automatically instead of typed repeatedly.'},
+  {term:'Lookup key', def:'The value used to find a match in a reference table. Owner is the lookup key because it is controlled — making it reliable enough for a formula to match on.'},
+  {term:'Support data', def:'Stable information about a person or category that does not change task to task — like Team or Role. It belongs in the reference table, not typed into every row.'},
+  {term:'VLOOKUP', def:'A Google Sheets formula that searches for a value in the first column of a range and returns a value from another column of the same row. Used to pull Team and Role automatically from Owner.'},
+  {term:'onEdit trigger', def:'An Apps Script function that runs automatically whenever a cell in a sheet is edited. Used to write timestamps without manual entry.'},
+  {term:'Handoff logic', def:'The agreed rules for what must be complete, communicated, and transferred before work moves from one stage to the next. A status change alone is not a handoff.'},
+  {term:'Operating note', def:'A short, practical document that defines how the team uses and updates the three-tool workflow — update rules, naming rules, ownership expectations, and handoff logic.'},
+  {term:'Source of truth', def:'The agreed master record for a specific type of data. Each layer owns something: Sheets owns task status, dates, and ownership records. The Lists tab owns controlled values and reference data. Notion owns briefs, templates, and process documentation. When tools disagree on task state or dates — update Sheets first.'},
+];
+
+const glossList = document.getElementById('glossList');
+TERMS.forEach(t => {
+  const div = document.createElement('div');
+  div.className = 'gloss-item';
+  div.innerHTML = `
+    <div class="gloss-trigger" onclick="toggleGloss(this.parentElement)">
+      <span>${t.term}</span>
+      <span class="gt-arrow">+</span>
+    </div>
+    <div class="gloss-def">${t.def}</div>`;
+  glossList.appendChild(div);
+});
+
+function toggleGloss(item) {
+  item.classList.toggle('open');
+}
+
+// ── SELF CHECK ──
+const CHECKS = [
+  'I can name the 6 minimum fields and explain why each one exists.',
+  'I can explain the difference between a field, a value, and a rule — with an example.',
+  'I can explain why Owner, Status, and Priority must be controlled — and what breaks if they are not.',
+  'I can explain why Team and Role are optional support columns, not part of the minimum six.',
+  'I can explain how VLOOKUP uses Owner as a lookup key to pull Team and Role automatically.',
+  'I can explain the rule: automate repeated actions, not human judgment.',
+  'I can describe the three distinct jobs of Sheets, Notion, and the board — without confusing them.',
+  'I can explain what a handoff is — and why a status change alone is not enough.',
+  'I can describe what a good AI request includes — and what AI should not be allowed to decide.',
+  'I can explain why structure comes before automation, and why AI comes last.',
+];
+
+const scList = document.getElementById('selfCheckList');
+const checkCount = document.getElementById('checkCount');
+const checkTotal = document.getElementById('checkTotal');
+const checkMsg   = document.getElementById('checkMsg');
+checkTotal.textContent = CHECKS.length;
+
+CHECKS.forEach((q, i) => {
+  const li = document.createElement('li');
+  li.innerHTML = `<div class="sc-box">✓</div><span>${q}</span>`;
+  li.addEventListener('click', () => {
+    li.classList.toggle('checked');
+    const done = document.querySelectorAll('#selfCheckList li.checked').length;
+    checkCount.textContent = done;
+    checkMsg.textContent = done === 0 ? 'keep going' : done < 5 ? 'good start' : done < CHECKS.length ? 'almost there' : '— you are ready!';
+  });
+  scList.appendChild(li);
+});
+
+// ── PROGRESS BAR ──
+const fill = document.getElementById('progressFill');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  fill.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
+});
+
+// ── S5: BELONGS CLASSIFY ──
+function revealBelongs(el) {
+  el.classList.toggle('revealed');
+}
+
+// ── S6: SPOT THE GAP ──
+function revealGap(btn) {
+  btn.nextElementSibling.classList.add('shown');
+  btn.style.display = 'none';
+}
+
+// ── S7: AUTO/MANUAL QUIZ ──
+function revealAMQ(el) {
+  el.classList.add('revealed');
+}
+
+</script>
+</body>
+</html>
