@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 1 · Student Handout — BRD → PRD → Engineering Action Plan</title>
+<style>
+:root{
+  --bg:#F5F3EE;
+  --surface:#FFFFFF;
+  --surface-2:#EDEAE3;
+  --ink:#1A1824;
+  --ink-2:#4A4760;
+  --ink-muted:#8E8C9A;
+  --navy:#1D3557;
+  --navy-light:#2A4A73;
+  --accent:#C74B2C;
+  --green:#2A7251;
+  --disc-blue:#1A56A0;
+  --disc-blue-bg:#EEF4FB;
+  --border:#DDD9D0;
+  --bad:#8B2635;
+  --bad-bg:#FFF5F5;
+  --bad-border:#EAABAB;
+  --good-bg:#F1FAF5;
+  --good-border:#8EC9A8;
+  --sh:0 1px 3px rgba(0,0,0,.05),0 4px 16px rgba(0,0,0,.04);
+  --sh-md:0 2px 8px rgba(0,0,0,.07),0 10px 32px rgba(0,0,0,.06);
+  --r:10px;
+  --rl:16px;
+  --t:all .2s ease;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+  font-size:15px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── PROGRESS BAR ── */
+.progress-bar{position:fixed;top:0;left:0;right:0;z-index:300;height:3px;background:var(--surface-2);}
+.progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--navy));transition:width .2s ease;}
+
+/* ── TOP NAV ── */
+.topnav{
+  position:fixed;top:3px;left:0;right:0;z-index:200;
+  height:48px;background:rgba(26,24,36,.94);
+  backdrop-filter:blur(12px);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;border-bottom:1px solid rgba(255,255,255,.05);
+}
+.topnav-brand{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.45);white-space:nowrap;}
+.topnav-brand strong{color:rgba(255,255,255,.75);font-weight:600;}
+.topnav-pill{
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  font-weight:700;color:rgba(255,255,255,.38);
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);
+  border-radius:100px;padding:4px 12px;
+}
+
+/* ── LAYOUT ── */
+.page-section{padding:72px 24px 80px;scroll-margin-top:60px;}
+.wrap{max-width:960px;margin:0 auto;}
+.wrap-sm{max-width:720px;margin:0 auto;}
+.sec-warm{background:var(--bg);}
+.sec-white{background:var(--surface);}
+.sec-dark{background:var(--navy);}
+
+/* ── SEC LABEL ── */
+.sec-label{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  font-weight:700;color:var(--ink-muted);margin-bottom:18px;
+}
+.sec-num{
+  width:22px;height:22px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;color:#fff;flex-shrink:0;
+}
+
+/* ── TYPOGRAPHY ── */
+.section-title{
+  font-family:Georgia,'Times New Roman',serif;
+  font-size:clamp(22px,3.5vw,38px);
+  font-weight:normal;color:var(--ink);
+  line-height:1.2;letter-spacing:-.015em;margin-bottom:12px;
+}
+.section-sub{
+  font-size:clamp(14px,1.8vw,16px);
+  color:var(--ink-2);line-height:1.6;margin-bottom:28px;max-width:640px;
+}
+h3.card-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+p.card-body{font-size:13px;color:var(--ink-2);line-height:1.55;margin:0;}
+
+/* ── CARD ── */
+.card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh);
+}
+.card.accent-top{border-top:3px solid var(--accent);}
+.card.navy-top  {border-top:3px solid var(--navy);}
+.card.green-top {border-top:3px solid var(--green);}
+.card.blue-top  {border-top:3px solid var(--disc-blue);}
+.card.bad-top   {border-top:3px solid var(--bad);}
+
+/* ── GRID ── */
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:20px 0;}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:20px 0;}
+.grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:20px 0;}
+
+/* ── CALLOUT ── */
+.callout{border-radius:var(--r);padding:16px 20px;margin:20px 0;font-size:14px;line-height:1.55;}
+.callout.navy  {background:var(--navy);color:#fff;}
+.callout.green {background:rgba(42,114,81,.09);border:1px solid var(--good-border);color:var(--green);}
+.callout.red   {background:var(--bad-bg);border:1px solid var(--bad-border);color:var(--bad);}
+.callout.blue  {background:var(--disc-blue-bg);border:1px solid rgba(26,86,160,.2);color:var(--disc-blue);}
+.callout.warm  {background:rgba(199,75,44,.07);border:1px solid rgba(199,75,44,.18);color:var(--accent);}
+.callout strong{font-weight:700;}
+
+/* ── TAG ── */
+.tag{
+  display:inline-block;font-size:10px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;border-radius:4px;padding:2px 8px;
+}
+.tag.navy  {background:rgba(29,53,87,.1);color:var(--navy);}
+.tag.green {background:rgba(42,114,81,.1);color:var(--green);}
+.tag.red   {background:var(--bad-bg);color:var(--bad);border:1px solid var(--bad-border);}
+.tag.blue  {background:var(--disc-blue-bg);color:var(--disc-blue);}
+.tag.accent{background:rgba(199,75,44,.09);color:var(--accent);}
+.tag.muted {background:var(--surface-2);color:var(--ink-muted);}
+
+/* ── HERO ── */
+#hero{background:var(--navy);padding:96px 24px 72px;position:relative;overflow:hidden;}
+#hero::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 70% at 10% 60%,rgba(199,75,44,.2) 0%,transparent 65%),
+    radial-gradient(ellipse 50% 60% at 90% 15%,rgba(42,114,81,.12) 0%,transparent 55%),
+    radial-gradient(ellipse 80% 40% at 50% 100%,rgba(0,0,0,.25) 0%,transparent 60%);
+}
+.hero-inner{position:relative;z-index:1;}
+.hero-eyebrow{
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  font-weight:700;color:rgba(255,255,255,.38);margin-bottom:16px;
+  display:flex;align-items:center;gap:10px;
+}
+.hero-eyebrow::after{content:'';display:block;width:32px;height:1px;background:rgba(255,255,255,.2);}
+.hero-title{
+  font-family:Georgia,'Times New Roman',serif;
+  font-size:clamp(28px,5vw,54px);font-weight:normal;color:#fff;
+  line-height:1.12;letter-spacing:-.02em;margin-bottom:14px;max-width:680px;
+}
+.hero-sub{font-size:clamp(14px,1.8vw,18px);color:rgba(255,255,255,.55);max-width:520px;line-height:1.6;margin-bottom:36px;}
+.hero-badges{display:flex;gap:8px;flex-wrap:wrap;}
+.hero-badge{
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  font-weight:700;color:rgba(255,255,255,.5);
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
+  border-radius:100px;padding:5px 14px;
+}
+
+/* ── ROADMAP ── */
+.roadmap-wrap{margin:28px 0;}
+.roadmap-row{display:flex;align-items:stretch;gap:0;overflow-x:auto;padding-bottom:4px;}
+.roadmap-item{
+  flex:1;min-width:80px;cursor:pointer;
+  border:1px solid var(--border);border-right:none;
+  background:var(--surface);padding:12px 8px 10px;text-align:center;transition:var(--t);
+}
+.roadmap-item:first-child{border-radius:var(--r) 0 0 var(--r);}
+.roadmap-item:last-child{border-right:1px solid var(--border);border-radius:0 var(--r) var(--r) 0;}
+.roadmap-item:hover,.roadmap-item.active{background:var(--navy);border-color:var(--navy);}
+.roadmap-item:hover .rm-num,.roadmap-item.active .rm-num{color:rgba(255,255,255,.4);}
+.roadmap-item:hover .rm-name,.roadmap-item.active .rm-name{color:#fff;}
+.rm-num{font-size:10px;font-weight:700;color:var(--ink-muted);letter-spacing:.08em;margin-bottom:4px;}
+.rm-name{font-size:11px;font-weight:700;color:var(--ink);line-height:1.2;}
+.roadmap-preview{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);padding:16px 20px;margin-top:10px;min-height:60px;
+  font-size:13.5px;color:var(--ink-2);line-height:1.55;display:none;
+}
+.roadmap-preview.visible{display:block;}
+.roadmap-preview strong{color:var(--navy);}
+
+/* ── ORIENTATION ── */
+.orientation-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:stretch;margin:24px 0;}
+.orient-col{border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);}
+.orient-head{padding:10px 16px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;}
+.orient-head.not{background:var(--bad-bg);color:var(--bad);border-bottom:1px solid var(--bad-border);}
+.orient-head.yes{background:rgba(42,114,81,.08);color:var(--green);border-bottom:1px solid var(--good-border);}
+.orient-body{background:var(--surface);padding:4px 0;}
+.orient-body li{list-style:none;padding:8px 16px;border-bottom:1px solid var(--border);font-size:13.5px;color:var(--ink-2);line-height:1.4;}
+.orient-body li:last-child{border-bottom:none;}
+.orient-divider{display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--ink-muted);font-weight:300;}
+
+/* ── COMPARE 2-COL ── */
+.compare-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:20px 0;}
+.compare-col{border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);}
+.compare-head{padding:9px 16px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;}
+.compare-head.bad {background:var(--bad-bg);color:var(--bad);border-bottom:1px solid var(--bad-border);}
+.compare-head.good{background:rgba(42,114,81,.08);color:var(--green);border-bottom:1px solid var(--good-border);}
+.compare-head.navy{background:rgba(29,53,87,.08);color:var(--navy);border-bottom:1px solid rgba(29,53,87,.15);}
+.compare-body{background:var(--surface);}
+.compare-body li{list-style:none;padding:8px 16px;border-bottom:1px solid var(--border);font-size:13px;color:var(--ink-2);line-height:1.4;}
+.compare-body li:last-child{border-bottom:none;}
+
+/* ── STRIP ── */
+.strip{border-radius:var(--r);padding:14px 20px;margin:16px 0;font-size:14px;font-weight:600;text-align:center;line-height:1.45;}
+.strip.navy  {background:var(--navy);color:#fff;}
+.strip.green {background:var(--green);color:#fff;}
+.strip.ink   {background:var(--ink);color:#fff;}
+.strip.accent{background:var(--accent);color:#fff;}
+
+/* ── THREE-COLUMN ARTIFACT ── */
+.three-col-art{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh-md);margin:20px 0;
+}
+.tca-head{
+  background:var(--surface-2);padding:11px 20px;
+  border-bottom:1px solid var(--border);
+  font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink);
+}
+.tca-cols{display:grid;grid-template-columns:1fr 1fr 1fr;}
+.tca-col{border-right:1px solid var(--border);}
+.tca-col:last-child{border-right:none;}
+.tca-col-head{
+  padding:9px 14px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;
+  border-bottom:1px solid var(--border);
+}
+.tca-col-head.explicit{background:rgba(42,114,81,.08);color:var(--green);}
+.tca-col-head.implied {background:rgba(199,75,44,.07);color:#8A4A10;}
+.tca-col-head.missing {background:rgba(139,38,53,.07);color:var(--bad);}
+.tca-item{padding:9px 14px;font-size:12.5px;line-height:1.45;border-bottom:1px solid rgba(221,217,208,.6);color:var(--ink-2);}
+.tca-item:last-child{border-bottom:none;}
+.tca-col.implied .tca-item{font-style:italic;}
+.tca-col.missing .tca-item{color:var(--bad);font-style:italic;}
+@media(max-width:680px){
+  .tca-cols{grid-template-columns:1fr;}
+  .tca-col{border-right:none;border-bottom:1px solid var(--border);}
+}
+
+/* ── TWO-COL TRANSLATION TABLE ── */
+.trans-art{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh-md);margin:20px 0;}
+.trans-art-head{background:var(--surface-2);padding:11px 20px;border-bottom:1px solid var(--border);font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink);}
+.trans-art-cols{display:grid;grid-template-columns:1fr 1fr;}
+.trans-art-col{border-right:1px solid var(--border);}
+.trans-art-col:last-child{border-right:none;}
+.trans-art-col-head{padding:9px 16px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;border-bottom:1px solid var(--border);}
+.trans-art-col-head.biz {background:rgba(199,75,44,.06);color:#8A4A10;}
+.trans-art-col-head.prod{background:rgba(29,53,87,.06);color:var(--navy);}
+.trans-art-cell{padding:10px 16px;font-size:13px;line-height:1.5;border-bottom:1px solid rgba(221,217,208,.6);}
+.trans-art-cell:last-child{border-bottom:none;}
+.trans-art-col.biz .trans-art-cell{color:var(--ink-2);font-style:italic;}
+.trans-art-col.prod .trans-art-cell{color:var(--ink);font-weight:500;}
+@media(max-width:600px){
+  .trans-art-cols{grid-template-columns:1fr;}
+  .trans-art-col{border-right:none;border-bottom:1px solid var(--border);}
+}
+
+/* ── FIELD PILLS (clickable defs) ── */
+.field-strip{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0;}
+.field-pill{
+  padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;
+  cursor:pointer;transition:var(--t);border:1.5px solid var(--border);
+  background:var(--surface);color:var(--ink);
+  display:flex;flex-direction:column;align-items:flex-start;gap:3px;
+  min-width:110px;
+}
+.field-pill:hover,.field-pill.open{border-color:var(--navy);background:var(--navy);color:#fff;}
+.field-pill:hover .fp-type,.field-pill.open .fp-type{color:rgba(255,255,255,.55);}
+.fp-name{font-size:13px;font-weight:700;}
+.fp-type{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted);}
+.field-reveal{
+  display:none;margin:8px 0 0;padding:12px 16px;
+  background:rgba(29,53,87,.06);border-radius:var(--r);
+  font-size:13px;color:var(--ink-2);line-height:1.55;
+  border:1px solid rgba(29,53,87,.1);
+}
+.field-pill.open + .field-reveal{display:block;}
+
+/* ── FLOW ── */
+.flow-row{display:flex;align-items:center;gap:0;flex-wrap:wrap;margin:16px 0;overflow-x:auto;}
+.flow-step{
+  padding:10px 16px;font-size:13px;font-weight:700;
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:8px;white-space:nowrap;text-align:center;min-width:100px;
+}
+.flow-step.navy-step {background:var(--navy);color:#fff;border-color:var(--navy);}
+.flow-step.green-step{background:var(--green);color:#fff;border-color:var(--green);}
+.flow-step.accent-step{background:var(--accent);color:#fff;border-color:var(--accent);}
+.flow-arrow{font-size:18px;color:var(--ink-muted);padding:0 8px;flex-shrink:0;}
+
+/* ── SCOPE TABLE ── */
+.scope-art{background:var(--surface);border:1px solid var(--good-border);border-left:4px solid var(--green);border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh-md);margin:20px 0;}
+.scope-art-head{background:rgba(42,114,81,.06);padding:11px 20px;border-bottom:1px solid var(--good-border);font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--green);}
+.scope-row{display:grid;grid-template-columns:160px 1fr;border-bottom:1px solid var(--border);}
+.scope-row:last-child{border-bottom:none;}
+.scope-row-lbl{padding:11px 16px;background:var(--surface-2);font-size:11px;font-weight:700;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.07em;border-right:1px solid var(--border);display:flex;align-items:flex-start;}
+.scope-row-val{padding:10px 16px;font-size:13px;color:var(--ink-2);line-height:1.55;}
+@media(max-width:560px){
+  .scope-row{grid-template-columns:1fr;}
+  .scope-row-lbl{border-right:none;border-bottom:1px solid var(--border);}
+}
+
+/* ── BLOCKER LIST ── */
+.blocker-list{list-style:none;margin:16px 0;}
+.blocker-list li{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:11px 0;border-bottom:1px solid var(--border);
+  font-size:13.5px;color:var(--ink-2);line-height:1.45;
+}
+.blocker-list li:last-child{border-bottom:none;}
+.bl-icon{
+  width:22px;height:22px;border-radius:50%;flex-shrink:0;
+  background:var(--bad-bg);border:1px solid var(--bad-border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:9px;font-weight:700;color:var(--bad);margin-top:1px;
+}
+
+/* ── URQ TABLE ── */
+.urq-art{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh-md);margin:20px 0;}
+.urq-art-head{background:var(--surface-2);padding:11px 20px;border-bottom:1px solid var(--border);font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink);}
+.urq-art-cols{display:grid;grid-template-columns:1fr 1fr 1fr;}
+.urq-art-col{border-right:1px solid var(--border);}
+.urq-art-col:last-child{border-right:none;}
+.urq-col-head{padding:9px 14px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;border-bottom:1px solid var(--border);}
+.urq-col-head.u{background:rgba(201,150,26,.08);color:#7A5A00;}
+.urq-col-head.r{background:rgba(139,38,53,.07);color:var(--bad);}
+.urq-col-head.q{background:rgba(29,53,87,.06);color:var(--navy);}
+.urq-art-cell{padding:10px 14px;font-size:12.5px;line-height:1.5;border-bottom:1px solid rgba(221,217,208,.6);}
+.urq-art-cell:last-child{border-bottom:none;}
+.urq-art-col.u .urq-art-cell{color:var(--ink-2);font-style:italic;}
+.urq-art-col.r .urq-art-cell{color:var(--bad);}
+.urq-art-col.q .urq-art-cell{color:var(--navy);font-weight:500;}
+@media(max-width:720px){
+  .urq-art-cols{grid-template-columns:1fr;}
+  .urq-art-col{border-right:none;border-bottom:1px solid var(--border);}
+}
+
+/* ── LAYER CONCEPT ── */
+.layer-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh-md);margin:20px 0;border:1px solid var(--border);}
+.layer-col{padding:18px;}
+.layer-col.l-brd {background:rgba(199,75,44,.06);}
+.layer-col.l-prd {background:rgba(29,53,87,.07);}
+.layer-col.l-eng {background:rgba(42,114,81,.07);}
+.layer-col-label{font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;margin-bottom:8px;}
+.layer-col.l-brd .layer-col-label{color:var(--accent);}
+.layer-col.l-prd .layer-col-label{color:var(--navy);}
+.layer-col.l-eng .layer-col-label{color:var(--green);}
+.layer-col h4{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:8px;line-height:1.3;}
+.layer-col p{font-size:13px;color:var(--ink-2);line-height:1.5;margin-bottom:10px;}
+.layer-col ul{list-style:none;}
+.layer-col ul li{font-size:12.5px;color:var(--ink-2);padding:4px 0 4px 14px;position:relative;border-bottom:1px solid rgba(221,217,208,.5);line-height:1.4;}
+.layer-col ul li:last-child{border-bottom:none;}
+.layer-col ul li::before{content:'→';position:absolute;left:0;top:5px;font-size:10px;color:var(--ink-muted);}
+@media(max-width:640px){.layer-row{grid-template-columns:1fr;}}
+
+/* ── READINESS LEVELS ── */
+.readiness-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:20px 0;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);border:1px solid var(--border);}
+.rl-col{padding:16px 18px;}
+.rl-col.discuss {background:var(--surface-2);}
+.rl-col.estimate{background:rgba(199,75,44,.05);}
+.rl-col.execute {background:rgba(42,114,81,.05);}
+.rl-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;}
+.rl-col.discuss .rl-label{color:var(--ink-muted);}
+.rl-col.estimate .rl-label{color:var(--accent);}
+.rl-col.execute .rl-label{color:var(--green);}
+.rl-list{list-style:none;}
+.rl-list li{font-size:12.5px;color:var(--ink-2);padding:4px 0;border-bottom:1px solid rgba(221,217,208,.5);line-height:1.4;}
+.rl-list li:last-child{border-bottom:none;}
+@media(max-width:600px){.readiness-row{grid-template-columns:1fr;}}
+
+/* ── ACTION LANES ── */
+.lane-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:20px 0;}
+.lane-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);}
+.lane-head{padding:9px 14px;border-bottom:1px solid var(--border);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;}
+.lane-card.move-now  .lane-head{background:rgba(42,114,81,.08);color:var(--green);border-color:var(--good-border);}
+.lane-card.resolve   .lane-head{background:rgba(139,38,53,.07);color:var(--bad);border-color:var(--bad-border);}
+.lane-card.prepare   .lane-head{background:rgba(199,75,44,.07);color:var(--accent);border-color:rgba(199,75,44,.2);}
+.lane-card.hold-later.lane-head{background:rgba(29,53,87,.06);color:var(--navy);border-color:rgba(29,53,87,.15);}
+.lane-items{list-style:none;}
+.lane-items li{padding:8px 14px;font-size:12.5px;line-height:1.4;border-bottom:1px solid rgba(221,217,208,.6);color:var(--ink-2);}
+.lane-items li:last-child{border-bottom:none;}
+
+/* ── OWNERSHIP CARDS ── */
+.own-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:20px 0;}
+.own-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;box-shadow:var(--sh);}
+.own-card.eng  {border-left:4px solid var(--navy);}
+.own-card.prod {border-left:4px solid var(--accent);}
+.own-card.joint{border-left:4px solid #5A3A8A;}
+.own-card.check{border-left:4px solid var(--green);}
+.own-type{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;margin-bottom:5px;}
+.own-card.eng   .own-type{color:var(--navy);}
+.own-card.prod  .own-type{color:var(--accent);}
+.own-card.joint .own-type{color:#5A3A8A;}
+.own-card.check .own-type{color:var(--green);}
+.own-card h4{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px;line-height:1.3;}
+.own-card p{font-size:12.5px;color:var(--ink-2);line-height:1.45;margin:0;}
+
+/* ── SECTION DIVIDER ── */
+.section-divider{height:3px;margin:0;background:linear-gradient(90deg,var(--border) 0%,transparent 100%);}
+
+/* ── FINAL HERO ── */
+.final-hero{
+  background:var(--navy);border-radius:var(--rl);
+  padding:32px 36px;margin:28px 0;
+  position:relative;overflow:hidden;box-shadow:var(--sh-md);
+}
+.final-hero::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 60% at 90% 10%,rgba(42,114,81,.18) 0%,transparent 55%),
+    radial-gradient(ellipse 50% 50% at 5% 90%,rgba(26,86,160,.15) 0%,transparent 50%);
+}
+.final-hero-inner{position:relative;z-index:1;}
+.fh-eyebrow{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:12px;}
+.fh-title{font-family:Georgia,'Times New Roman',serif;font-size:clamp(18px,3vw,28px);font-weight:normal;color:#fff;margin-bottom:20px;line-height:1.2;}
+.fh-list{list-style:none;}
+.fh-list li{
+  display:flex;gap:12px;align-items:flex-start;
+  padding:8px 0;border-bottom:1px solid rgba(255,255,255,.1);
+  font-size:13px;color:rgba(255,255,255,.7);line-height:1.4;
+}
+.fh-list li:last-child{border-bottom:none;}
+.fh-num{font-size:10px;font-weight:700;color:rgba(255,255,255,.35);width:20px;flex-shrink:0;padding-top:1px;}
+.fh-final{margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.12);font-family:Georgia,serif;font-size:clamp(14px,2vw,18px);color:#fff;font-style:italic;}
+
+/* ── CHEAT SHEET ── */
+.cheat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:20px 0;}
+.cheat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;box-shadow:var(--sh);}
+.cheat-card .cc-title{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--navy);margin-bottom:10px;border-bottom:2px solid var(--navy);padding-bottom:6px;}
+.cheat-card ul{list-style:none;}
+.cheat-card ul li{font-size:13px;color:var(--ink-2);padding:4px 0 4px 14px;position:relative;border-bottom:1px solid var(--border);line-height:1.4;}
+.cheat-card ul li:last-child{border-bottom:none;}
+.cheat-card ul li::before{content:'·';position:absolute;left:3px;font-size:18px;color:var(--ink-muted);line-height:1.1;}
+
+/* ── GLOSSARY ── */
+.glossary-list{margin:16px 0;}
+.gloss-item{border-bottom:1px solid var(--border);}
+.gloss-item:first-child{border-top:1px solid var(--border);}
+.gloss-trigger{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:11px 4px;cursor:pointer;font-size:14px;font-weight:700;color:var(--ink);
+  transition:var(--t);user-select:none;
+}
+.gloss-trigger:hover{color:var(--navy);}
+.gloss-trigger .gt-arrow{font-size:18px;color:var(--ink-muted);transition:transform .2s ease;line-height:1;}
+.gloss-item.open .gt-arrow{transform:rotate(45deg);}
+.gloss-def{display:none;padding:0 0 12px 0;font-size:13.5px;color:var(--ink-2);line-height:1.6;}
+.gloss-item.open .gloss-def{display:block;}
+
+/* ── SELF CHECK ── */
+.self-check-list{list-style:none;margin:16px 0;}
+.self-check-list li{
+  display:flex;gap:12px;align-items:flex-start;
+  padding:12px 0;border-bottom:1px solid var(--border);
+  font-size:14px;color:var(--ink-2);line-height:1.5;cursor:pointer;transition:var(--t);
+}
+.self-check-list li:last-child{border-bottom:none;}
+.self-check-list li:hover{color:var(--navy);}
+.sc-box{
+  width:20px;height:20px;border:2px solid var(--border);
+  border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:11px;transition:var(--t);margin-top:1px;
+}
+.self-check-list li.checked .sc-box{background:var(--green);border-color:var(--green);color:#fff;}
+
+/* ── FOOTER ── */
+.page-footer{background:var(--ink);color:rgba(255,255,255,.4);padding:32px 24px;text-align:center;font-size:12px;letter-spacing:.05em;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:700px){
+  .page-section{padding:52px 18px 60px;}
+  .topnav{padding:0 16px;}
+  .orientation-grid{grid-template-columns:1fr;gap:8px;}
+  .orient-divider{display:none;}
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<nav class="topnav">
+  <span class="topnav-brand"><strong>Day 1</strong> · Student Handout</span>
+  <span class="topnav-pill">BRD → PRD → Engineering Action Plan</span>
+</nav>
+
+
+<!-- ══════════════════════════════════════
+     HERO
+══════════════════════════════════════ -->
+<section id="hero">
+  <div class="wrap">
+    <div class="hero-inner">
+      <div class="hero-eyebrow">Day 1 · Student Handout</div>
+      <h1 class="hero-title">BRD → PRD →<br>Engineering Action Plan</h1>
+      <p class="hero-sub">Your reference for today's session. The full translation path — from business requirement to planning-ready engineering action plan — one layer at a time.</p>
+      <div class="hero-badges">
+        <span class="hero-badge">9 sections (S0–S8)</span>
+        <span class="hero-badge">Support escalation use case</span>
+        <span class="hero-badge">3-layer model</span>
+        <span class="hero-badge">cheat sheet + glossary</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     ROADMAP
+══════════════════════════════════════ -->
+<section class="page-section sec-white" id="roadmap">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--ink);">↓</span> Day Roadmap</div>
+    <h2 class="section-title">Nine sections. One connected translation.</h2>
+    <p class="section-sub" style="margin-bottom:16px;">Click any section to see what it covers.</p>
+    <div class="roadmap-wrap">
+      <div class="roadmap-row" id="roadmapRow">
+        <div class="roadmap-item active" data-idx="0"><div class="rm-num">S0</div><div class="rm-name">Opening</div></div>
+        <div class="roadmap-item" data-idx="1"><div class="rm-num">S1</div><div class="rm-name">BRD</div></div>
+        <div class="roadmap-item" data-idx="2"><div class="rm-num">S2</div><div class="rm-name">PRD</div></div>
+        <div class="roadmap-item" data-idx="3"><div class="rm-num">S3</div><div class="rm-name">Scope</div></div>
+        <div class="roadmap-item" data-idx="4"><div class="rm-num">S4</div><div class="rm-name">Risks</div></div>
+        <div class="roadmap-item" data-idx="5"><div class="rm-num">S5</div><div class="rm-name">Epics</div></div>
+        <div class="roadmap-item" data-idx="6"><div class="rm-num">S6</div><div class="rm-name">AC</div></div>
+        <div class="roadmap-item" data-idx="7"><div class="rm-num">S7</div><div class="rm-name">Delivery</div></div>
+        <div class="roadmap-item" data-idx="8"><div class="rm-num">S8</div><div class="rm-name">Action</div></div>
+      </div>
+      <div class="roadmap-preview visible" id="roadmapPreview"></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     ORIENTATION
+══════════════════════════════════════ -->
+<section class="page-section sec-warm" id="orientation">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--ink);">!</span> Important</div>
+    <h2 class="section-title">This is not a PRD editing lesson. It is a translation lesson.</h2>
+    <p class="section-sub">The goal today is not to make a weak document look better. It is to follow the full path from business need to engineering action — in the correct order, without skipping the layer in the middle.</p>
+    <div class="orientation-grid">
+      <div class="orient-col">
+        <div class="orient-head not">✕ Not this</div>
+        <ul class="orient-body">
+          <li>Editing a weak PRD to make it prettier</li>
+          <li>Writing tickets from a business brief</li>
+          <li>Estimating before scope is bounded</li>
+          <li>Assuming engineering can fix missing product decisions</li>
+          <li>Treating "we have a document" as "we are ready to build"</li>
+        </ul>
+      </div>
+      <div class="orient-divider">→</div>
+      <div class="orient-col">
+        <div class="orient-head yes">✓ Yes this</div>
+        <ul class="orient-body">
+          <li>Reading the BRD as the business layer — nothing more</li>
+          <li>Writing the PRD from the business requirement</li>
+          <li>Bounding scope before any engineering work is structured</li>
+          <li>Naming unknowns, risks, and open questions explicitly</li>
+          <li>Building the engineering plan only after the PRD is clear</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout navy">
+      <strong>The correct sequence:</strong> Read the BRD correctly → Write the PRD from it → Bound scope and surface risks → Build engineering structure → Write acceptance criteria → Shape delivery → Build the action plan
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     USE CASE
+══════════════════════════════════════ -->
+<section class="page-section sec-white" id="usecase">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--ink);">📋</span> Use Case</div>
+    <h2 class="section-title">The same scenario. All day.</h2>
+    <p class="section-sub">Every section uses this use case. Keep it in mind at each layer.</p>
+    <div class="grid-2">
+      <div class="card navy-top">
+        <h3 class="card-title">The business problem</h3>
+        <p class="card-body">A SaaS company receives customer-reported issues through Slack, email, spreadsheets, and direct messages. Important issues are delayed, duplicated, or escalated to engineering without enough information to act on.</p>
+        <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:5px;">
+          <span class="tag navy">Support</span>
+          <span class="tag blue">Customer Success</span>
+          <span class="tag accent">Engineering</span>
+          <span class="tag muted">Leadership</span>
+        </div>
+      </div>
+      <div class="card accent-top">
+        <h3 class="card-title">The business goal</h3>
+        <p class="card-body">Build a lightweight internal workflow for issue intake, urgency classification, routing, and status tracking — without introducing unnecessary process overhead.</p>
+        <div style="margin-top:14px;">
+          <div style="font-size:12px;color:var(--ink-muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">V1 outcome targets</div>
+          <div style="font-size:13px;color:var(--ink-2);border-top:1px solid var(--border);padding-top:6px;">Faster triage · Fewer incomplete escalations · Clearer status visibility</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+
+<!-- ══════════════════════════════════════
+     S0 — THE MISSING TRANSLATION STEP
+══════════════════════════════════════ -->
+<section class="page-section sec-warm" id="s0">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--ink);">0</span> Section 0</div>
+    <h2 class="section-title">The Missing Translation Step</h2>
+    <p class="section-sub">A document labelled as a PRD arrived. The team's first job is to classify it — which layer is it actually operating at?</p>
+
+    <div class="callout navy">
+      <strong>Core idea:</strong> Business intent is not product specification. Engineering cannot plan responsibly from the first. The missing layer between them — the PRD — must be written, not assumed.
+    </div>
+
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:22px 0 10px;">The three layers — click each to see what it does</h3>
+    <div class="field-strip">
+      <div>
+        <div class="field-pill" onclick="toggleField(this)">
+          <span class="fp-name">BRD</span>
+          <span class="fp-type">Business layer</span>
+        </div>
+        <div class="field-reveal">Captures the business problem, the desired outcome, stakeholders, and constraints. Does <strong>not</strong> define system behavior, workflow rules, or user-facing logic. Answers: "Why do we need this?"</div>
+      </div>
+      <div>
+        <div class="field-pill" onclick="toggleField(this)">
+          <span class="fp-name">PRD</span>
+          <span class="fp-type">Product layer</span>
+        </div>
+        <div class="field-reveal">Translates business intent into how the system must behave. Defines user needs, workflow rules, states, permissions, required fields, and measurable success conditions. Answers: "How must the system work?"</div>
+      </div>
+      <div>
+        <div class="field-pill" onclick="toggleField(this)">
+          <span class="fp-name">Engineering Plan</span>
+          <span class="fp-type">Execution layer</span>
+        </div>
+        <div class="field-reveal">Converts the clarified PRD into epics, stories, tasks, acceptance criteria, and a delivery sequence. Only safe to begin after the PRD layer is specific enough to plan from. Answers: "What do we build, in what order, and how do we know when it's done?"</div>
+      </div>
+    </div>
+
+    <div class="layer-row">
+      <div class="layer-col l-brd">
+        <div class="layer-col-label">BRD · Business Layer</div>
+        <h4>What the business needs and why</h4>
+        <ul>
+          <li>Business problem and pain</li>
+          <li>Desired outcome</li>
+          <li>Who is affected</li>
+          <li>Operating constraints</li>
+          <li>Success at business level</li>
+        </ul>
+      </div>
+      <div class="layer-col l-prd">
+        <div class="layer-col-label">PRD · Product Layer</div>
+        <h4>How the system must behave</h4>
+        <ul>
+          <li>User needs per user type</li>
+          <li>Workflow behavior and rules</li>
+          <li>States, permissions, fields</li>
+          <li>Scope and non-goals</li>
+          <li>Measurable success conditions</li>
+        </ul>
+      </div>
+      <div class="layer-col l-eng">
+        <div class="layer-col-label">Engineering Plan · Execution</div>
+        <h4>What gets built and how</h4>
+        <ul>
+          <li>Epics from scope decisions</li>
+          <li>Stories from user needs</li>
+          <li>Tasks from implementation</li>
+          <li>AC and readiness checks</li>
+          <li>Delivery sequence and action plan</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="strip navy">"BRD: what the business needs and why. PRD: how the system must behave. Engineering planning begins only after the second document exists."</div>
+
+    <div class="callout warm" style="margin-top:16px;">
+      <strong>The v0.6 document that arrived</strong> — "PRD v0.6 — Support Escalation Workflow" — is still operating at the business layer. It has labels, steps, and capability names, but no workflow rules, no state definitions, no required fields, and no measurable success conditions. The PRD layer was never written.
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+
+<!-- ══════════════════════════════════════
+     S1 — THE BRD LAYER
+══════════════════════════════════════ -->
+<section class="page-section sec-white" id="s1">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--accent);">1</span> Section 1 — The BRD Layer</div>
+    <h2 class="section-title">Reading the Business Requirement Correctly</h2>
+    <p class="section-sub">Before the PRD can be written, engineering must read the business brief as what it is — the BRD layer. Extract only what it explicitly gives. Name what is implied. Name what is missing.</p>
+
+    <div class="callout navy">
+      <strong>Core idea:</strong> A BRD is the starting material for a PRD — not a planning document itself. Reading it correctly means stopping at what it actually says, not filling in the gaps silently.
+    </div>
+
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:22px 0 10px;">This use case: the business brief gives us</h3>
+    <div class="grid-2" style="margin:12px 0 20px;">
+      <div class="card navy-top">
+        <h3 class="card-title">Business problem</h3>
+        <p class="card-body">No standardized intake process. Issues arrive through inconsistent channels. Urgent issues are hard to identify. Engineering receives incomplete reports. Support has no status visibility after escalation.</p>
+      </div>
+      <div class="card navy-top">
+        <h3 class="card-title">Business goal</h3>
+        <p class="card-body">Structured intake, urgency classification, correct routing, and status tracking — lightweight, usable by non-engineering staff, no full platform migration.</p>
+      </div>
+      <div class="card navy-top">
+        <h3 class="card-title">Stakeholders</h3>
+        <p class="card-body">Support (submitters), Customer Success (visibility + follow-up), Engineering (triage + resolution), Managers (workload oversight), Leadership (aggregate visibility). How they hand off to each other is not yet defined.</p>
+      </div>
+      <div class="card navy-top">
+        <h3 class="card-title">Constraints</h3>
+        <p class="card-body">V1 must be lightweight and practical. No full platform migration. Must work for non-engineering staff. Should not create heavy manual overhead. Must be adoptable quickly.</p>
+      </div>
+    </div>
+
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:22px 0 12px;">Explicit / Implied / Missing — reading analysis</h3>
+    <div class="three-col-art">
+      <div class="tca-head">Business Brief — Layer Classification</div>
+      <div class="tca-cols">
+        <div class="tca-col explicit">
+          <div class="tca-col-head explicit">✓ Explicitly stated</div>
+          <div class="tca-item">Issue intake is inconsistent across channels</div>
+          <div class="tca-item">Urgent issues are hard to identify and prioritize</div>
+          <div class="tca-item">Engineering receives incomplete reports</div>
+          <div class="tca-item">Support has no status visibility after escalation</div>
+          <div class="tca-item">Leadership needs visibility into escalated issue volume</div>
+          <div class="tca-item">V1 must be lightweight — no full platform migration</div>
+          <div class="tca-item">Must be usable by non-engineering staff</div>
+        </div>
+        <div class="tca-col implied">
+          <div class="tca-col-head implied">~ Implied but not confirmed</div>
+          <div class="tca-item">Some form of role-based workflow</div>
+          <div class="tca-item">Some urgency or priority classification model</div>
+          <div class="tca-item">An internal review or assignment process within engineering</div>
+          <div class="tca-item">Status visible across some teams after escalation</div>
+          <div class="tca-item">Some notion of issue "resolution" exists</div>
+        </div>
+        <div class="tca-col missing">
+          <div class="tca-col-head missing">✕ Missing entirely</div>
+          <div class="tca-item">What fields are required to submit an escalation</div>
+          <div class="tca-item">Who sets severity — and by what rules</div>
+          <div class="tca-item">Role permissions — who can change, assign, or close</div>
+          <div class="tca-item">Triage logic — what happens during review</div>
+          <div class="tca-item">What counts as resolution</div>
+          <div class="tca-item">How success will be measured operationally</div>
+          <div class="tca-item">Whether duplicate handling is in scope for V1</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout red" style="margin-top:16px;">
+      <strong>Do not assume:</strong> Who sets priority · That support owns severity · That status names mean what you think · A specific tool · Automation in V1 · Customer-facing visibility · Duplicate handling in V1 · That success criteria are measurable as stated.
+    </div>
+
+    <div class="strip accent">"If the business brief does not say it, engineering does not get to quietly invent it."</div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+
+<!-- ══════════════════════════════════════
+     S2 — WRITING THE PRD
+══════════════════════════════════════ -->
+<section class="page-section sec-warm" id="s2">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--navy);">2</span> Section 2 — Writing the PRD</div>
+    <h2 class="section-title">Translating Business Language into Product Structure</h2>
+    <p class="section-sub">The BRD layer is read. Now write the PRD from it — translating business intent into product-facing structure that engineering can begin to plan from.</p>
+
+    <div class="callout navy">
+      <strong>Core idea:</strong> Business language describes pain. Product language describes what the workflow must make possible. Writing one when you mean the other is how teams end up with documents that look like PRDs but are still operating at the business layer.
+    </div>
+
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:22px 0 12px;">The translation — business pain → product behavior</h3>
+    <div class="trans-art">
+      <div class="trans-art-head">Language Transformation — Business Brief → PRD</div>
+      <div class="trans-art-cols">
+        <div class="trans-art-col biz">
+          <div class="trans-art-col-head biz">Business language — describes pain</div>
+          <div class="trans-art-cell">Critical issues are hard to identify and prioritize</div>
+          <div class="trans-art-cell">Engineering receives incomplete reports before triage</div>
+          <div class="trans-art-cell">Support has no status visibility after escalation</div>
+          <div class="trans-art-cell">Teams interpret severity differently</div>
+          <div class="trans-art-cell">Leadership needs better visibility</div>
+        </div>
+        <div class="trans-art-col prod">
+          <div class="trans-art-col-head prod">Product language — describes what the workflow must enable</div>
+          <div class="trans-art-cell">The workflow must support urgency classification using a shared rule model — rules to be defined</div>
+          <div class="trans-art-cell">Issue submission must capture the minimum context required for triage — required fields to be defined</div>
+          <div class="trans-art-cell">Non-engineering stakeholders must be able to view current status without operational access</div>
+          <div class="trans-art-cell">The workflow must expose a consistent issue state model readable across all teams</div>
+          <div class="trans-art-cell">The system must provide visibility appropriate to each stakeholder type</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:22px 0 12px;">User needs — stakeholder list → product-relevant need</h3>
+    <div class="grid-3" style="margin:12px 0 20px;">
+      <div class="card blue-top">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px;">
+          <h3 class="card-title" style="margin:0;">Support Agent</h3>
+          <span class="tag navy" style="white-space:nowrap;">Primary</span>
+        </div>
+        <p class="card-body">Needs a structured submission format that enforces the minimum information engineering needs — without requiring engineering knowledge to complete.</p>
+      </div>
+      <div class="card blue-top">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px;">
+          <h3 class="card-title" style="margin:0;">Engineering Reviewer</h3>
+          <span class="tag navy" style="white-space:nowrap;">Primary</span>
+        </div>
+        <p class="card-body">Needs enough intake context to triage without sending repeated clarification requests before work can begin.</p>
+      </div>
+      <div class="card blue-top">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px;">
+          <h3 class="card-title" style="margin:0;">Customer Success</h3>
+          <span class="tag blue" style="white-space:nowrap;">Secondary</span>
+        </div>
+        <p class="card-body">Needs post-escalation status visibility — current state, last change, current owner — without engineering tooling access.</p>
+      </div>
+      <div class="card blue-top">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px;">
+          <h3 class="card-title" style="margin:0;">Eng Manager / PM</h3>
+          <span class="tag blue" style="white-space:nowrap;">Secondary</span>
+        </div>
+        <p class="card-body">Needs queue and assignment state visibility — what is escalated, assigned, and potentially stalled — at a queue level, not just per issue.</p>
+      </div>
+      <div class="card blue-top">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px;">
+          <h3 class="card-title" style="margin:0;">Leadership / Ops</h3>
+          <span class="tag muted" style="white-space:nowrap;">Visibility only</span>
+        </div>
+        <p class="card-body">Needs aggregate summary visibility — volume of open escalations, urgent issues being addressed — not individual workflow detail or operational access.</p>
+      </div>
+    </div>
+
+    <div class="strip navy">"A first PRD draft from the BRD is not the same as a complete, planning-ready product requirement. The translation started. It is not finished."</div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+
+<!-- ══════════════════════════════════════
+     S3 — SCOPE & NON-GOALS
+══════════════════════════════════════ -->
+<section class="page-section sec-white" id="s3">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--navy);">3</span> Section 3 — Completing the PRD</div>
+    <h2 class="section-title">Defining Scope and Non-Goals</h2>
+    <p class="section-sub">The PRD has structure. Engineering still cannot estimate without knowing what is explicitly inside this requirement and what is explicitly outside it.</p>
+
+    <div class="callout navy">
+      <strong>Core idea:</strong> Scope is not the feature list. It is the explicit boundary between what this version commits to building and what the team is deliberately refusing to absorb. Both sides must be written.
+    </div>
+
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:22px 0 12px;">V1 In-Scope — explicit commitments</h3>
+    <div class="scope-art">
+      <div class="scope-art-head">V1 In-Scope — Support Escalation Workflow</div>
+      <div class="scope-row"><div class="scope-row-lbl">Structured Intake</div><div class="scope-row-val">Consistent submission format replacing ad-hoc channels. Required fields TBD.</div></div>
+      <div class="scope-row"><div class="scope-row-lbl">Priority Classification</div><div class="scope-row-val">Shared model (Low / Medium / High / Critical). Rules and ownership TBD.</div></div>
+      <div class="scope-row"><div class="scope-row-lbl">Engineering Review</div><div class="scope-row-val">Defined decision point: accept, return for more context, or defer. Tracked state transition.</div></div>
+      <div class="scope-row"><div class="scope-row-lbl">Assignment</div><div class="scope-row-val">One visible engineering owner per accepted issue, with logged timestamp.</div></div>
+      <div class="scope-row"><div class="scope-row-lbl">Status Tracking</div><div class="scope-row-val">Current state visible to submitters and CS after escalation. State definitions TBD.</div></div>
+      <div class="scope-row"><div class="scope-row-lbl">Queue Visibility</div><div class="scope-row-val">List view for engineering managers — incoming, in review, assigned, stalled. Not a dashboard.</div></div>
+      <div class="scope-row"><div class="scope-row-lbl">Resolution State</div><div class="scope-row-val">Defined closed state with logged timestamp. Resolution criteria TBD.</div></div>
+    </div>
+
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:22px 0 12px;">V1 Non-Goals — deliberate exclusions</h3>
+    <div class="grid-2" style="margin:12px 0;">
+      <div class="callout red" style="margin:0;"><strong>✕ Customer-facing visibility</strong> — V1 is internal only. External status or notifications belong in a later version.</div>
+      <div class="callout red" style="margin:0;"><strong>✕ Automated priority classification</strong> — Rules not yet defined. Automating undefined rules creates automated inconsistency.</div>
+      <div class="callout red" style="margin:0;"><strong>✕ External platform integrations</strong> — No Zendesk, Linear, Jira, or other platform integration in V1. Standalone internal process.</div>
+      <div class="callout red" style="margin:0;"><strong>✕ SLA tracking or escalation timers</strong> — SLA targets not defined. Timer logic adds complexity that requires a separate product decision.</div>
+      <div class="callout red" style="margin:0;"><strong>✕ Reporting dashboard or analytics</strong> — V1 queue view is a list, not a dashboard. Historical trend analysis follows once baseline data exists.</div>
+      <div class="callout red" style="margin:0;"><strong>✕ Admin-configurable workflow rules</strong> — V1 is a single shared workflow. Making it configurable adds governance complexity not justified until baseline is proven.</div>
+    </div>
+
+    <div class="callout warm" style="margin-top:16px;">
+      <strong>"Not in scope" means three different things:</strong> (1) <strong>Decided out</strong> — explicitly excluded by choice with a reason. (2) <strong>Still undefined</strong> — may be in scope but rules not yet agreed. (3) <strong>Never discussed</strong> — not on anyone's radar. Only (1) is a true non-goal. (2) and (3) are planning blockers wearing the disguise of a scope decision.
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+
+<!-- ══════════════════════════════════════
+     S4 — UNKNOWNS & RISKS
+══════════════════════════════════════ -->
+<section class="page-section sec-warm" id="s4">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--bad);">4</span> Section 4 — PRD Risk &amp; Clarification</div>
+    <h2 class="section-title">Identifying Unknowns, Risks, and Open Questions</h2>
+    <p class="section-sub">Scope is bounded. What is still undefined is no longer abstract — it is the specific set of things blocking estimation.</p>
+
+    <div class="callout navy">
+      <strong>Core idea:</strong> An unknown → Risk → Clarification Question. Each undefined item must be named as an unknown, mapped to the planning damage it creates, and converted into a specific answerable question before estimation can begin.
+    </div>
+
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:22px 0 12px;">Unknown → Risk → Clarification Question</h3>
+    <div class="urq-art">
+      <div class="urq-art-head">Planning Blocker Framework — Support Escalation Workflow</div>
+      <div class="urq-art-cols">
+        <div class="urq-art-col u">
+          <div class="urq-col-head u">Unknown — not decided</div>
+          <div class="urq-art-cell">Who sets priority, and who can revise it</div>
+          <div class="urq-art-cell">What fields are required in the submission</div>
+          <div class="urq-art-cell">What each status actually means, and what moves issues between states</div>
+          <div class="urq-art-cell">Engineering review outcomes — accept, return, defer</div>
+          <div class="urq-art-cell">What resolution means — closing criteria</div>
+        </div>
+        <div class="urq-art-col r">
+          <div class="urq-col-head r">Risk — damage if ignored</div>
+          <div class="urq-art-cell">Queue order distorted. Priority disputes before work even begins.</div>
+          <div class="urq-art-cell">Incomplete issues enter review. Churn before triage, not during.</div>
+          <div class="urq-art-cell">Three teams read each status differently. Visibility becomes misleading.</div>
+          <div class="urq-art-cell">Decisions are untracked. No audit trail. Submitters don't know why issues were returned.</div>
+          <div class="urq-art-cell">Issues closed inconsistently. QA cannot verify "done."</div>
+        </div>
+        <div class="urq-art-col q">
+          <div class="urq-col-head q">Clarification question — removes it</div>
+          <div class="urq-art-cell">Who is authorized to assign or revise priority, at what stage, and what distinguishes High from Critical?</div>
+          <div class="urq-art-cell">What minimum fields must exist before engineering is expected to begin review?</div>
+          <div class="urq-art-cell">What does each status mean operationally, and what event moves an issue from one state to another?</div>
+          <div class="urq-art-cell">What are the explicit outcomes of the review step, and what state does each outcome trigger?</div>
+          <div class="urq-art-cell">What conditions must be true before an issue can be closed, and who is authorized to mark it resolved?</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:22px 0 10px;">Seven planning blockers — these cannot be estimated around</h3>
+    <ul class="blocker-list">
+      <li><div class="bl-icon">✕</div><div><strong>Required submission fields</strong> — intake form cannot be specified or built without knowing what is required</div></li>
+      <li><div class="bl-icon">✕</div><div><strong>Priority classification rules and ownership</strong> — classification mechanism cannot be specified or tested</div></li>
+      <li><div class="bl-icon">✕</div><div><strong>Status definitions and transition conditions</strong> — status tracking cannot be built or tested without state meaning</div></li>
+      <li><div class="bl-icon">✕</div><div><strong>Engineering review outcomes</strong> — the review decision point cannot be designed without knowing its outcomes</div></li>
+      <li><div class="bl-icon">✕</div><div><strong>Role permissions</strong> — write actions cannot be implemented without knowing who is allowed to perform them</div></li>
+      <li><div class="bl-icon">✕</div><div><strong>Resolution criteria</strong> — the closed state cannot be specified or tested without a definition of done</div></li>
+      <li><div class="bl-icon">✕</div><div><strong>Measurable success targets and baselines</strong> — without targets, no post-launch validation is possible</div></li>
+    </ul>
+
+    <div class="callout warm">
+      <strong>Clarification question rule:</strong> "Can you clarify priority?" is a bad question — it restates confusion. "Who is authorized to assign or revise priority, what criteria distinguish High from Critical, and does priority affect review order?" is a useful question — it removes planning ambiguity.
+    </div>
+
+    <div class="strip accent">"An unknown is not yet a risk until you understand what damage it creates. A risk is not yet actionable until you can phrase the question that would remove it."</div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+
+<!-- ══════════════════════════════════════
+     S5 — ENGINEERING STRUCTURE
+══════════════════════════════════════ -->
+<section class="page-section sec-white" id="s5">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--green);">5</span> Section 5 — PRD to Engineering Structure</div>
+    <h2 class="section-title">Breaking the PRD into Epics, Stories, and Tasks</h2>
+    <p class="section-sub">The PRD is clear enough to begin structuring work. This is the engineering execution layer. Blockers do not disappear — they stay visible in every work item that depends on an unresolved decision.</p>
+
+    <div class="callout navy">
+      <strong>Core idea:</strong> Epics come from scope decisions. Stories come from user needs. Tasks come from implementation work. A backlog becomes dangerous when implementation steps are written as if they were user stories.
+    </div>
+
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:22px 0 12px;">Epic / Story / Task — the three levels</h3>
+    <div class="grid-3" style="margin:12px 0 20px;">
+      <div class="card navy-top">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--navy);margin-bottom:5px;">Epic</div>
+        <h3 class="card-title">A capability area from the PRD</h3>
+        <p class="card-body">Groups related work into a meaningful chunk. Comes from a scope commitment, a user need, or a workflow behavior. Not a sprint container.</p>
+        <div style="margin-top:10px;font-size:12px;color:var(--ink-muted);font-style:italic;">E.g. "Escalation Intake" — the full capability for structured issue submission</div>
+      </div>
+      <div class="card green-top">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:5px;">Story</div>
+        <h3 class="card-title">A user- or behavior-centered unit of work</h3>
+        <p class="card-body">Describes what a specific user needs the system to do, or what workflow behavior must exist. Never an implementation step. If it sounds like a build task, it is probably a task.</p>
+        <div style="margin-top:10px;font-size:12px;color:var(--ink-muted);font-style:italic;">"As a support agent, I need a structured form so engineering receives the context needed for review."</div>
+      </div>
+      <div class="card accent-top">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:5px;">Task</div>
+        <h3 class="card-title">The implementation work for a story</h3>
+        <p class="card-body">What engineering builds to deliver the story. Belongs to the story. Never a user-facing value statement. A task list is not a story.</p>
+        <div style="margin-top:10px;font-size:12px;color:var(--ink-muted);font-style:italic;">Build form UI · Add validation · Store record · Return incomplete submission</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:22px 0 12px;">Seven epics — from V1 scope</h3>
+    <div class="grid-2" style="margin:12px 0;">
+      <div class="card navy-top"><h3 class="card-title">E1 — Escalation Intake</h3><p class="card-body">Structured submission format replacing ad-hoc channels. All downstream behavior depends on reliable intake.</p></div>
+      <div class="card navy-top"><h3 class="card-title">E2 — Priority Classification</h3><p class="card-body">Shared model applied to each issue. Blocked until rules and ownership are confirmed.</p></div>
+      <div class="card navy-top"><h3 class="card-title">E3 — Engineering Review</h3><p class="card-body">Accept / return / defer decision point. Gatekeeping before work enters the engineering queue.</p></div>
+      <div class="card navy-top"><h3 class="card-title">E4 — Assignment &amp; Ownership</h3><p class="card-body">One visible owner per accepted issue. Follows acceptance — not raw submission.</p></div>
+      <div class="card navy-top"><h3 class="card-title">E5 — Status Tracking &amp; Visibility</h3><p class="card-body">Issue state visible to support and CS. Blocked until state model is agreed.</p></div>
+      <div class="card navy-top"><h3 class="card-title">E6 — Resolution Handling</h3><p class="card-body">Defined terminal state with logged timestamp. Blocked until resolution criteria agreed.</p></div>
+      <div class="card navy-top"><h3 class="card-title">E7 — Queue Oversight</h3><p class="card-body">Manager list view — incoming, assigned, stalled. Depends on reliable upstream data.</p></div>
+    </div>
+
+    <div class="strip navy">"A backlog becomes dangerous when implementation steps are written as if they were user stories."</div>
+
+    <div class="callout warm" style="margin-top:16px;">
+      <strong>Spot the fake story:</strong> "Create escalation form UI" is a task. "Add status dropdown" is a task. "Build database table" is a task. None of these express user value or workflow behavior. Each belongs under a story as a task — not as the story itself.
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+
+<!-- ══════════════════════════════════════
+     S6 — ACCEPTANCE CRITERIA
+══════════════════════════════════════ -->
+<section class="page-section sec-warm" id="s6">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--navy);">6</span> Section 6 — Engineering Execution Layer</div>
+    <h2 class="section-title">Writing Acceptance Criteria and Delivery Readiness Rules</h2>
+    <p class="section-sub">Stories need acceptance criteria before they can be estimated, reviewed, and tested. AC is not a task list — it is observable, testable behavior.</p>
+
+    <div class="callout navy">
+      <strong>Core idea:</strong> A story is not ready because it exists in the backlog. It is ready when the team can tell what acceptable looks like — and when different people reading it would still build the same thing.
+    </div>
+
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:22px 0 12px;">Four distinctions — not interchangeable</h3>
+    <div class="grid-2" style="margin:12px 0 20px;">
+      <div class="card green-top">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:5px;">Story</div>
+        <h3 class="card-title">What the system must do for a user</h3>
+        <p class="card-body">User- or behavior-centered. Defines the need, not the solution. Written from the user's perspective. Does not describe how it is built.</p>
+      </div>
+      <div class="card navy-top">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--navy);margin-bottom:5px;">Acceptance Criteria (AC)</div>
+        <h3 class="card-title">What must be true for the story to be accepted</h3>
+        <p class="card-body">Observable, testable behavior — not tasks. If you can't write AC, the story is not ready. If AC sounds like build steps, rewrite it as behavior.</p>
+      </div>
+      <div class="card accent-top">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:5px;">Task</div>
+        <h3 class="card-title">The implementation work required</h3>
+        <p class="card-body">What engineering builds. Belongs to the story. Not a story itself. Tasks answer "how." AC answers "when is this done correctly."</p>
+      </div>
+      <div class="card" style="border-top:3px solid #5A3A8A;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#5A3A8A;margin-bottom:5px;">Definition of Done (DoD)</div>
+        <h3 class="card-title">The team-level completion standard</h3>
+        <p class="card-body">Applies across all stories. Reviewed, tested, merged, documented as agreed. Not story-specific. Sits above AC — it does not replace it.</p>
+      </div>
+    </div>
+
+    <div class="strip navy">"AC defines what success looks like for this story. DoD defines what completion looks like for the team."</div>
+
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:22px 0 12px;">Pre-estimation readiness levels</h3>
+    <div class="readiness-row">
+      <div class="rl-col discuss">
+        <div class="rl-label">Ready for Discussion</div>
+        <ul class="rl-list">
+          <li>Story is written and scoped</li>
+          <li>AC is drafted — even if incomplete</li>
+          <li>Blockers are named</li>
+          <li>Team can examine and improve it</li>
+        </ul>
+      </div>
+      <div class="rl-col estimate">
+        <div class="rl-label">Ready for Estimation</div>
+        <ul class="rl-list">
+          <li>Story behavior is agreed</li>
+          <li>AC items are testable</li>
+          <li>No unresolved product blocker</li>
+          <li>Failure behavior is specified</li>
+          <li>Dependencies are visible</li>
+        </ul>
+      </div>
+      <div class="rl-col execute">
+        <div class="rl-label">Ready for Execution</div>
+        <ul class="rl-list">
+          <li>Estimated and accepted</li>
+          <li>All blockers resolved</li>
+          <li>Tasks broken out</li>
+          <li>DoD understood and agreed</li>
+          <li>No open rule or permission gap</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout red" style="margin-top:12px;">
+      <strong>Weak AC warning signs:</strong> "The form should work correctly" — untestable. "Build the validation layer" — a task, not a behavior. "The user should be able to submit" — says nothing about what happens when it fails or what state the system enters after success.
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+
+<!-- ══════════════════════════════════════
+     S7 — DELIVERY BREAKDOWN
+══════════════════════════════════════ -->
+<section class="page-section sec-white" id="s7">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--navy);">7</span> Section 7 — Engineering Execution Layer</div>
+    <h2 class="section-title">Building the Initial Delivery Breakdown</h2>
+    <p class="section-sub">Stories are readiness-checked. Now sequence the work — what must happen first, what depends on what, and what cannot move until a blocker is resolved.</p>
+
+    <div class="callout navy">
+      <strong>Core idea:</strong> Delivery order is earned by dependency, not by preference. Placing a blocked item in Slice 3 rather than Slice 1 does not remove the blocker. It only delays the moment the blocker becomes visible.
+    </div>
+
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:22px 0 12px;">Sequencing logic — what makes something come first</h3>
+    <div class="grid-2" style="margin:12px 0 20px;">
+      <div class="card navy-top">
+        <h3 class="card-title">Foundational dependency</h3>
+        <p class="card-body">Later behavior cannot exist without earlier behavior. Review cannot be built before intake exists. State visibility cannot be trusted before the state model is agreed.</p>
+      </div>
+      <div class="card navy-top">
+        <h3 class="card-title">Usable progress</h3>
+        <p class="card-body">What creates a shippable, testable outcome on its own? An intake form skeleton produces something testable. A manager overview without queue data produces noise.</p>
+      </div>
+      <div class="card bad-top">
+        <h3 class="card-title">Blocker timing</h3>
+        <p class="card-body">A blocked story is blocked in every slice — not just the first one. Sequencing it later delays the moment the blocker becomes visible. It does not resolve the blocker.</p>
+      </div>
+      <div class="card bad-top">
+        <h3 class="card-title">Fake Phase 1</h3>
+        <p class="card-body">The most dangerous delivery plan looks complete — every story has a slice — but no single item in Slice 1 can be completed in a reviewable state because a blocker affects each one.</p>
+      </div>
+    </div>
+
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:22px 0 12px;">First delivery slices — support escalation workflow</h3>
+    <div class="grid-2" style="margin:12px 0;">
+      <div class="card" style="border-left:4px solid var(--navy);">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--navy);margin-bottom:6px;">Slice 1 — Intake Foundation</div>
+        <p class="card-body">Structured submission form (partial) · Issue record creation (partial) · Incomplete submission handling (blocked — required fields TBD)</p>
+      </div>
+      <div class="card" style="border-left:4px solid var(--green);">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--green);margin-bottom:6px;">Slice 2 — Review &amp; Decision</div>
+        <p class="card-body">Engineering review action (partial) · Return for more info (partial) · Priority classification (blocked — rules TBD)</p>
+      </div>
+      <div class="card" style="border-left:4px solid var(--accent);">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:6px;">Slice 3 — Ownership &amp; Visibility</div>
+        <p class="card-body">Assignment with visible owner (partial) · CS state visibility (blocked — state model TBD)</p>
+      </div>
+      <div class="card" style="border-left:4px solid var(--bad);">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--bad);margin-bottom:6px;">Slice 4 — Resolution &amp; Oversight</div>
+        <p class="card-body">Resolved state handling (blocked — resolution criteria TBD) · Manager queue overview (partial)</p>
+      </div>
+    </div>
+
+    <div class="strip accent">"A delivery plan is not real just because everything has a place on it."</div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+
+<!-- ══════════════════════════════════════
+     S8 — ACTION PLAN
+══════════════════════════════════════ -->
+<section class="page-section sec-warm" id="s8">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--green);">8</span> Section 8 — Final Section</div>
+    <h2 class="section-title">Building the Planning-Ready Action Plan</h2>
+    <p class="section-sub">Delivery order is not yet an action plan. The team needs both — but finishing the sequence is not the same as knowing who does what next and under what condition.</p>
+
+    <div class="callout navy">
+      <strong>Core idea:</strong> Sequencing tells the team what comes first. An action plan tells the team what to do first — with a named owner and an explicit next move for every item.
+    </div>
+
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:22px 0 12px;">Four action lanes</h3>
+    <div class="lane-grid">
+      <div class="lane-card move-now">
+        <div class="lane-head">✓ Move Now</div>
+        <ul class="lane-items">
+          <li>Intake form structure shell</li>
+          <li>Issue record creation behavior</li>
+          <li>Review decision flow framing (structure only)</li>
+        </ul>
+      </div>
+      <div class="lane-card resolve">
+        <div class="lane-head">✕ Resolve Before Move</div>
+        <ul class="lane-items">
+          <li>Required submission fields</li>
+          <li>Priority rules and ownership</li>
+          <li>Status definitions and transitions</li>
+          <li>Role permissions</li>
+          <li>Review outcomes</li>
+          <li>Resolution criteria</li>
+        </ul>
+      </div>
+      <div class="lane-card prepare">
+        <div class="lane-head">→ Prepare Next</div>
+        <ul class="lane-items">
+          <li>Assignment + visible owner design</li>
+          <li>CS state visibility structure</li>
+          <li>Priority display in queue</li>
+        </ul>
+      </div>
+      <div class="lane-card hold-later">
+        <div class="lane-head">◌ Hold for Later</div>
+        <ul class="lane-items">
+          <li>Resolved state implementation</li>
+          <li>Full role-based visibility enforcement</li>
+          <li>Manager queue view (stable data required first)</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:22px 0 12px;">Next action ownership</h3>
+    <div class="own-grid">
+      <div class="own-card eng">
+        <div class="own-type">Engineering</div>
+        <h4>Acts without waiting</h4>
+        <p>Build form structure shell · Define issue record creation · Draft review action model (structure only) · Data model stub</p>
+      </div>
+      <div class="own-card prod">
+        <div class="own-type">Product Clarification</div>
+        <h4>Must decide before engineering proceeds</h4>
+        <p>Required fields · Priority rules · Status definitions · Resolution criteria · Duplicate handling depth in V1</p>
+      </div>
+      <div class="own-card joint">
+        <div class="own-type">Joint Decision</div>
+        <h4>Both must agree before build</h4>
+        <p>Role permissions · Review outcomes · State visibility logic · Measurement baselines</p>
+      </div>
+      <div class="own-card check">
+        <div class="own-type">Validation</div>
+        <h4>Verify before moving forward</h4>
+        <p>Story readiness check before estimation · AC verification once blockers resolve · Slice 2 pre-entry check after Slice 1 is stable</p>
+      </div>
+    </div>
+
+    <div class="strip navy">"A plan is not execution-ready just because the work is listed. It becomes execution-ready when next action, ownership, and blocker status are explicit."</div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+
+<!-- ══════════════════════════════════════
+     CHEAT SHEET
+══════════════════════════════════════ -->
+<section class="page-section sec-white" id="cheat">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--ink);">★</span> Quick Reference</div>
+    <h2 class="section-title">Cheat sheet — the rules that matter most.</h2>
+    <p class="section-sub">The clearest version of the key principles from each section.</p>
+
+    <div class="cheat-grid">
+      <div class="cheat-card">
+        <div class="cc-title">The Three Layers</div>
+        <ul>
+          <li><strong>BRD</strong> — what the business needs and why</li>
+          <li><strong>PRD</strong> — how the system must behave</li>
+          <li><strong>Engineering Plan</strong> — what gets built, when, and how</li>
+          <li>Each layer depends on the previous one being done correctly</li>
+        </ul>
+      </div>
+      <div class="cheat-card">
+        <div class="cc-title">BRD Reading Rules</div>
+        <ul>
+          <li>Extract what is explicitly stated — stop there</li>
+          <li>Name what is implied — don't confirm it</li>
+          <li>Name what is missing — don't fill it in</li>
+          <li>Do not invent what the business brief did not say</li>
+        </ul>
+      </div>
+      <div class="cheat-card">
+        <div class="cc-title">PRD Writing Rules</div>
+        <ul>
+          <li>User need ≠ stakeholder list</li>
+          <li>Capability name ≠ behavior statement</li>
+          <li>Business language → product language</li>
+          <li>Name open decisions — don't silently resolve them</li>
+        </ul>
+      </div>
+      <div class="cheat-card">
+        <div class="cc-title">Scope Rules</div>
+        <ul>
+          <li>Both sides must be written: in-scope and non-goals</li>
+          <li>"Decided out" = non-goal. "Still undefined" = planning blocker</li>
+          <li>If it is not listed as committed, it is not committed</li>
+          <li>Non-goals need reasons, not just names</li>
+        </ul>
+      </div>
+      <div class="cheat-card">
+        <div class="cc-title">Risk Register Rules</div>
+        <ul>
+          <li>Unknown → map the planning damage</li>
+          <li>Risk → phrase the specific question</li>
+          <li>Good question = removes ambiguity</li>
+          <li>Bad question = restates the confusion</li>
+        </ul>
+      </div>
+      <div class="cheat-card">
+        <div class="cc-title">Backlog Rules</div>
+        <ul>
+          <li>Epics come from scope decisions</li>
+          <li>Stories come from user needs</li>
+          <li>Tasks come from implementation</li>
+          <li>Build steps ≠ stories</li>
+        </ul>
+      </div>
+      <div class="cheat-card">
+        <div class="cc-title">AC Rules</div>
+        <ul>
+          <li>AC = observable, testable behavior — not a task list</li>
+          <li>If you can't write AC, the story isn't ready</li>
+          <li>AC ≠ DoD (AC is story-specific; DoD is team-wide)</li>
+          <li>Failure behavior must be visible where it matters</li>
+        </ul>
+      </div>
+      <div class="cheat-card">
+        <div class="cc-title">Sequencing Rules</div>
+        <ul>
+          <li>Delivery order = earned by dependency, not preference</li>
+          <li>Placing a blocked item later does not remove the blocker</li>
+          <li>Every item needs a lane, an owner, and an explicit next move</li>
+          <li>A plan is not real just because everything has a place on it</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Day summary -->
+    <div class="final-hero" style="margin-top:32px;">
+      <div class="final-hero-inner">
+        <div class="fh-eyebrow">Day 1 — Full Journey</div>
+        <div class="fh-title">BRD → PRD → Engineering Action Plan. The complete translation path.</div>
+        <ul class="fh-list">
+          <li><span class="fh-num">S0</span><span><strong>Missing layer identified.</strong> A document arrived labelled as a PRD. It was still at the business layer. Engineering cannot plan from business language alone.</span></li>
+          <li><span class="fh-num">S1</span><span><strong>BRD read correctly.</strong> The team extracted what the business brief explicitly gives — and named what is implied, what is missing, and what may not be assumed.</span></li>
+          <li><span class="fh-num">S2</span><span><strong>PRD written from the BRD.</strong> Business language translated into user needs, product behavior, and visibility requirements. First real PRD draft.</span></li>
+          <li><span class="fh-num">S3</span><span><strong>Scope bounded.</strong> V1 commitments made explicit. Non-goals stated with reasons. The line between decided out and still undefined was drawn.</span></li>
+          <li><span class="fh-num">S4</span><span><strong>Unknowns surfaced.</strong> Every undefined item mapped to its planning risk and converted into a specific answerable question. Clarification register built.</span></li>
+          <li><span class="fh-num">S5</span><span><strong>Engineering structure built.</strong> Epics from scope. Stories from user needs. Tasks from implementation. Blockers carried forward honestly.</span></li>
+          <li><span class="fh-num">S6</span><span><strong>Work items made reviewable.</strong> Stories got acceptance criteria. Readiness checked honestly — some ready, some partial, some blocked.</span></li>
+          <li><span class="fh-num">S7</span><span><strong>Delivery shaped.</strong> Work sequenced by dependency. Initial breakdown showed what belongs where — and was honest about what cannot move.</span></li>
+          <li><span class="fh-num">S8</span><span><strong>Action plan built.</strong> Each item has a lane, an owner, and an explicit next move. Ready for execution discussion.</span></li>
+        </ul>
+        <div class="fh-final">"The goal was never to make the business document look like a PRD. The goal was to actually write the PRD — and then use it to make the engineering work safer to plan and deliver."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+
+<!-- ══════════════════════════════════════
+     GLOSSARY
+══════════════════════════════════════ -->
+<section class="page-section sec-warm" id="glossary">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--ink);">G</span> Glossary</div>
+    <h2 class="section-title">Key terms — click to expand.</h2>
+    <div class="glossary-list" id="glossList"></div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     SELF CHECK
+══════════════════════════════════════ -->
+<section class="page-section sec-white" id="selfcheck">
+  <div class="wrap">
+    <div class="sec-label"><span class="sec-num" style="background:var(--green);">✓</span> Self Check</div>
+    <h2 class="section-title">Can you say yes to each of these?</h2>
+    <p class="section-sub">Click each item when you can answer it confidently. Use this at the end of the day, or when reviewing before your next session.</p>
+    <div style="font-size:13px;color:var(--ink-muted);margin-bottom:4px;"><span id="checkCount">0</span> / <span id="checkTotal">0</span> checked — <span id="checkMsg">keep going</span></div>
+    <ul class="self-check-list" id="selfCheckList"></ul>
+  </div>
+</section>
+
+
+<footer class="page-footer">
+  Day 1 · BRD → PRD → Engineering Action Plan · Student Handout
+</footer>
+
+
+<script>
+// ── ROADMAP ──
+const SECTIONS = [
+  {label:'S0 · The Missing Translation Step', desc:'<strong>The three layers:</strong> A document arrived labelled as a PRD. The team\'s job is to identify which layer it actually operates at — BRD, PRD, or engineering plan — and understand why the missing middle layer is the source of all planning problems.'},
+  {label:'S1 · Reading the Business Requirement', desc:'<strong>The BRD Layer:</strong> Extract what the business brief explicitly gives. Name what is implied. Name what is missing. Do not quietly fill gaps — stop at what the brief actually says.'},
+  {label:'S2 · Writing the PRD', desc:'<strong>Translation:</strong> Business language describes pain. Product language describes what the system must make possible. Translate the business requirement into user needs, expected behavior, and visibility requirements.'},
+  {label:'S3 · Scope and Non-Goals', desc:'<strong>Bounding:</strong> Write both sides — explicit in-scope commitments and explicit non-goals with reasons. Name the difference between decided out, still undefined, and never discussed.'},
+  {label:'S4 · Unknowns, Risks, and Open Questions', desc:'<strong>Clarification register:</strong> Map each undefined item to its planning damage and convert it into a specific answerable question. Build the clarification package an engineering lead could actually send.'},
+  {label:'S5 · Engineering Structure', desc:'<strong>Epics → Stories → Tasks:</strong> Epics from scope decisions. Stories from user needs. Tasks from implementation. Blockers remain visible — do not embed them as hidden assumptions inside backlog items.'},
+  {label:'S6 · Acceptance Criteria', desc:'<strong>Story readiness:</strong> AC = observable, testable behavior. If you can\'t write AC for a story, the story is not ready. Know the difference between Story, AC, Task, and DoD — they are not interchangeable.'},
+  {label:'S7 · Initial Delivery Breakdown', desc:'<strong>Sequencing:</strong> Delivery order is earned by dependency, not preference. Placing a blocked item later in the plan does not remove its blocker — it only delays the moment the blocker becomes visible.'},
+  {label:'S8 · Planning-Ready Action Plan', desc:'<strong>Final output:</strong> Every item needs a lane (move/resolve/prepare/hold), an owner, and an explicit next move. A plan is not execution-ready just because the work is listed.'},
+];
+
+const row = document.getElementById('roadmapRow');
+const preview = document.getElementById('roadmapPreview');
+
+function updatePreview(idx) {
+  preview.innerHTML = SECTIONS[idx].desc;
+  row.querySelectorAll('.roadmap-item').forEach((item, i) => item.classList.toggle('active', i === idx));
+}
+
+row.querySelectorAll('.roadmap-item').forEach((item, i) => {
+  item.addEventListener('click', () => updatePreview(i));
+});
+updatePreview(0);
+
+// ── FIELD PILLS ──
+function toggleField(el) {
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.field-pill').forEach(p => p.classList.remove('open'));
+  if (!isOpen) el.classList.add('open');
+}
+
+// ── GLOSSARY ──
+const TERMS = [
+  {term:'BRD (Business Requirements Document)', def:'The business layer. Captures what problem the business has, what outcome it wants, who is affected, and what constraints apply. Does NOT define system behavior, workflow rules, or user-facing logic. That is the PRD\'s job.'},
+  {term:'PRD (Product Requirements Document)', def:'The product layer. Translates business intent into how the system must behave — user needs, workflow rules, states, permissions, required fields, and measurable success conditions. Engineering planning begins only after this layer is clear enough to act from.'},
+  {term:'Engineering Action Plan', def:'The execution layer. Converts the clarified PRD into epics, stories, tasks, acceptance criteria, delivery sequences, and next action assignments. Only safe to begin after the PRD layer is specific enough to plan from.'},
+  {term:'Epic', def:'A capability area or workflow slice that groups related engineering work. Comes from a scope decision, a user need, or a workflow behavior in the PRD. Not a sprint container.'},
+  {term:'Story (User Story)', def:'A user- or behavior-centered unit of work that expresses workflow value or needed system behavior. Describes what a specific user needs the system to do — not how it is built. If it sounds like a build step, it is probably a task.'},
+  {term:'Task', def:'The implementation work required to deliver a story. Belongs to the story. Never a user-facing value statement. A task list is not a substitute for a story or for acceptance criteria.'},
+  {term:'Acceptance Criteria (AC)', def:'What must be true for a story to be accepted as correctly implemented. Describes observable, testable behavior — not implementation steps. A story with no AC is a wish. If you cannot write AC, the story is not ready to estimate.'},
+  {term:'Definition of Done (DoD)', def:'The team-level completion standard that applies across all stories — reviewed, tested, merged, documented as agreed. Not story-specific. Sits above AC and does not replace it.'},
+  {term:'Non-goal', def:'A capability the team explicitly decided to exclude from this version — with a reason. Non-goals must be written. They are not things the team forgot; they are things the team refused. Adding one back requires a product decision.'},
+  {term:'Planning blocker', def:'An undefined item that prevents the team from safely estimating a work item. Blockers are not clarifications to chase later — they block planning now. Sequencing a blocked item into a later delivery slice does not remove the blocker.'},
+  {term:'Unknown', def:'Something not yet decided — a rule, a field definition, a role permission, or a success condition that has not been confirmed. Must be named explicitly before estimation begins.'},
+  {term:'Clarification register', def:'A structured list of undefined items mapped to their planning risks and converted into specific answerable questions — with decision owners named. The output of Section 4 and the input that must be resolved before estimation.'},
+  {term:'Delivery slice', def:'A phase of work grouped by dependency logic, not calendar time. Work in Slice 1 enables work in Slice 2. Items do not move to a later slice because their blocker is resolved — they move because the work that enables them has been completed.'},
+  {term:'Action lane', def:'The immediate operational category for a work item: Move Now (can begin), Resolve Before Move (blocked by decision), Prepare Next (prepare but do not actively build), or Hold for Later (depends on earlier work being stable).'},
+];
+
+const glossList = document.getElementById('glossList');
+TERMS.forEach(t => {
+  const div = document.createElement('div');
+  div.className = 'gloss-item';
+  div.innerHTML = `<div class="gloss-trigger" onclick="toggleGloss(this.parentElement)"><span>${t.term}</span><span class="gt-arrow">+</span></div><div class="gloss-def">${t.def}</div>`;
+  glossList.appendChild(div);
+});
+
+function toggleGloss(item) { item.classList.toggle('open'); }
+
+// ── SELF CHECK ──
+const CHECKS = [
+  'I can explain the difference between a BRD, a PRD, and an Engineering Plan — and why the order matters.',
+  'I can read a business brief and separate what is explicitly stated from what is implied and what is missing entirely.',
+  'I can name at least four things that the business layer cannot tell engineering without the PRD being written first.',
+  'I can explain why "do not assume" matters — and name three things from this use case that engineering must not invent.',
+  'I can translate a business pain statement into product-facing language for this use case.',
+  'I can explain the difference between a stakeholder list and a user need statement — with an example.',
+  'I can write V1 scope commitments for this use case — and name at least four non-goals with reasons.',
+  'I can explain the difference between "decided out," "still undefined," and "never discussed" as scope categories.',
+  'I can take an undefined item, name the planning risk it creates, and phrase a specific answerable clarification question.',
+  'I can explain the difference between an epic, a story, and a task — and classify a given backlog item correctly.',
+  'I can identify a fake story (a task written as a story) and rewrite it correctly.',
+  'I can write testable acceptance criteria for a story from this use case — not a task list.',
+  'I can explain the difference between AC and DoD.',
+  'I can explain why delivery order is earned by dependency, not preference — and give an example from this use case.',
+  'I can classify a work item into the correct action lane (Move Now / Resolve / Prepare / Hold) and name its owner.',
+];
+
+const scList = document.getElementById('selfCheckList');
+const checkCount = document.getElementById('checkCount');
+const checkTotal = document.getElementById('checkTotal');
+const checkMsg = document.getElementById('checkMsg');
+checkTotal.textContent = CHECKS.length;
+
+CHECKS.forEach(q => {
+  const li = document.createElement('li');
+  li.innerHTML = `<div class="sc-box">✓</div><span>${q}</span>`;
+  li.addEventListener('click', () => {
+    li.classList.toggle('checked');
+    const done = document.querySelectorAll('#selfCheckList li.checked').length;
+    checkCount.textContent = done;
+    checkMsg.textContent = done === 0 ? 'keep going' : done < 5 ? 'good start' : done < CHECKS.length ? 'almost there' : '— you are ready!';
+  });
+  scList.appendChild(li);
+});
+
+// ── PROGRESS BAR ──
+const fill = document.getElementById('progressFill');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  fill.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
+});
+</script>
+</body>
+</html>
