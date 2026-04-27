@@ -3,1775 +3,1026 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Day 2 · Student Handout — BI Dashboards & Reporting Production</title>
+<title>Day 2 — Student Handout · PRD → Jira Delivery Plan</title>
 <style>
-:root{
-  --bg:#F5F3EE;
-  --surface:#FFFFFF;
-  --surface-2:#EDEAE3;
-  --ink:#1A1824;
-  --ink-2:#4A4760;
-  --ink-muted:#8E8C9A;
-  --navy:#1D3557;
-  --navy-light:#2A4A73;
-  --accent:#C74B2C;
-  --green:#2A7251;
-  --disc-blue:#1A56A0;
-  --disc-blue-bg:#EEF4FB;
-  --border:#DDD9D0;
-  --bad:#8B2635;
-  --bad-bg:#FFF5F5;
-  --bad-border:#EAABAB;
-  --good-bg:#F1FAF5;
-  --good-border:#8EC9A8;
-  --sh:0 1px 3px rgba(0,0,0,.05),0 4px 16px rgba(0,0,0,.04);
-  --sh-md:0 2px 8px rgba(0,0,0,.07),0 10px 32px rgba(0,0,0,.06);
-  --r:10px;
-  --rl:16px;
-  --t:all .2s ease;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
-body{
-  background:var(--bg);
-  color:var(--ink);
-  font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
-  font-size:15px;
-  line-height:1.6;
-  -webkit-font-smoothing:antialiased;
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+:root {
+  --ink: #18181B;
+  --ink-2: #3F3F46;
+  --ink-muted: #71717A;
+  --bg: #F4F1EC;
+  --surface: #FFFFFF;
+  --surface-2: #F0EDE8;
+  --border: #E2DDD6;
+  --navy: #1B3252;
+  --navy-mid: #254672;
+  --navy-light: #3A6299;
+  --accent: #C24B2A;
+  --green: #246746;
+  --green-bg: #F0FAF4;
+  --green-border: #9ECFB4;
+  --amber: #855500;
+  --amber-bg: #FDF6E8;
+  --amber-border: #D4AB5A;
+  --red: #8B2635;
+  --red-bg: #FEF2F2;
+  --red-border: #F4AAAA;
+  --blue-bg: #EEF4FB;
+  --blue-border: #ACCBE8;
+  --sh: 0 1px 3px rgba(0,0,0,0.06), 0 4px 14px rgba(0,0,0,0.04);
+  --sh-md: 0 2px 8px rgba(0,0,0,0.07), 0 12px 32px rgba(0,0,0,0.06);
+  --r: 8px;
+  --rl: 14px;
+  --t: all 0.2s ease;
 }
 
-/* ── STICKY PROGRESS BAR ── */
-.progress-bar{
-  position:fixed;top:0;left:0;right:0;z-index:300;
-  height:3px;background:var(--surface-2);
-}
-.progress-fill{
-  height:100%;width:0%;
-  background:linear-gradient(90deg,var(--accent),var(--navy));
-  transition:width .2s ease;
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.68;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* ── TOP NAV ── */
-.topnav{
-  position:fixed;top:3px;left:0;right:0;z-index:200;
-  height:48px;background:rgba(26,24,36,.94);
-  backdrop-filter:blur(12px);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 24px;border-bottom:1px solid rgba(255,255,255,.05);
+/* ── TOPBAR ── */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+  height: 54px;
+  background: rgba(27, 50, 82, 0.97);
+  backdrop-filter: blur(14px);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 30px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
 }
-.topnav-brand{
-  font-size:11px;letter-spacing:.13em;text-transform:uppercase;
-  color:rgba(255,255,255,.45);white-space:nowrap;
+.topbar-brand {
+  font-size: 11px; letter-spacing: .15em; text-transform: uppercase;
+  color: rgba(255,255,255,.4); font-weight: 500;
 }
-.topnav-brand strong{color:rgba(255,255,255,.75);font-weight:600;}
-.topnav-pill{
-  font-size:10px;letter-spacing:.1em;text-transform:uppercase;
-  font-weight:700;color:rgba(255,255,255,.38);
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.09);
-  border-radius:100px;padding:4px 12px;
+.topbar-brand strong { color: rgba(255,255,255,.75); font-weight: 700; }
+.topbar-tag {
+  font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+  color: rgba(255,255,255,.3); font-weight: 500;
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+  border-radius: 100px; padding: 3px 12px;
 }
-
-/* ── LAYOUT ── */
-.page-section{padding:72px 24px 80px;scroll-margin-top:60px;}
-.wrap{max-width:960px;margin:0 auto;}
-.wrap-sm{max-width:720px;margin:0 auto;}
-.sec-warm{background:var(--bg);}
-.sec-white{background:var(--surface);}
-.sec-dark{background:var(--navy);}
-
-/* ── SECTION LABEL ── */
-.sec-label{
-  display:inline-flex;align-items:center;gap:8px;
-  font-size:10px;letter-spacing:.16em;text-transform:uppercase;
-  font-weight:700;color:var(--ink-muted);margin-bottom:18px;
-}
-.sec-num{
-  width:22px;height:22px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:10px;font-weight:700;color:#fff;flex-shrink:0;
-}
-
-/* ── TYPOGRAPHY ── */
-.section-title{
-  font-family:Georgia,'Times New Roman',serif;
-  font-size:clamp(22px,3.5vw,38px);
-  font-weight:normal;color:var(--ink);
-  line-height:1.2;letter-spacing:-.015em;margin-bottom:12px;
-}
-.section-sub{
-  font-size:clamp(14px,1.8vw,16px);
-  color:var(--ink-2);line-height:1.6;margin-bottom:28px;
-  max-width:640px;
-}
-h3.card-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;}
-p.card-body{font-size:13px;color:var(--ink-2);line-height:1.55;margin:0;}
-
-/* ── CARD ── */
-.card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r);padding:18px 20px;
-  box-shadow:var(--sh);
-}
-.card.accent-top { border-top:3px solid var(--accent); }
-.card.navy-top   { border-top:3px solid var(--navy); }
-.card.green-top  { border-top:3px solid var(--green); }
-.card.blue-top   { border-top:3px solid var(--disc-blue); }
-
-/* ── GRID ── */
-.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:20px 0;}
-.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:20px 0;}
-.grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:20px 0;}
-
-/* ── CALLOUT ── */
-.callout{
-  border-radius:var(--r);padding:16px 20px;margin:20px 0;
-  font-size:14px;line-height:1.55;
-}
-.callout.navy{ background:var(--navy);color:#fff; }
-.callout.green{ background:rgba(42,114,81,.09);border:1px solid var(--good-border);color:var(--green); }
-.callout.red{ background:var(--bad-bg);border:1px solid var(--bad-border);color:var(--bad); }
-.callout.blue{ background:var(--disc-blue-bg);border:1px solid rgba(26,86,160,.2);color:var(--disc-blue); }
-.callout.warm{ background:rgba(199,75,44,.07);border:1px solid rgba(199,75,44,.18);color:var(--accent); }
-.callout.yellow{ background:#FEFCE8;border:1px solid #FDE68A;color:#92400E; }
-.callout strong{font-weight:700;}
-
-/* ── TAG ── */
-.tag{
-  display:inline-block;font-size:10px;font-weight:700;
-  letter-spacing:.1em;text-transform:uppercase;
-  border-radius:4px;padding:2px 8px;
-}
-.tag.navy  { background:rgba(29,53,87,.1);color:var(--navy); }
-.tag.green { background:rgba(42,114,81,.1);color:var(--green); }
-.tag.red   { background:var(--bad-bg);color:var(--bad);border:1px solid var(--bad-border); }
-.tag.blue  { background:var(--disc-blue-bg);color:var(--disc-blue); }
-.tag.accent{ background:rgba(199,75,44,.09);color:var(--accent); }
-.tag.muted { background:var(--surface-2);color:var(--ink-muted); }
 
 /* ── HERO ── */
-#hero{
-  background:var(--navy);
-  padding:96px 24px 72px;
-  position:relative;overflow:hidden;
+.hero {
+  min-height: 100vh;
+  background: var(--navy);
+  display: flex; align-items: center;
+  padding: 110px 32px 80px;
+  position: relative; overflow: hidden;
 }
-#hero::before{
-  content:'';position:absolute;inset:0;
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
   background:
-    radial-gradient(ellipse 60% 70% at 10% 60%,rgba(199,75,44,.2) 0%,transparent 65%),
-    radial-gradient(ellipse 50% 60% at 90% 15%,rgba(42,114,81,.12) 0%,transparent 55%),
-    radial-gradient(ellipse 80% 40% at 50% 100%,rgba(0,0,0,.25) 0%,transparent 60%);
+    radial-gradient(ellipse 65% 70% at 5% 70%, rgba(194,75,42,.18) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 55% at 96% 15%, rgba(58,98,153,.18) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 35% at 50% 108%, rgba(0,0,0,.3) 0%, transparent 65%);
 }
-.hero-inner{position:relative;z-index:1;}
-.hero-eyebrow{
-  font-size:10px;letter-spacing:.18em;text-transform:uppercase;
-  font-weight:700;color:rgba(255,255,255,.38);margin-bottom:16px;
-  display:flex;align-items:center;gap:10px;
+.hero-inner { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; width: 100%; }
+.hero-eyebrow {
+  font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+  color: rgba(255,255,255,.35); font-weight: 700; margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
 }
-.hero-eyebrow::after{content:'';display:block;width:32px;height:1px;background:rgba(255,255,255,.2);}
-.hero-title{
-  font-family:Georgia,'Times New Roman',serif;
-  font-size:clamp(28px,5vw,54px);
-  font-weight:normal;color:#fff;
-  line-height:1.12;letter-spacing:-.02em;
-  margin-bottom:14px;max-width:680px;
+.hero-eyebrow::before { content: ''; width: 28px; height: 1px; background: rgba(255,255,255,.2); }
+.hero-title {
+  font-family: 'Lora', Georgia, serif;
+  font-size: clamp(28px, 5.5vw, 58px);
+  font-weight: 400; color: #fff;
+  line-height: 1.12; letter-spacing: -.02em;
+  margin-bottom: 22px; max-width: 700px;
 }
-.hero-sub{
-  font-size:clamp(14px,1.8vw,18px);
-  color:rgba(255,255,255,.55);max-width:520px;
-  line-height:1.6;margin-bottom:36px;
+.hero-title em { font-style: italic; color: rgba(255,255,255,.62); }
+.hero-sub {
+  font-size: clamp(15px, 2vw, 18px);
+  color: rgba(255,255,255,.5);
+  max-width: 560px; line-height: 1.7;
+  margin-bottom: 44px;
 }
-.hero-badges{display:flex;gap:8px;flex-wrap:wrap;}
-.hero-badge{
-  font-size:10px;letter-spacing:.1em;text-transform:uppercase;
-  font-weight:700;color:rgba(255,255,255,.5);
-  background:rgba(255,255,255,.07);
-  border:1px solid rgba(255,255,255,.1);
-  border-radius:100px;padding:5px 14px;
+.hero-carry {
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1);
+  border-left: 4px solid rgba(194,75,42,.65);
+  border-radius: var(--r); padding: 20px 26px;
+  max-width: 640px; margin-bottom: 40px;
+}
+.hero-carry-label {
+  font-size: 10px; letter-spacing: .17em; text-transform: uppercase;
+  color: rgba(255,255,255,.32); font-weight: 700; margin-bottom: 10px;
+}
+.hero-carry p { color: rgba(255,255,255,.68); font-size: 15px; line-height: 1.65; margin: 0; }
+
+.surfaces-row {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 10px; max-width: 580px;
+}
+.surface-card {
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+  border-radius: var(--r); padding: 16px 18px;
+}
+.surface-label { font-size: 9px; letter-spacing: .17em; text-transform: uppercase; color: rgba(255,255,255,.3); font-weight: 700; margin-bottom: 5px; }
+.surface-name { font-size: 15px; font-weight: 700; color: rgba(255,255,255,.82); margin-bottom: 2px; }
+.surface-desc { font-size: 12px; color: rgba(255,255,255,.38); line-height: 1.4; }
+
+/* ── LAYOUT ── */
+section { scroll-margin-top: 54px; padding: 80px 32px 90px; }
+.sec-warm { background: var(--bg); }
+.sec-white { background: var(--surface); }
+.wrap { max-width: 960px; margin: 0 auto; }
+
+/* ── TYPOGRAPHY ── */
+.sec-num {
+  font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+  font-weight: 700; color: var(--accent); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.sec-num::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.sec-title {
+  font-family: 'Lora', Georgia, serif;
+  font-size: clamp(22px, 3.5vw, 38px);
+  font-weight: 400; line-height: 1.2;
+  color: var(--ink); margin-bottom: 14px;
+  letter-spacing: -.015em;
+}
+.sec-sub {
+  font-size: clamp(14px, 1.8vw, 16.5px);
+  color: var(--ink-2); line-height: 1.7;
+  margin-bottom: 36px; max-width: 720px;
+}
+h3 { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 8px; letter-spacing: .01em; text-transform: uppercase; }
+p { color: var(--ink-2); margin-bottom: 14px; }
+p:last-child { margin-bottom: 0; }
+
+/* ── CALLOUT BOXES ── */
+.callout {
+  border-radius: var(--r); padding: 18px 24px; margin: 20px 0;
+}
+.callout-blue {
+  background: var(--blue-bg); border: 1px solid var(--blue-border);
+  border-left: 4px solid var(--navy-light);
+}
+.callout-green {
+  background: var(--green-bg); border: 1px solid var(--green-border);
+  border-left: 4px solid var(--green);
+}
+.callout-amber {
+  background: var(--amber-bg); border: 1px solid var(--amber-border);
+  border-left: 4px solid var(--amber);
+}
+.callout-navy {
+  background: rgba(27,50,82,.05); border: 1px solid rgba(27,50,82,.14);
+  border-left: 4px solid var(--navy);
+}
+.callout-label {
+  font-size: 10px; letter-spacing: .15em; text-transform: uppercase;
+  font-weight: 700; margin-bottom: 8px;
+}
+.callout-blue .callout-label { color: var(--navy-light); }
+.callout-green .callout-label { color: var(--green); }
+.callout-amber .callout-label { color: var(--amber); }
+.callout-navy .callout-label { color: var(--navy); }
+.callout p { color: var(--ink-2); font-style: italic; line-height: 1.6; font-size: 15px; margin: 0; }
+
+/* ── SESSION OVERVIEW TABLE ── */
+.overview-table {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--rl); overflow: hidden; box-shadow: var(--sh-md);
+  margin: 28px 0;
+}
+.ov-head {
+  background: var(--navy); padding: 14px 24px;
+  display: grid; grid-template-columns: 2fr 100px 1fr;
+  gap: 16px;
+}
+.ov-head-cell {
+  font-size: 10px; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: rgba(255,255,255,.45);
+}
+.ov-row {
+  display: grid; grid-template-columns: 2fr 100px 1fr;
+  gap: 16px; border-bottom: 1px solid var(--border);
+  align-items: center; transition: background .15s;
+}
+.ov-row:last-child { border-bottom: none; }
+.ov-row:hover { background: rgba(27,50,82,.025); }
+.ov-stage {
+  padding: 14px 24px; font-size: 14px; font-weight: 600;
+  color: var(--ink); line-height: 1.4;
+}
+.ov-time {
+  padding: 14px 0; font-size: 13px; color: var(--ink-muted);
+  font-family: 'DM Mono', monospace; font-weight: 500;
+}
+.ov-type {
+  padding: 14px 20px 14px 0;
+}
+.type-pill {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  border-radius: 100px; padding: 3px 11px;
+}
+.type-setup { background: var(--blue-bg); border: 1px solid var(--blue-border); color: var(--navy-mid); }
+.type-structure { background: rgba(27,50,82,.06); border: 1px solid rgba(27,50,82,.16); color: var(--navy); }
+.type-order { background: var(--amber-bg); border: 1px solid var(--amber-border); color: var(--amber); }
+.type-workflow { background: rgba(194,75,42,.07); border: 1px solid rgba(194,75,42,.22); color: var(--accent); }
+.type-board { background: var(--green-bg); border: 1px solid var(--green-border); color: var(--green); }
+.type-sprint { background: rgba(27,50,82,.1); border: 1px solid rgba(27,50,82,.2); color: var(--navy); }
+.type-controls { background: var(--red-bg); border: 1px solid var(--red-border); color: var(--red); }
+.type-automation { background: var(--surface-2); border: 1px solid var(--border); color: var(--ink-muted); }
+
+/* ── SECTION CARDS (Detailed Outline) ── */
+.outline-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--rl); overflow: hidden;
+  box-shadow: var(--sh); margin: 20px 0;
+}
+.oc-header {
+  background: var(--surface-2); padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  cursor: pointer; transition: var(--t); user-select: none;
+}
+.oc-header:hover { background: #e8e4dc; }
+.oc-num {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--navy); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; flex-shrink: 0;
+}
+.oc-title {
+  font-size: 15px; font-weight: 700; color: var(--ink); flex: 1;
+  line-height: 1.3;
+}
+.oc-time {
+  font-size: 12px; color: var(--ink-muted);
+  font-family: 'DM Mono', monospace;
+}
+.oc-toggle {
+  font-size: 12px; color: var(--ink-muted); transition: var(--t);
+  width: 20px; text-align: center;
+}
+.oc-header.open .oc-toggle { transform: rotate(180deg); }
+.oc-body {
+  display: none; padding: 24px;
+}
+.oc-body.open { display: block; }
+.oc-flow {
+  list-style: none; margin: 0 0 20px; padding: 0;
+}
+.oc-flow li {
+  padding: 10px 0 10px 20px;
+  border-left: 2px solid var(--border);
+  margin-left: 8px; margin-bottom: 2px;
+  font-size: 14.5px; color: var(--ink-2);
+  line-height: 1.55; position: relative;
+}
+.oc-flow li::before {
+  content: '';
+  position: absolute; left: -5px; top: 18px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--surface); border: 2px solid var(--border);
+}
+.oc-flow li.ends {
+  border-left-color: var(--navy); color: var(--navy); font-weight: 600;
+}
+.oc-flow li.ends::before { border-color: var(--navy); background: var(--navy); }
+
+.oc-outcome {
+  background: rgba(27,50,82,.04); border: 1px solid rgba(27,50,82,.12);
+  border-radius: var(--r); padding: 14px 18px;
+  display: flex; align-items: flex-start; gap: 12px;
+}
+.oc-outcome-icon {
+  font-size: 16px; flex-shrink: 0; margin-top: 1px;
+}
+.oc-outcome-text {
+  font-size: 14px; font-weight: 600; color: var(--navy); line-height: 1.5;
+  margin: 0;
 }
 
-/* ── ROADMAP ── */
-.roadmap-wrap{margin:28px 0;}
-.roadmap-row{
-  display:flex;align-items:stretch;gap:0;
-  overflow-x:auto;padding-bottom:4px;
+/* ── OBJECTIVES ── */
+.objectives-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px; margin: 24px 0;
 }
-.roadmap-item{
-  flex:1;min-width:90px;cursor:pointer;
-  border:1px solid var(--border);
-  border-right:none;
-  background:var(--surface);
-  padding:12px 10px 10px;
-  text-align:center;
-  transition:var(--t);
-  position:relative;
+.obj-card {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: var(--r); padding: 18px 20px;
+  display: flex; gap: 14px; align-items: flex-start;
+  box-shadow: var(--sh); transition: var(--t);
 }
-.roadmap-item:first-child{border-radius:var(--r) 0 0 var(--r);}
-.roadmap-item:last-child{border-right:1px solid var(--border);border-radius:0 var(--r) var(--r) 0;}
-.roadmap-item:hover,.roadmap-item.active{background:var(--navy);border-color:var(--navy);}
-.roadmap-item:hover .rm-num,.roadmap-item.active .rm-num{color:rgba(255,255,255,.4);}
-.roadmap-item:hover .rm-name,.roadmap-item.active .rm-name{color:#fff;}
-.rm-num{font-size:10px;font-weight:700;color:var(--ink-muted);letter-spacing:.08em;margin-bottom:4px;}
-.rm-name{font-size:11px;font-weight:700;color:var(--ink);line-height:1.2;}
-.roadmap-preview{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r);padding:16px 20px;
-  margin-top:10px;min-height:60px;
-  font-size:13.5px;color:var(--ink-2);line-height:1.55;
-  display:none;
+.obj-card:hover { border-color: var(--navy-light); transform: translateY(-1px); box-shadow: var(--sh-md); }
+.obj-verb {
+  font-size: 9px; letter-spacing: .14em; text-transform: uppercase;
+  font-weight: 700; color: #fff; background: var(--navy);
+  border-radius: 5px; padding: 4px 8px;
+  flex-shrink: 0; margin-top: 1px; white-space: nowrap;
 }
-.roadmap-preview.visible{display:block;}
-.roadmap-preview strong{color:var(--navy);}
+.obj-text { font-size: 14px; color: var(--ink-2); line-height: 1.55; }
 
-/* ── NOT/YES ORIENTATION ── */
-.orientation-grid{
-  display:grid;grid-template-columns:1fr auto 1fr;
-  gap:16px;align-items:stretch;margin:24px 0;
+/* ── STATUS REFERENCE ── */
+.status-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 0; border: 1px solid var(--border);
+  border-radius: var(--rl); overflow: hidden;
+  box-shadow: var(--sh-md); margin: 20px 0 28px;
 }
-.orient-col{border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);}
-.orient-head{padding:10px 16px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;}
-.orient-head.not{background:var(--bad-bg);color:var(--bad);border-bottom:1px solid var(--bad-border);}
-.orient-head.yes{background:rgba(42,114,81,.08);color:var(--green);border-bottom:1px solid var(--good-border);}
-.orient-body{background:var(--surface);padding:4px 0;}
-.orient-body li{
-  list-style:none;padding:8px 16px;border-bottom:1px solid var(--border);
-  font-size:13.5px;color:var(--ink-2);line-height:1.4;
+.status-cell {
+  padding: 18px 20px; border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border); background: var(--surface);
 }
-.orient-body li:last-child{border-bottom:none;}
-.orient-divider{
-  display:flex;align-items:center;justify-content:center;
-  font-size:22px;color:var(--ink-muted);font-weight:300;
+.status-cell:nth-child(3n) { border-right: none; }
+.status-cell:nth-last-child(-n+3) { border-bottom: none; }
+.status-badge {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  border-radius: 100px; padding: 3px 12px; margin-bottom: 8px;
 }
+.s-intake .status-badge { background: var(--surface-2); border: 1px solid var(--border); color: var(--ink-muted); }
+.s-ready .status-badge { background: var(--blue-bg); border: 1px solid var(--blue-border); color: var(--navy-light); }
+.s-inprog .status-badge { background: var(--green-bg); border: 1px solid var(--green-border); color: var(--green); }
+.s-review .status-badge { background: var(--amber-bg); border: 1px solid var(--amber-border); color: var(--amber); }
+.s-blocked .status-badge { background: var(--red-bg); border: 1px solid var(--red-border); color: var(--red); }
+.s-done .status-badge { background: rgba(27,50,82,.07); border: 1px solid rgba(27,50,82,.18); color: var(--navy); }
+.status-meaning { font-size: 13px; color: var(--ink-2); line-height: 1.5; }
 
-/* ── TWO-COL COMPARE ── */
-.compare-2{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:14px;margin:20px 0;
+/* ── THREE SURFACES VISUAL ── */
+.surfaces-block {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 0; border: 1px solid var(--border);
+  border-radius: var(--rl); overflow: hidden;
+  box-shadow: var(--sh-md); margin: 24px 0;
 }
-.compare-col{border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);}
-.compare-head{
-  padding:9px 16px;font-size:11px;letter-spacing:.1em;
-  text-transform:uppercase;font-weight:700;
+.sb-col {
+  padding: 24px 22px; border-right: 1px solid var(--border);
+  background: var(--surface);
 }
-.compare-head.bad {background:var(--bad-bg);color:var(--bad);border-bottom:1px solid var(--bad-border);}
-.compare-head.good{background:rgba(42,114,81,.08);color:var(--green);border-bottom:1px solid var(--good-border);}
-.compare-body{background:var(--surface);}
-.compare-body li{
-  list-style:none;padding:8px 16px;border-bottom:1px solid var(--border);
-  font-size:13px;color:var(--ink-2);line-height:1.4;
+.sb-col:last-child { border-right: none; }
+.sb-badge {
+  display: inline-block; font-size: 9px; font-weight: 700;
+  letter-spacing: .13em; text-transform: uppercase;
+  border-radius: 6px; padding: 4px 10px; margin-bottom: 10px;
 }
-.compare-body li.bad-item{color:var(--bad);font-style:italic;}
-.compare-body li.good-item{color:var(--green);font-weight:500;}
-.compare-body li:last-child{border-bottom:none;}
+.sb-backlog .sb-badge { background: var(--blue-bg); border: 1px solid var(--blue-border); color: var(--navy-mid); }
+.sb-board .sb-badge { background: var(--green-bg); border: 1px solid var(--green-border); color: var(--green); }
+.sb-sprint .sb-badge { background: rgba(27,50,82,.08); border: 1px solid rgba(27,50,82,.18); color: var(--navy); }
+.sb-name { font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+.sb-role { font-size: 12.5px; color: var(--ink-muted); line-height: 1.5; }
 
-/* ── FIELD PILLS (repurposed for click-reveal cards) ── */
-.field-strip{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0;}
-.field-pill{
-  padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;
-  cursor:pointer;transition:var(--t);border:1.5px solid var(--border);
-  background:var(--surface);color:var(--ink);
-  display:flex;flex-direction:column;align-items:flex-start;gap:3px;
-  min-width:120px;
+/* ── TOOLTIP ── */
+.tooltip-word {
+  border-bottom: 1px dashed var(--navy-light);
+  cursor: help; color: var(--navy);
+  position: relative;
 }
-.field-pill:hover,.field-pill.open{border-color:var(--navy);background:var(--navy);color:#fff;}
-.field-pill:hover .fp-type,.field-pill.open .fp-type{color:rgba(255,255,255,.55);}
-.fp-name{font-size:13px;font-weight:700;}
-.fp-type{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted);}
-.field-reveal{
-  display:none;margin:8px 0 0;padding:12px 16px;
-  background:rgba(29,53,87,.06);border-radius:var(--r);
-  font-size:13px;color:var(--ink-2);line-height:1.55;
-  border:1px solid rgba(29,53,87,.1);
+.tooltip-word .tooltip-box {
+  display: none;
+  position: absolute; bottom: calc(100% + 8px); left: 50%;
+  transform: translateX(-50%);
+  background: var(--navy); color: #fff;
+  font-size: 12px; line-height: 1.5;
+  padding: 8px 12px; border-radius: 6px;
+  white-space: nowrap; z-index: 100;
+  box-shadow: 0 4px 16px rgba(0,0,0,.22);
+  pointer-events: none;
+  font-weight: 400;
 }
-.field-pill.open + .field-reveal{display:block;}
+.tooltip-word:hover .tooltip-box { display: block; }
 
-/* ── FV BLOCK ── */
-.fv-row{display:flex;gap:10px;align-items:stretch;margin:20px 0;flex-wrap:wrap;}
-.fv-box{flex:1;min-width:160px;border-radius:var(--r);padding:16px 18px;}
-.fv-box.field-b{background:rgba(29,53,87,.08);border:1px solid rgba(29,53,87,.15);}
-.fv-box.value-b{background:rgba(199,75,44,.08);border:1px solid rgba(199,75,44,.2);}
-.fv-box.rule-b {background:rgba(42,114,81,.07);border:1px solid var(--good-border);}
-.fv-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;margin-bottom:6px;}
-.fv-box.field-b .fv-label{color:var(--navy);}
-.fv-box.value-b .fv-label{color:var(--accent);}
-.fv-box.rule-b  .fv-label{color:var(--green);}
-.fv-main{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:4px;}
-.fv-note{font-size:12px;color:var(--ink-muted);}
-.fv-arrow{display:flex;align-items:center;font-size:20px;color:var(--ink-muted);padding:0 4px;flex-shrink:0;}
+/* ── TOGGLE REVEAL BUTTON ── */
+.reveal-btn {
+  background: var(--navy); color: #fff;
+  border: none; border-radius: var(--r);
+  padding: 10px 22px; font-size: 12px; font-weight: 700;
+  letter-spacing: .09em; text-transform: uppercase;
+  cursor: pointer; transition: var(--t); margin-top: 14px;
+  display: inline-block;
+}
+.reveal-btn:hover { background: var(--navy-mid); }
+.reveal-answer {
+  display: none; margin-top: 14px;
+  background: rgba(27,50,82,.04); border: 1px solid rgba(27,50,82,.12);
+  border-radius: var(--r); padding: 16px 20px;
+}
+.reveal-answer.shown { display: block; }
+.reveal-answer p { color: var(--ink-2); font-size: 14px; margin: 0; }
 
-/* ── STRIP ── */
-.strip{
-  border-radius:var(--r);padding:14px 20px;margin:16px 0;
-  font-size:14px;font-weight:600;text-align:center;line-height:1.45;
+/* ── LENS TABS ── */
+.lens-tabs { display: flex; gap: 0; border: 1px solid var(--border); border-radius: var(--rl); overflow: hidden; box-shadow: var(--sh); margin: 20px 0 0; }
+.lens-tab {
+  flex: 1; padding: 16px 20px; background: var(--surface);
+  border: none; border-right: 1px solid var(--border);
+  cursor: pointer; transition: var(--t); text-align: left;
 }
-.strip.navy {background:var(--navy);color:#fff;}
-.strip.green{background:var(--green);color:#fff;}
-.strip.ink  {background:var(--ink);color:#fff;}
-.strip.accent{background:var(--accent);color:#fff;}
+.lens-tab:last-child { border-right: none; }
+.lens-tab.active { background: var(--navy); }
+.lens-tab-name { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 5px; }
+.lens-tab:not(.active) .lens-tab-name { color: var(--ink-muted); }
+.lens-tab.active .lens-tab-name { color: rgba(255,255,255,.5); }
+.lens-tab-q { font-size: 13px; font-weight: 700; line-height: 1.3; }
+.lens-tab:not(.active) .lens-tab-q { color: var(--ink); }
+.lens-tab.active .lens-tab-q { color: #fff; }
+.lens-panel { display: none; padding: 20px 24px; background: var(--surface); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--rl) var(--rl); font-size: 14px; color: var(--ink-2); line-height: 1.6; }
+.lens-panel.active { display: block; }
 
-/* ── SECTION DIVIDER ── */
-.section-divider{
-  height:3px;margin:0;
-  background:linear-gradient(90deg,var(--border) 0%,transparent 100%);
+/* ── FLOW DIAGRAM ── */
+.flow-row { display: flex; align-items: center; gap: 0; margin: 24px 0; flex-wrap: wrap; }
+.flow-step {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: var(--r); padding: 14px 18px;
+  text-align: center; flex: 1; min-width: 120px;
 }
+.flow-step-num { font-size: 10px; font-weight: 700; color: var(--ink-muted); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 5px; }
+.flow-step-name { font-size: 13.5px; font-weight: 700; color: var(--ink); line-height: 1.3; }
+.flow-step-desc { font-size: 11.5px; color: var(--ink-muted); margin-top: 4px; line-height: 1.4; }
+.flow-arrow { font-size: 18px; color: var(--border); padding: 0 8px; flex-shrink: 0; }
 
-/* ── SYSTEM MAP / WORKFLOW ── */
-.system-map{
-  display:flex;align-items:center;flex-wrap:wrap;
-  gap:4px;margin:24px 0;justify-content:center;
+/* ── SIDEBAR NOTES ── */
+.sidebar-row { display: grid; grid-template-columns: 1fr 280px; gap: 28px; margin: 28px 0; }
+.sidebar-note {
+  background: var(--amber-bg); border: 1px solid var(--amber-border);
+  border-radius: var(--r); padding: 18px 20px;
+  height: fit-content;
 }
-.sm-block{
-  text-align:center;padding:10px 12px;
-  border-radius:var(--r);min-width:80px;flex:1;
-}
-.sm-block .sm-num{font-size:10px;font-weight:700;letter-spacing:.1em;margin-bottom:4px;}
-.sm-block .sm-name{font-size:12px;font-weight:700;line-height:1.2;}
-.sm-block .sm-tool{font-size:10px;opacity:.7;margin-top:3px;}
-.sm-1{background:rgba(29,53,87,.1);color:var(--navy);}
-.sm-2{background:rgba(199,75,44,.1);color:var(--accent);}
-.sm-3{background:rgba(42,114,81,.1);color:var(--green);}
-.sm-4{background:rgba(26,86,160,.1);color:var(--disc-blue);}
-.sm-5{background:rgba(29,53,87,.08);color:var(--navy);}
-.sm-6{background:rgba(199,75,44,.1);color:var(--accent);}
-.sm-7{background:rgba(42,114,81,.1);color:var(--green);}
-.sm-8{background:rgba(26,86,160,.08);color:var(--disc-blue);}
-.sm-arrow{font-size:16px;color:var(--ink-muted);flex-shrink:0;}
+.sidebar-note-label { font-size: 10px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: var(--amber); margin-bottom: 8px; }
+.sidebar-note p { font-size: 13px; color: var(--ink-2); line-height: 1.55; margin: 0; }
 
-/* ── CHEAT SHEET ── */
-.cheat-grid{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:12px;margin:20px 0;
+/* ── TRY IT PROMPT ── */
+.try-it {
+  border: 2px dashed var(--border); border-radius: var(--r);
+  padding: 20px 24px; margin: 24px 0;
 }
-.cheat-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r);padding:16px 18px;box-shadow:var(--sh);
+.try-it-label {
+  font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 10px;
 }
-.cheat-card .cc-title{
-  font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--navy);margin-bottom:10px;border-bottom:2px solid var(--navy);
-  padding-bottom:6px;
-}
-.cheat-card ul{list-style:none;}
-.cheat-card ul li{
-  font-size:13px;color:var(--ink-2);
-  padding:4px 0 4px 14px;position:relative;
-  border-bottom:1px solid var(--border);line-height:1.4;
-}
-.cheat-card ul li:last-child{border-bottom:none;}
-.cheat-card ul li::before{
-  content:'·';position:absolute;left:3px;
-  font-size:18px;color:var(--ink-muted);line-height:1.1;
-}
+.try-it p { font-size: 14px; color: var(--ink-2); line-height: 1.6; margin: 0; }
 
-/* ── GLOSSARY ACCORDION ── */
-.glossary-list{margin:16px 0;}
-.gloss-item{border-bottom:1px solid var(--border);}
-.gloss-item:first-child{border-top:1px solid var(--border);}
-.gloss-trigger{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:11px 4px;cursor:pointer;
-  font-size:14px;font-weight:700;color:var(--ink);
-  transition:var(--t);user-select:none;
+/* ── STRIPE ── */
+.stripe {
+  background: var(--navy); color: rgba(255,255,255,.82);
+  padding: 14px 22px; border-radius: var(--r);
+  font-size: 14px; line-height: 1.6;
+  margin: 24px 0; letter-spacing: .02em;
 }
-.gloss-trigger:hover{color:var(--navy);}
-.gloss-trigger .gt-arrow{font-size:18px;color:var(--ink-muted);transition:transform .2s ease;line-height:1;}
-.gloss-item.open .gt-arrow{transform:rotate(45deg);}
-.gloss-def{display:none;padding:0 0 12px 0;font-size:13.5px;color:var(--ink-2);line-height:1.6;}
-.gloss-item.open .gloss-def{display:block;}
-
-/* ── SELF CHECK ── */
-.self-check-list{list-style:none;margin:16px 0;}
-.self-check-list li{
-  display:flex;gap:12px;align-items:flex-start;
-  padding:12px 0;border-bottom:1px solid var(--border);
-  font-size:14px;color:var(--ink-2);line-height:1.5;cursor:pointer;
-  transition:var(--t);
-}
-.self-check-list li:last-child{border-bottom:none;}
-.self-check-list li:hover{color:var(--navy);}
-.sc-box{
-  width:20px;height:20px;border:2px solid var(--border);
-  border-radius:4px;flex-shrink:0;display:flex;
-  align-items:center;justify-content:center;
-  font-size:11px;transition:var(--t);margin-top:1px;
-}
-.self-check-list li.checked .sc-box{background:var(--green);border-color:var(--green);color:#fff;}
-
-/* ── PROMPT COMPARE ── */
-.prompt-compare{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:12px;margin:16px 0;
-}
-.pc-card{border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);border:1px solid var(--border);}
-.pc-head{padding:8px 14px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;}
-.pc-head.weak  {background:var(--bad-bg);color:var(--bad);border-bottom:1px solid var(--bad-border);}
-.pc-head.strong{background:rgba(42,114,81,.08);color:var(--green);border-bottom:1px solid var(--good-border);}
-.pc-body{background:var(--surface);padding:14px 16px;}
-.pc-prompt{
-  font-size:13px;font-style:italic;color:var(--ink);
-  border-left:3px solid var(--border);padding-left:10px;
-  margin-bottom:10px;line-height:1.55;
-}
-.pc-why{font-size:12px;color:var(--ink-muted);line-height:1.5;}
-
-/* ── FINAL HERO ── */
-.final-hero{
-  background:var(--navy);border-radius:var(--rl);
-  padding:32px 36px;margin:28px 0;
-  position:relative;overflow:hidden;box-shadow:var(--sh-md);
-}
-.final-hero::before{
-  content:'';position:absolute;inset:0;
-  background:
-    radial-gradient(ellipse 60% 60% at 90% 10%,rgba(42,114,81,.18) 0%,transparent 55%),
-    radial-gradient(ellipse 50% 50% at 5% 90%,rgba(26,86,160,.15) 0%,transparent 50%);
-}
-.final-hero-inner{position:relative;z-index:1;}
-.fh-eyebrow{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:12px;}
-.fh-title{
-  font-family:Georgia,'Times New Roman',serif;
-  font-size:clamp(18px,3vw,28px);font-weight:normal;
-  color:#fff;margin-bottom:20px;line-height:1.2;
-}
-.fh-list{list-style:none;}
-.fh-list li{
-  display:flex;gap:12px;align-items:flex-start;
-  padding:8px 0;border-bottom:1px solid rgba(255,255,255,.1);
-  font-size:13px;color:rgba(255,255,255,.7);line-height:1.4;
-}
-.fh-list li:last-child{border-bottom:none;}
-.fh-num{font-size:10px;font-weight:700;color:rgba(255,255,255,.35);width:20px;flex-shrink:0;padding-top:1px;}
 
 /* ── FOOTER ── */
-.page-footer{
-  background:var(--ink);color:rgba(255,255,255,.4);
-  padding:32px 24px;text-align:center;
-  font-size:12px;letter-spacing:.05em;
+.footer {
+  background: var(--navy); color: rgba(255,255,255,.4);
+  padding: 40px 32px; text-align: center;
+  font-size: 12px; letter-spacing: .05em;
 }
-
-/* ── AI IO BLOCK ── */
-.ai-io{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh-md);margin:16px 0;
-}
-.ai-io-pane{padding:12px 18px;border-bottom:1px solid var(--border);}
-.ai-io-pane:last-child{border-bottom:none;}
-.aio-label{
-  font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
-  margin-bottom:8px;display:flex;align-items:center;gap:5px;
-}
-.aio-label::before{content:'◆';font-size:7px;}
-.aio-label.input {color:var(--ink-muted);}
-.aio-label.output{color:var(--green);}
-.aio-label.human {color:var(--disc-blue);}
-.aio-text{font-size:13px;color:var(--ink-2);line-height:1.55;}
-.aio-text.rough{font-style:italic;color:var(--ink-muted);}
-
-/* ── KPI ANATOMY ROW ── */
-.kpi-anatomy{
-  display:flex;gap:10px;align-items:stretch;margin:20px 0;flex-wrap:wrap;
-}
-.kpi-part{
-  flex:1;min-width:130px;border-radius:var(--r);padding:14px 16px;
-  border:1px solid var(--border);background:var(--surface);
-}
-.kpi-part-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;}
-.kpi-part-label.def{color:var(--navy);}
-.kpi-part-label.formula{color:var(--accent);}
-.kpi-part-label.dim{color:var(--green);}
-.kpi-part-label.filter{color:var(--disc-blue);}
-.kpi-part-value{font-size:13px;color:var(--ink-2);line-height:1.5;}
-
-/* ── DASHBOARD LAYOUT PREVIEW ── */
-.dash-preview{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh-md);
-  margin:20px 0;
-}
-.dash-label-bar{
-  background:var(--navy);color:rgba(255,255,255,.6);
-  font-size:10px;letter-spacing:.12em;text-transform:uppercase;
-  font-weight:700;padding:8px 16px;
-}
-.dash-row{display:flex;gap:8px;padding:12px;border-bottom:1px solid var(--border);}
-.dash-row:last-child{border-bottom:none;}
-.dash-row-label{
-  font-size:10px;font-weight:700;color:var(--ink-muted);
-  text-transform:uppercase;letter-spacing:.08em;
-  width:60px;flex-shrink:0;padding-top:3px;
-}
-.dash-blocks{display:flex;gap:6px;flex:1;flex-wrap:wrap;}
-.dash-block{
-  flex:1;min-width:80px;border-radius:var(--r);padding:10px 12px;
-  font-size:11px;font-weight:700;text-align:center;line-height:1.3;
-}
-.db-kpi{background:rgba(29,53,87,.08);color:var(--navy);}
-.db-trend{background:rgba(199,75,44,.07);color:var(--accent);}
-.db-breakdown{background:rgba(42,114,81,.07);color:var(--green);}
-.db-filter{background:rgba(26,86,160,.07);color:var(--disc-blue);}
-.dash-block-note{font-size:10px;font-weight:400;opacity:.75;margin-top:2px;}
-
-/* ── NARRATIVE STEP ── */
-.narrative-steps{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
-  gap:10px;margin:20px 0;
-}
-.ns-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r);padding:14px 16px;box-shadow:var(--sh);
-}
-.ns-num{
-  font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--accent);background:rgba(199,75,44,.08);
-  border-radius:4px;padding:2px 8px;display:inline-block;margin-bottom:8px;
-}
-.ns-title{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px;}
-.ns-ex{font-size:12px;color:var(--ink-muted);font-style:italic;line-height:1.5;}
-
-/* ── OUTPUT CHECKLIST ── */
-.output-list{list-style:none;margin:16px 0;}
-.output-list li{
-  display:flex;gap:12px;align-items:flex-start;
-  padding:12px 0;border-bottom:1px solid var(--border);
-  font-size:13.5px;color:var(--ink-2);line-height:1.5;
-}
-.output-list li:last-child{border-bottom:none;}
-.out-num{
-  font-size:10px;font-weight:700;color:var(--navy);
-  background:rgba(29,53,87,.1);border-radius:4px;
-  padding:2px 7px;flex-shrink:0;margin-top:2px;
-}
-
-/* ── TRIGGER FLOW (reused for decision flow) ── */
-.decision-chain{
-  display:flex;flex-direction:column;gap:6px;margin:16px 0;
-}
-.dc-item{
-  background:var(--surface);border:1px solid var(--border);
-  border-left:4px solid var(--navy);border-radius:var(--r);
-  padding:11px 16px;
-}
-.dc-item.accent{border-left-color:var(--accent);}
-.dc-item.green {border-left-color:var(--green);}
-.dc-item.blue  {border-left-color:var(--disc-blue);}
-.dc-stage{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:4px;}
-.dc-content{font-size:13px;color:var(--ink-2);line-height:1.45;}
-
-/* ── BEFORE/AFTER TOGGLE ── */
-.ba-wrap{margin:16px 0;}
-.ba-tabs{display:flex;gap:0;margin-bottom:0;}
-.ba-tab{
-  flex:1;padding:8px;text-align:center;
-  font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-  cursor:pointer;border:1.5px solid var(--border);
-  background:var(--surface-2);color:var(--ink-muted);
-  transition:var(--t);
-}
-.ba-tab:first-child{border-radius:var(--r) 0 0 0;}
-.ba-tab:last-child{border-radius:0 var(--r) 0 0;}
-.ba-tab.active.before{background:var(--bad-bg);color:var(--bad);border-color:var(--bad-border);}
-.ba-tab.active.after {background:rgba(42,114,81,.08);color:var(--green);border-color:var(--good-border);}
-.ba-panel{
-  display:none;border:1.5px solid var(--border);
-  border-top:none;border-radius:0 0 var(--r) var(--r);
-  padding:16px;background:var(--surface);
-}
-.ba-panel.active{display:block;}
-.ba-panel ul{list-style:none;}
-.ba-panel ul li{padding:5px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--ink-2);}
-.ba-panel ul li:last-child{border-bottom:none;}
-.ba-panel ul li.bad-item{color:var(--bad);font-style:italic;}
-.ba-panel ul li.good-item{color:var(--green);}
+.footer strong { color: rgba(255,255,255,.7); }
 
 /* ── RESPONSIVE ── */
-@media(max-width:640px){
-  .orientation-grid{grid-template-columns:1fr;gap:10px;}
-  .orient-divider{display:none;}
-  .kpi-anatomy{flex-direction:column;}
-  .fv-row{flex-direction:column;}
-  .fv-arrow{transform:rotate(90deg);justify-content:center;}
-  .system-map{justify-content:flex-start;}
+@media (max-width: 720px) {
+  .surfaces-row, .surfaces-block { grid-template-columns: 1fr; }
+  .status-grid { grid-template-columns: 1fr 1fr; }
+  .status-cell:nth-child(3n) { border-right: 1px solid var(--border); }
+  .status-cell:nth-child(2n) { border-right: none; }
+  .sidebar-row { grid-template-columns: 1fr; }
+  .ov-head, .ov-row { grid-template-columns: 1fr 70px; }
+  .ov-type { display: none; }
+  .lens-tabs { flex-direction: column; }
+  .lens-tab { border-right: none; border-bottom: 1px solid var(--border); }
+}
+@media (max-width: 480px) {
+  section { padding: 60px 20px 70px; }
+  .hero { padding: 100px 20px 60px; }
+  .status-grid { grid-template-columns: 1fr; }
+  .objectives-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 <body>
 
-<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-
-<nav class="topnav">
-  <div class="topnav-brand">Digitera <strong>· Day 2</strong> · Student Handout</div>
-  <div class="topnav-pill">BI Dashboards &amp; Reporting</div>
+<!-- TOPBAR -->
+<nav class="topbar">
+  <div class="topbar-brand"><strong>Day 2</strong> &nbsp;·&nbsp; PRD → Jira Delivery Plan</div>
+  <div class="topbar-tag">Student Handout</div>
 </nav>
 
-<!-- ══════════════════════════════════════
-     HERO
-══════════════════════════════════════ -->
-<section id="hero" style="padding-top:96px;">
-  <div class="wrap hero-inner">
-    <div class="hero-eyebrow">Digitera · Day 2 · Student Handout</div>
-    <h1 class="hero-title">BI Dashboards &amp;<br>Reporting Production</h1>
-    <p class="hero-sub">From business question to actionable recommendation — using data, KPIs, dashboards, and structured interpretation.</p>
-    <div class="hero-badges">
-      <span class="hero-badge">7 Sections</span>
-      <span class="hero-badge">Case Study · StyleHub</span>
-      <span class="hero-badge">Tools · Power BI + Looker Studio</span>
-      <span class="hero-badge">5 Day Outputs</span>
+<!-- ════════ HERO ════════ -->
+<section class="hero" id="top">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Day 2 · Session Handout</div>
+    <h1 class="hero-title">The plan exists.<br><em>Now it needs a workspace.</em></h1>
+    <p class="hero-sub">This handout guides you through the full structure of today's session — what each stage covers, how it progresses, and what you should be able to do by the end.</p>
+
+    <div class="hero-carry">
+      <div class="hero-carry-label">Carried forward from Day 1</div>
+      <p>A planning-ready backlog built from a real PRD — with scope defined, stories written, and readiness states identified. Today, that backlog becomes an operational Jira workspace.</p>
+    </div>
+
+    <div class="surfaces-row">
+      <div class="surface-card">
+        <div class="surface-label">Surface 1</div>
+        <div class="surface-name">Backlog</div>
+        <div class="surface-desc">All work, ordered</div>
+      </div>
+      <div class="surface-card">
+        <div class="surface-label">Surface 2</div>
+        <div class="surface-name">Board</div>
+        <div class="surface-desc">Daily status, live</div>
+      </div>
+      <div class="surface-card">
+        <div class="surface-label">Surface 3</div>
+        <div class="surface-name">Sprint</div>
+        <div class="surface-desc">Near-term commitment</div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════
-     ROADMAP
-══════════════════════════════════════ -->
-<section class="page-section sec-white" id="roadmap">
+<!-- ════════ SECTION 1: SESSION OVERVIEW ════════ -->
+<section class="sec-warm" id="overview">
   <div class="wrap">
-    <div class="sec-label"><span class="sec-num" style="background:var(--ink);">↓</span> Roadmap</div>
-    <h2 class="section-title">What this day covers</h2>
-    <p class="section-sub">Click any section below to see what it covers and jump directly to it.</p>
+    <div class="sec-num">Section 1</div>
+    <h2 class="sec-title">Session Overview</h2>
+    <p class="sec-sub">Seven structured stages take the backlog from Day 1 through to a fully operational Jira workspace. Each stage has a clear input, a defined focus, and a concrete outcome.</p>
 
-    <div class="roadmap-wrap">
-      <div class="roadmap-row" id="roadmapRow">
-        <div class="roadmap-item active">
-          <div class="rm-num">S1</div>
-          <div class="rm-name">Framing</div>
-        </div>
-        <div class="roadmap-item">
-          <div class="rm-num">S2</div>
-          <div class="rm-name">KPI Model</div>
-        </div>
-        <div class="roadmap-item">
-          <div class="rm-num">S3</div>
-          <div class="rm-name">Data Prep</div>
-        </div>
-        <div class="roadmap-item">
-          <div class="rm-num">S4</div>
-          <div class="rm-name">Dashboard</div>
-        </div>
-        <div class="roadmap-item">
-          <div class="rm-num">S5</div>
-          <div class="rm-name">Tools</div>
-        </div>
-        <div class="roadmap-item">
-          <div class="rm-num">S6</div>
-          <div class="rm-name">Interpret</div>
-        </div>
-        <div class="roadmap-item">
-          <div class="rm-num">S7</div>
-          <div class="rm-name">AI + Output</div>
-        </div>
+    <div class="overview-table">
+      <div class="ov-head">
+        <div class="ov-head-cell">Stage</div>
+        <div class="ov-head-cell">Duration</div>
+        <div class="ov-head-cell">Type</div>
       </div>
-      <div class="roadmap-preview visible" id="roadmapPreview"></div>
+
+      <div class="ov-row">
+        <div class="ov-stage">Converting the backlog into Jira issue structure</div>
+        <div class="ov-time">40 min</div>
+        <div class="ov-type"><span class="type-pill type-setup">Setup</span></div>
+      </div>
+      <div class="ov-row">
+        <div class="ov-stage">Organizing and ranking the backlog in Jira</div>
+        <div class="ov-time">35 min</div>
+        <div class="ov-type"><span class="type-pill type-order">Order</span></div>
+      </div>
+      <div class="ov-row">
+        <div class="ov-stage">Defining workflow statuses and board logic</div>
+        <div class="ov-time">35 min</div>
+        <div class="ov-type"><span class="type-pill type-workflow">Workflow</span></div>
+      </div>
+      <div class="ov-row">
+        <div class="ov-stage">Building the board view for delivery visibility</div>
+        <div class="ov-time">35 min</div>
+        <div class="ov-type"><span class="type-pill type-board">Board</span></div>
+      </div>
+      <div class="ov-row">
+        <div class="ov-stage">Preparing sprint-ready work and creating the first sprint</div>
+        <div class="ov-time">45 min</div>
+        <div class="ov-type"><span class="type-pill type-sprint">Sprint</span></div>
+      </div>
+      <div class="ov-row">
+        <div class="ov-stage">Managing blockers, handoffs, and delivery controls</div>
+        <div class="ov-time">25 min</div>
+        <div class="ov-type"><span class="type-pill type-controls">Controls</span></div>
+      </div>
+      <div class="ov-row">
+        <div class="ov-stage">Adding basic dashboards and lightweight automation</div>
+        <div class="ov-time">25 min</div>
+        <div class="ov-type"><span class="type-pill type-automation">Automation</span></div>
+      </div>
+    </div>
+
+    <div class="callout callout-navy">
+      <div class="callout-label">How to read this handout</div>
+      <p>Each section below maps directly to one of the stages above. Expand any section to read how the content progresses, what it covers, and what you should have at the end of it. Use this as your reference during and after the session.</p>
+    </div>
+
+    <!-- THREE SURFACES VISUAL -->
+    <div class="surfaces-block" style="margin-top:36px;">
+      <div class="sb-col sb-backlog">
+        <div class="sb-badge">Backlog</div>
+        <div class="sb-name">Ordered list</div>
+        <div class="sb-role">All work, ranked, ready to pull from. Not a wishlist — the plan in item form.</div>
+      </div>
+      <div class="sb-col sb-board">
+        <div class="sb-badge">Board</div>
+        <div class="sb-name">Live status</div>
+        <div class="sb-role">What is moving and what is stuck. The team's daily truth surface.</div>
+      </div>
+      <div class="sb-col sb-sprint">
+        <div class="sb-badge">Sprint</div>
+        <div class="sb-name">Commitment</div>
+        <div class="sb-role">Bounded, time-boxed set of work the team commits to closing.</div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════
-     ORIENTATION
-══════════════════════════════════════ -->
-<section class="page-section sec-warm" id="orientation">
+<!-- ════════ SECTION 2: DETAILED OUTLINES ════════ -->
+<section class="sec-white" id="detailed">
   <div class="wrap">
-    <div class="sec-label"><span class="sec-num" style="background:var(--ink);">—</span> Orientation</div>
-    <h2 class="section-title">What Day 2 is — and is not</h2>
-    <p class="section-sub">Before building anything, understand the correct mindset for this day.</p>
+    <div class="sec-num">Section 2</div>
+    <h2 class="sec-title">Detailed Outlines</h2>
+    <p class="sec-sub">Each stage below shows the flow of the session: how it opens, what it covers, and what concrete outcome it reaches. Click any card to expand it.</p>
 
-    <div class="orientation-grid">
-      <div class="orient-col">
-        <div class="orient-head not">Not this</div>
-        <ul class="orient-body">
-          <li>Learning tools before defining the question</li>
-          <li>Adding charts because they look good</li>
-          <li>Treating all numbers as equally important</li>
-          <li>Building dashboards as proof of work</li>
-          <li>Using AI to generate analysis without data</li>
-          <li>Presenting chart behavior instead of business impact</li>
+    <!-- STAGE 1 -->
+    <div class="outline-card">
+      <div class="oc-header" onclick="toggleCard(this)">
+        <div class="oc-num">1</div>
+        <div class="oc-title">Converting the Day 1 backlog into Jira issue structure</div>
+        <div class="oc-time">40 min</div>
+        <div class="oc-toggle">▼</div>
+      </div>
+      <div class="oc-body">
+        <ul class="oc-flow">
+          <li>The session opens with the planning-ready backlog produced during Day 1 — all scope decisions, story states, and readiness flags are already in place before any Jira work begins.</li>
+          <li>The content moves that backlog into Jira by establishing the correct hierarchy: 
+            <span class="tooltip-word">epics<span class="tooltip-box">Epics group work by capability area — e.g. "Routing Logic" or "Agent Visibility"</span></span> 
+            group capabilities, 
+            <span class="tooltip-word">stories<span class="tooltip-box">Stories describe a user-facing outcome: what someone can do as a result of this work</span></span> 
+            describe user outcomes, and 
+            <span class="tooltip-word">tasks<span class="tooltip-box">Tasks are discrete implementation steps that sit beneath a story</span></span> 
+            carry the implementation detail.</li>
+          <li>Partial and blocked items are explicitly placed inside the hierarchy — marked, not removed — so the team can see what exists without treating unready items as executable.</li>
+          <li>The difference between a structured hierarchy and a flat ticket dump is examined directly: what each approach makes visible, and at what cost.</li>
+          <li class="ends">This stage ends with the full backlog represented in Jira as a structured, navigable hierarchy — not a flat list.</li>
         </ul>
+        <div class="oc-outcome">
+          <div class="oc-outcome-icon">🎯</div>
+          <p class="oc-outcome-text">Outcome: A Jira project containing epics, stories, and tasks that reflect the scope, structure, and readiness states from Day 1 — without flattening or losing the decisions already made.</p>
+        </div>
       </div>
-      <div class="orient-divider">→</div>
-      <div class="orient-col">
-        <div class="orient-head yes">Yes this</div>
-        <ul class="orient-body">
-          <li>Start with a specific business question</li>
-          <li>Define KPIs before opening any tool</li>
-          <li>Clean and structure data for your KPI model</li>
-          <li>Design dashboards to support decisions</li>
-          <li>Interpret patterns into business impact</li>
-          <li>Use AI to accelerate — not to replace — your thinking</li>
+    </div>
+
+    <!-- STAGE 2 -->
+    <div class="outline-card">
+      <div class="oc-header" onclick="toggleCard(this)">
+        <div class="oc-num">2</div>
+        <div class="oc-title">Organizing and ranking the backlog in Jira</div>
+        <div class="oc-time">35 min</div>
+        <div class="oc-toggle">▼</div>
+      </div>
+      <div class="oc-body">
+        <ul class="oc-flow">
+          <li>The session moves from structure into order. The hierarchy is in place — the question becomes what should rise to the top and why.</li>
+          <li>The content introduces three ordering lenses that must be applied together: importance (how much does this matter?), executability (can the team actually start this now?), and dependency order (does something else need to exist before this can move?).</li>
+          <li>The session challenges the assumption that "most important" equals "top of the backlog" — a blocked high-priority item at the top adds pressure without enabling any progress.</li>
+          <li>Learners rank the real items from the Support Escalation backlog before the correct order is revealed, making the judgment explicit and discussable.</li>
+          <li class="ends">This stage ends with a backlog that is ordered, reasoned, and ready to be pulled from — the top reflects what the team can actually execute first.</li>
         </ul>
-      </div>
-    </div>
 
-    <div class="callout navy">
-      <strong>The sequence that matters:</strong> Question → KPI Model → Data Preparation → Dashboard Structure → Build → Interpret → Recommend → Communicate
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════
-     USE CASE
-══════════════════════════════════════ -->
-<section class="page-section sec-white" id="usecase">
-  <div class="wrap">
-    <div class="sec-label"><span class="sec-num" style="background:var(--ink);">📋</span> Use Case</div>
-    <h2 class="section-title">StyleHub — the case you will work through</h2>
-    <p class="section-sub">Every example today is anchored in this scenario. Study the situation — do not jump to conclusions.</p>
-
-    <div class="grid-2">
-      <div class="card navy-top">
-        <h3 class="card-title">The company</h3>
-        <p class="card-body">StyleHub is an online fashion e-commerce business. It tracks website traffic, conversion rates, revenue, and order data across multiple marketing channels.</p>
-        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;">
-          <span class="tag navy">Online fashion</span>
-          <span class="tag blue">Multi-channel</span>
-          <span class="tag accent">E-commerce</span>
-        </div>
-      </div>
-      <div class="card accent-top">
-        <h3 class="card-title">The situation</h3>
-        <p class="card-body" style="margin-bottom:10px;">Management has noticed a performance issue. Your job is to investigate using the data — not to assume you already know the answer.</p>
-        <div style="font-size:13px;color:var(--bad);font-weight:600;padding:8px 12px;background:var(--bad-bg);border-radius:var(--r);border:1px solid var(--bad-border);">
-          Traffic is up. Orders are down. Conversion rate has dropped significantly.
-        </div>
-      </div>
-    </div>
-
-    <div class="grid-2" style="margin-top:0;">
-      <div class="card green-top">
-        <h3 class="card-title">The CEO's question</h3>
-        <p class="card-body">"Our website traffic is increasing but sales are not following. What is happening and what should we do about it?"</p>
-      </div>
-      <div class="card blue-top">
-        <h3 class="card-title">Available data</h3>
-        <div style="display:flex;flex-direction:column;gap:4px;margin-top:6px;">
-          <div style="font-size:12.5px;color:var(--ink-2);padding:4px 0;border-bottom:1px solid var(--border);">Website visits by channel and date</div>
-          <div style="font-size:12.5px;color:var(--ink-2);padding:4px 0;border-bottom:1px solid var(--border);">Orders with product, channel, and customer type</div>
-          <div style="font-size:12.5px;color:var(--ink-2);padding:4px 0;border-bottom:1px solid var(--border);">Revenue per completed transaction</div>
-          <div style="font-size:12.5px;color:var(--ink-2);padding:4px 0;">Customer classification: new vs. returning</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="callout warm">
-      <strong>Important:</strong> Do not jump to a diagnosis. Your job is to follow the analytical process and let the data lead you to a supported conclusion — not to confirm a guess.
-    </div>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- ══════════════════════════════════════
-     S1 — FRAMING
-══════════════════════════════════════ -->
-<section class="page-section sec-warm" id="s1">
-  <div class="wrap">
-    <div class="sec-label"><span class="sec-num" style="background:var(--navy);">1</span> Section 1</div>
-    <h2 class="section-title">Framing the Reporting Question</h2>
-    <p class="section-sub">Before touching any tool, define what you are trying to answer, who is reading it, and what decision it must support.</p>
-
-    <div class="callout navy">
-      <strong>Core rule:</strong> A dashboard is not "show me all the data." It is "help me answer this exact question." If you cannot state the question in one sentence, you are not ready to build.
-    </div>
-
-    <!-- Observation → Question -->
-    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 10px;">Observation vs. Question — know the difference</h3>
-    <div class="compare-2">
-      <div class="compare-col">
-        <div class="compare-head bad">Observation (not enough)</div>
-        <ul class="compare-body">
-          <li class="bad-item">"Sales are dropping."</li>
-          <li class="bad-item">"Traffic is up but revenue is down."</li>
-          <li class="bad-item">Cannot be built from — too vague to direct a dashboard</li>
-        </ul>
-      </div>
-      <div class="compare-col">
-        <div class="compare-head good">Analytical Question (actionable)</div>
-        <ul class="compare-body">
-          <li class="good-item">"Why is conversion rate declining despite rising traffic?"</li>
-          <li class="good-item">Specific · Measurable · Points to the data needed</li>
-          <li class="good-item">Every design decision that follows can be tested against it</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- CEO vs Marketing -->
-    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 10px;">Audience determines everything — click each to compare</h3>
-    <div class="field-strip" id="audienceStrip">
-      <div>
-        <div class="field-pill" onclick="toggleField(this)">
-          <span class="fp-name">CEO View</span>
-          <span class="fp-type">Executive</span>
-        </div>
-        <div class="field-reveal">Wants: instant summary + revenue impact. Needs: 3 KPIs visible in 5 seconds. Question: "Is the business improving or not?" Action: "What do we prioritize this week?" — <strong>Build for understanding, not investigation.</strong></div>
-      </div>
-      <div>
-        <div class="field-pill" onclick="toggleField(this)">
-          <span class="fp-name">Marketing Manager</span>
-          <span class="fp-type">Operational</span>
-        </div>
-        <div class="field-reveal">Wants: channel breakdowns + campaign ROI. Needs: filters by channel, date, audience segment. Question: "Which campaign is underperforming?" Action: "Which campaign do I pause or fix?" — <strong>Build for investigation and action.</strong></div>
-      </div>
-    </div>
-    <div class="callout blue" style="margin-top:8px;">
-      <strong>Day 2 focus:</strong> The dashboard you build today is CEO-facing. Interpretation work in Section 6 is the analyst's job — reading that dashboard to form a recommendation.
-    </div>
-
-    <!-- Data → Metrics → KPIs -->
-    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 10px;">Data → Metrics → KPIs — three different layers</h3>
-    <div class="fv-row">
-      <div class="fv-box field-b">
-        <div class="fv-label">Raw Data</div>
-        <div class="fv-main">order_id · price · channel</div>
-        <div class="fv-note">Facts from the system. No meaning on their own.</div>
-      </div>
-      <div class="fv-arrow">→</div>
-      <div class="fv-box value-b">
-        <div class="fv-label">Metrics</div>
-        <div class="fv-main">Total Revenue · Order Count</div>
-        <div class="fv-note">Calculations applied to data. Useful but lack context.</div>
-      </div>
-      <div class="fv-arrow">→</div>
-      <div class="fv-box rule-b">
-        <div class="fv-label">KPIs</div>
-        <div class="fv-main">Conversion Rate by Channel</div>
-        <div class="fv-note">Metric + Context + Purpose. Only these belong at the top of a dashboard.</div>
-      </div>
-    </div>
-
-    <!-- Purpose statement -->
-    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 10px;">The dashboard purpose statement</h3>
-    <p style="font-size:13.5px;color:var(--ink-2);margin-bottom:12px;line-height:1.6;">Write one sentence before building anything. Every chart, metric, and filter must serve this statement.</p>
-    <div class="card" style="border-left:3px solid var(--accent);">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:6px;">StyleHub Purpose Statement</div>
-      <p class="card-body" style="font-size:14px;color:var(--ink);">"To identify where and why conversion rate is decreasing across channels and customer segments, in order to support decisions that improve sales performance."</p>
-    </div>
-    <div class="strip navy" style="margin-top:16px;">Formula: To [identify/understand] [KPI] across [dimensions], in order to support [specific decision].</div>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- ══════════════════════════════════════
-     S2 — KPI MODEL
-══════════════════════════════════════ -->
-<section class="page-section sec-white" id="s2">
-  <div class="wrap">
-    <div class="sec-label"><span class="sec-num" style="background:var(--accent);">2</span> Section 2</div>
-    <h2 class="section-title">KPI Model &amp; Data Dictionary</h2>
-    <p class="section-sub">Every KPI needs four components. Without all four, the number will be interpreted differently by different people.</p>
-
-    <div class="callout warm">
-      <strong>The KPI test:</strong> Ask "What would someone DO differently because of this number?" If you cannot answer — it is a metric, not a KPI.
-    </div>
-
-    <!-- 4-part anatomy -->
-    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 10px;">Every KPI has four required components</h3>
-    <div class="kpi-anatomy">
-      <div class="kpi-part">
-        <div class="kpi-part-label def">Definition</div>
-        <div class="kpi-part-value">Plain-language explanation of what it measures and what it excludes. <em>Revenue = total completed order value, excluding refunds.</em></div>
-      </div>
-      <div class="kpi-part">
-        <div class="kpi-part-label formula">Formula</div>
-        <div class="kpi-part-value">The exact calculation. <em>Conversion Rate = COUNT(completed orders) ÷ COUNT(unique sessions)</em></div>
-      </div>
-      <div class="kpi-part">
-        <div class="kpi-part-label dim">Dimensions</div>
-        <div class="kpi-part-value">The "by" fields — how it can be broken down. <em>By Channel, by Customer Type, by Time Period.</em></div>
-      </div>
-      <div class="kpi-part">
-        <div class="kpi-part-label filter">Filters</div>
-        <div class="kpi-part-value">What can be included or excluded. <em>Date range, channel selection, customer segment.</em></div>
-      </div>
-    </div>
-
-    <!-- StyleHub KPI set -->
-    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 10px;">StyleHub KPI set — click each to see the definition</h3>
-    <div class="field-strip" id="kpiStrip">
-      <div>
-        <div class="field-pill" onclick="toggleField(this)">
-          <span class="fp-name">Conversion Rate</span>
-          <span class="fp-type">Primary KPI</span>
-        </div>
-        <div class="field-reveal"><strong>Definition:</strong> % of sessions that result in a completed purchase.<br><strong>Formula:</strong> COUNT(orders) ÷ COUNT(sessions)<br><strong>Dimension:</strong> By Channel, by Customer Type<br><strong>Why it matters:</strong> Tells you where traffic is failing to convert — not just that it is.</div>
-      </div>
-      <div>
-        <div class="field-pill" onclick="toggleField(this)">
-          <span class="fp-name">Revenue</span>
-          <span class="fp-type">Financial KPI</span>
-        </div>
-        <div class="field-reveal"><strong>Definition:</strong> Total value of completed orders in the period, excluding refunded transactions.<br><strong>Formula:</strong> SUM(completed order values)<br><strong>Dimension:</strong> By month, by channel, by product category</div>
-      </div>
-      <div>
-        <div class="field-pill" onclick="toggleField(this)">
-          <span class="fp-name">Total Orders</span>
-          <span class="fp-type">Volume KPI</span>
-        </div>
-        <div class="field-reveal"><strong>Definition:</strong> Count of completed purchase transactions in the period.<br><strong>Formula:</strong> COUNT(Order_ID where status = Completed)<br><strong>Dimension:</strong> By channel, by customer type, by date</div>
-      </div>
-      <div>
-        <div class="field-pill" onclick="toggleField(this)">
-          <span class="fp-name">Avg Order Value</span>
-          <span class="fp-type">Efficiency KPI</span>
-        </div>
-        <div class="field-reveal"><strong>Definition:</strong> Average revenue generated per completed order.<br><strong>Formula:</strong> Total Revenue ÷ Total Orders<br><strong>Dimension:</strong> By channel, by product category</div>
-      </div>
-    </div>
-
-    <!-- Dimensions -->
-    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 10px;">Dimensions — the "where" and "who" of your data</h3>
-    <p style="font-size:13.5px;color:var(--ink-2);margin-bottom:12px;line-height:1.6;">Dimensions are the fields that break down a metric. Without dimensions, a KPI only tells you <em>what</em> happened. With dimensions, it tells you <em>where</em> and <em>who</em>.</p>
-    <div class="grid-3">
-      <div class="card">
-        <h3 class="card-title" style="color:var(--navy);">Channel</h3>
-        <p class="card-body">Facebook · Google · Organic · Email. Reveals where traffic originates and how each source converts.</p>
-      </div>
-      <div class="card">
-        <h3 class="card-title" style="color:var(--navy);">Customer Type</h3>
-        <p class="card-body">New vs. Returning. Reveals whether the issue affects acquisition, retention, or both.</p>
-      </div>
-      <div class="card">
-        <h3 class="card-title" style="color:var(--navy);">Time Period</h3>
-        <p class="card-body">Day · Week · Month. Reveals when the change started and whether it is a trend or a single event.</p>
-      </div>
-    </div>
-
-    <!-- Mini data dictionary -->
-    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 10px;">Mini data dictionary — why it prevents disagreements</h3>
-    <div class="callout blue">
-      <strong>The problem:</strong> If one analyst counts all page views as "visits" and another counts only unique sessions, they produce different conversion rates from the same data — and both are technically right. A data dictionary stops this before it happens.
-    </div>
-    <div class="card" style="margin-top:10px;">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-muted);margin-bottom:10px;">Minimum entry per KPI field</div>
-      <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--ink-2);">
-        <div><strong style="color:var(--ink);">Field name:</strong> What the column is called in the cleaned dataset</div>
-        <div><strong style="color:var(--ink);">Definition:</strong> What it measures and what it excludes</div>
-        <div><strong style="color:var(--ink);">Formula:</strong> How it is calculated (exact logic)</div>
-        <div><strong style="color:var(--ink);">Type:</strong> Dimension or Measure</div>
-        <div><strong style="color:var(--ink);">Valid values:</strong> For dimensions — the agreed controlled list</div>
-      </div>
-    </div>
-    <div class="strip accent">Rule: If two analysts can calculate the same KPI with different answers, the data dictionary is missing.</div>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- ══════════════════════════════════════
-     S3 — DATA PREP
-══════════════════════════════════════ -->
-<section class="page-section sec-warm" id="s3">
-  <div class="wrap">
-    <div class="sec-label"><span class="sec-num" style="background:var(--green);">3</span> Section 3</div>
-    <h2 class="section-title">Preparing Data for Reporting</h2>
-    <p class="section-sub">Clean data is necessary but not sufficient. The structure must also support your KPI model — before you open any BI tool.</p>
-
-    <div class="callout red">
-      <strong>Core principle:</strong> Garbage in → Garbage out. The most polished Power BI dashboard built on uncleaned data produces wrong conclusions with complete confidence.
-    </div>
-
-    <!-- Before / After toggle -->
-    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 10px;">What uncleaned data does to your dashboard</h3>
-    <div class="ba-wrap">
-      <div class="ba-tabs">
-        <div class="ba-tab before active" onclick="toggleBA('ba1','before',this)">Before cleaning</div>
-        <div class="ba-tab after" onclick="toggleBA('ba1','after',this)">After cleaning</div>
-      </div>
-      <div id="ba1-before" class="ba-panel active">
-        <ul>
-          <li class="bad-item">3 separate entries for the same channel: fb / Facebook / FB</li>
-          <li class="bad-item">"Cairo" / "cairo" / "CAIRO" counted as 3 different cities</li>
-          <li class="bad-item">Shoes and Footwear treated as separate categories — Footwear looks tiny</li>
-          <li class="bad-item">Duplicate sessions inflate apparent conversion rate</li>
-          <li class="bad-item">Missing customer_type values — segment analysis unavailable</li>
-          <li class="bad-item">Result: CEO draws conclusions from a distorted picture</li>
-        </ul>
-      </div>
-      <div id="ba1-after" class="ba-panel">
-        <ul>
-          <li class="good-item">One unified "Facebook" channel across all records</li>
-          <li class="good-item">Standardized city values — one entry per location</li>
-          <li class="good-item">Shoes + Footwear merged — category now shows true size</li>
-          <li class="good-item">Duplicates removed — conversion rate is accurate</li>
-          <li class="good-item">Missing values handled — full segment breakdown available</li>
-          <li class="good-item">Result: CEO makes a decision grounded in correct data</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Cleaning checklist -->
-    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 10px;">Data cleaning checklist — 5 required steps</h3>
-    <div class="decision-chain">
-      <div class="dc-item">
-        <div class="dc-stage">Step 1 · Standardise naming</div>
-        <div class="dc-content">Same value must have exactly the same label everywhere. Facebook = Facebook — not fb, FB, or facebook. Category names must match across all records.</div>
-      </div>
-      <div class="dc-item accent">
-        <div class="dc-stage">Step 2 · Handle missing values</div>
-        <div class="dc-content">Every missing value is a decision. Fill with logic where possible (e.g. infer customer type from order history). Remove and document when inference is not safe. Never leave gaps undocumented.</div>
-      </div>
-      <div class="dc-item green">
-        <div class="dc-stage">Step 3 · Merge split categories</div>
-        <div class="dc-content">When the same real-world category appears under multiple names, merge them into one controlled value. Hidden performance often surfaces when this is done.</div>
-      </div>
-      <div class="dc-item blue">
-        <div class="dc-stage">Step 4 · Fix data types</div>
-        <div class="dc-content">Revenue stored as text cannot be summed. Dates stored as free text cannot be filtered by period. Every field must be in the correct format for the formula that will use it.</div>
-      </div>
-      <div class="dc-item">
-        <div class="dc-stage">Step 5 · Remove unnecessary columns</div>
-        <div class="dc-content">Every field in the cleaned dataset must serve a KPI or a dimension. Unused columns add noise and risk confusion. If it does not contribute to your model — remove it.</div>
-      </div>
-    </div>
-
-    <!-- Bridge: data structure -->
-    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 10px;">From cleaned data to report-ready structure</h3>
-    <div class="callout blue">
-      <strong>Cleaning is not enough.</strong> Your data must also be structured so that each KPI formula can be calculated at the correct level of detail. This is the bridge between data prep and dashboard build.
-    </div>
-    <div class="compare-2" style="margin-top:14px;">
-      <div class="compare-col">
-        <div class="compare-head" style="background:rgba(29,53,87,.08);color:var(--navy);border-bottom:1px solid rgba(29,53,87,.15);">Dimensions — the "by" fields</div>
-        <ul class="compare-body">
-          <li>Fields used to <em>slice</em> your data</li>
-          <li>Channel · Customer Type · Product · Date</li>
-          <li>Answer: "Where?" and "Who?"</li>
-          <li>Must be standardised and consistent</li>
-        </ul>
-      </div>
-      <div class="compare-col">
-        <div class="compare-head" style="background:rgba(199,75,44,.07);color:var(--accent);border-bottom:1px solid rgba(199,75,44,.2);">Measures — the "what" fields</div>
-        <ul class="compare-body">
-          <li>Fields you <em>calculate</em> to produce a KPI</li>
-          <li>Revenue · Order Count · Conversion Rate</li>
-          <li>Answer: "How much?" and "How many?"</li>
-          <li>Must be calculable at the dimension level</li>
-        </ul>
-      </div>
-    </div>
-    <div class="card" style="margin-top:14px;border-left:3px solid var(--green);">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--green);margin-bottom:8px;">StyleHub report-readiness check</div>
-      <div style="display:flex;flex-direction:column;gap:5px;font-size:13px;color:var(--ink-2);">
-        <div>&#x2713; &nbsp;Channel column present and standardised</div>
-        <div>&#x2713; &nbsp;Customer_Type column present with consistent values</div>
-        <div>&#x2713; &nbsp;Order_Date in date format — filterable by week/month</div>
-        <div>&#x2713; &nbsp;Visits and Orders at the same time and channel granularity</div>
-        <div>&#x2713; &nbsp;Conversion Rate can be calculated by channel without ambiguity</div>
-      </div>
-    </div>
-    <div class="strip green" style="margin-top:16px;">Rule: If your visits and orders are at different time granularities, stop. Fix the structure before building anything.</div>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- ══════════════════════════════════════
-     S4 — DASHBOARD STRUCTURE
-══════════════════════════════════════ -->
-<section class="page-section sec-white" id="s4">
-  <div class="wrap">
-    <div class="sec-label"><span class="sec-num" style="background:var(--disc-blue);">4</span> Section 4</div>
-    <h2 class="section-title">Dashboard Structure &amp; Design Logic</h2>
-    <p class="section-sub">Every layout decision is a communication decision. Plan before you build. Every visual must earn its place.</p>
-
-    <div class="callout blue">
-      <strong>Remember:</strong> This dashboard is CEO-facing. It must answer the status question in under 10 seconds. Complexity is not a feature here — clarity is.
-    </div>
-
-    <!-- Layout logic -->
-    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 10px;">The layout logic — top to bottom follows the business question</h3>
-    <div class="dash-preview">
-      <div class="dash-label-bar">StyleHub Dashboard — CEO View · Layout Wireframe</div>
-      <div class="dash-row">
-        <div class="dash-row-label">Top</div>
-        <div class="dash-blocks">
-          <div class="dash-block db-kpi">Revenue<div class="dash-block-note">What is happening now?</div></div>
-          <div class="dash-block db-kpi">Orders<div class="dash-block-note">Volume of transactions</div></div>
-          <div class="dash-block db-kpi">Conversion Rate<div class="dash-block-note">Core performance signal</div></div>
-        </div>
-      </div>
-      <div class="dash-row">
-        <div class="dash-row-label">Middle</div>
-        <div class="dash-blocks">
-          <div class="dash-block db-trend" style="flex:2;">Conversion Rate Trend — Last 8 Weeks<div class="dash-block-note">When did it start?</div></div>
-          <div class="dash-block db-breakdown">Conversion by Channel<div class="dash-block-note">Where is it happening?</div></div>
-        </div>
-      </div>
-      <div class="dash-row">
-        <div class="dash-row-label">Bottom</div>
-        <div class="dash-blocks">
-          <div class="dash-block db-breakdown" style="flex:2;">Conversion by Customer Type (New vs. Returning)<div class="dash-block-note">Who is affected?</div></div>
-        </div>
-      </div>
-      <div class="dash-row" style="border-bottom:none;">
-        <div class="dash-row-label">Filters</div>
-        <div class="dash-blocks">
-          <div class="dash-block db-filter">Date Range</div>
-          <div class="dash-block db-filter">Channel</div>
-          <div class="dash-block db-filter">Customer Type</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Chart type logic -->
-    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 10px;">Chart type by question — not by preference</h3>
-    <div class="grid-2">
-      <div class="card">
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <div>
-            <div style="font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">KPI Card</div>
-            <div style="font-size:13px;color:var(--ink-2);">Single most-critical number. Use for the top row. Requires immediate visibility.</div>
+        <!-- LENS TABS -->
+        <div style="margin-top:20px;">
+          <h3 style="margin-bottom:12px;">The three ordering lenses</h3>
+          <div class="lens-tabs" id="lensTabGroup">
+            <button class="lens-tab active" data-panel="lens-importance" onclick="switchLens(this, 'lensTabGroup')">
+              <div class="lens-tab-name">Importance</div>
+              <div class="lens-tab-q">How much does this item matter?</div>
+            </button>
+            <button class="lens-tab" data-panel="lens-exec" onclick="switchLens(this, 'lensTabGroup')">
+              <div class="lens-tab-name">Executability</div>
+              <div class="lens-tab-q">Can the team start this now?</div>
+            </button>
+            <button class="lens-tab" data-panel="lens-dep" onclick="switchLens(this, 'lensTabGroup')">
+              <div class="lens-tab-name">Dependency Order</div>
+              <div class="lens-tab-q">Does something else need to exist first?</div>
+            </button>
           </div>
-          <div>
-            <div style="font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Line Chart</div>
-            <div style="font-size:13px;color:var(--ink-2);">Change over time. Use when the trend pattern matters more than individual values.</div>
+          <div class="lens-panel active" id="lens-importance">
+            The most commonly applied lens — but not sufficient on its own. An item can be critical to the product and still unmovable because it is blocked, incomplete, or waiting for a dependency. Importance determines long-term priority; the other two lenses determine what can move now.
           </div>
-          <div>
-            <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Bar Chart</div>
-            <div style="font-size:13px;color:var(--ink-2);">Comparison across categories. Use to rank channels, segments, or products by a measure.</div>
+          <div class="lens-panel" id="lens-exec">
+            Is the scope defined? Are acceptance criteria written? Is there a named owner? Is anything blocking it? Executability is the gate. An item that fails this check should not sit at the top of the backlog, regardless of how important it is in the abstract.
           </div>
-          <div>
-            <div style="font-size:11px;font-weight:700;color:var(--disc-blue);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Table</div>
-            <div style="font-size:13px;color:var(--ink-2);">Detailed record lookup. Use only when exact values must be read — not for pattern recognition.</div>
+          <div class="lens-panel" id="lens-dep">
+            Two items with equal importance are not interchangeable if one depends on the other. The item that unlocks later work rises — not because it is more valuable, but because the dependency order determines what can happen in what sequence.
           </div>
         </div>
-      </div>
-      <div class="card">
-        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--bad);margin-bottom:10px;">Dashboard pitfalls to avoid</div>
-        <div style="display:flex;flex-direction:column;gap:6px;">
-          <div style="font-size:13px;color:var(--bad);">Too many visuals — no hierarchy, no clear story</div>
-          <div style="font-size:13px;color:var(--bad);">Charts chosen for appearance, not purpose</div>
-          <div style="font-size:13px;color:var(--bad);">No filters or too many filters (CEO limit: 3 max)</div>
-          <div style="font-size:13px;color:var(--bad);">KPIs buried — not immediately visible</div>
-          <div style="font-size:13px;color:var(--bad);">Pie charts for magnitude comparison — use bars</div>
+
+        <div class="oc-outcome" style="margin-top:20px;">
+          <div class="oc-outcome-icon">🎯</div>
+          <p class="oc-outcome-text">Outcome: A backlog that is ordered by what can actually move — not just what the team cares most about in the abstract.</p>
         </div>
-        <div style="margin-top:10px;font-size:12px;color:var(--ink-muted);font-style:italic;">Design should support understanding — not serve as decoration.</div>
       </div>
     </div>
 
-    <!-- Validation check -->
-    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 10px;">Validate before sharing</h3>
-    <div class="card">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-muted);margin-bottom:10px;">The dashboard passes when all of these are true</div>
-      <div style="display:flex;flex-direction:column;gap:6px;font-size:13.5px;color:var(--ink-2);">
-        <div>&#x2713; &nbsp;Someone can see whether conversion is improving or declining in under 10 seconds</div>
-        <div>&#x2713; &nbsp;Someone can see when the decline started</div>
-        <div>&#x2713; &nbsp;Someone can identify which channel or segment is driving the change</div>
-        <div>&#x2713; &nbsp;Every visual serves the purpose statement — nothing extra</div>
-        <div>&#x2713; &nbsp;The CEO can answer the question without analyst support</div>
+    <!-- STAGE 3 -->
+    <div class="outline-card">
+      <div class="oc-header" onclick="toggleCard(this)">
+        <div class="oc-num">3</div>
+        <div class="oc-title">Defining workflow statuses and board logic</div>
+        <div class="oc-time">35 min</div>
+        <div class="oc-toggle">▼</div>
+      </div>
+      <div class="oc-body">
+        <ul class="oc-flow">
+          <li>The session establishes what each workflow status actually means — not as labels, but as shared agreements about readiness, progress, and completion.</li>
+          <li>Six statuses are defined with consistent, team-agreed meanings: Intake, Ready, In Progress, Review, Blocked, and Done.</li>
+          <li>The content clarifies the movement rules between statuses — what allows an item to advance, and what should prevent it from moving forward prematurely.</li>
+          <li>Blocked is examined closely: it requires a named blocker. Blocked without a cause is not a valid state.</li>
+          <li>Done is examined with equal rigor: it means verified and closed — not self-assessed as complete.</li>
+          <li class="ends">This stage ends with a shared status vocabulary and clear movement logic that the whole team can operate from consistently.</li>
+        </ul>
+
+        <div style="margin-top:20px;">
+          <h3 style="margin-bottom:12px;">Workflow status reference</h3>
+          <div class="status-grid">
+            <div class="status-cell s-intake">
+              <div class="status-badge">Intake</div>
+              <div class="status-meaning">Item exists but has not yet been assessed for readiness. It is visible — not executable.</div>
+            </div>
+            <div class="status-cell s-ready">
+              <div class="status-badge">Ready</div>
+              <div class="status-meaning">Scope defined, ACs written, owner named, no active blockers. Can enter the sprint.</div>
+            </div>
+            <div class="status-cell s-inprog">
+              <div class="status-badge">In Progress</div>
+              <div class="status-meaning">Work has started. A named owner is actively working on it inside the sprint.</div>
+            </div>
+            <div class="status-cell s-review">
+              <div class="status-badge">Review</div>
+              <div class="status-meaning">Work is complete but awaiting verification — a code review, QA check, or approval step.</div>
+            </div>
+            <div class="status-cell s-blocked">
+              <div class="status-badge">Blocked</div>
+              <div class="status-meaning">Cannot proceed. A named blocker must be specified — unresolved external dependency, decision, or missing input.</div>
+            </div>
+            <div class="status-cell s-done">
+              <div class="status-badge">Done</div>
+              <div class="status-meaning">Verified and closed. Not self-assessed — confirmed against ACs by someone other than the author.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="oc-outcome">
+          <div class="oc-outcome-icon">🎯</div>
+          <p class="oc-outcome-text">Outcome: A workflow with six named statuses, shared definitions, and agreed movement rules — so the board reflects delivery reality rather than guesswork.</p>
+        </div>
       </div>
     </div>
-    <div class="strip navy" style="margin-top:16px;">If something does not answer the purpose statement — remove it. Simplicity is discipline, not laziness.</div>
+
+    <!-- STAGE 4 -->
+    <div class="outline-card">
+      <div class="oc-header" onclick="toggleCard(this)">
+        <div class="oc-num">4</div>
+        <div class="oc-title">Building the board view for delivery visibility</div>
+        <div class="oc-time">35 min</div>
+        <div class="oc-toggle">▼</div>
+      </div>
+      <div class="oc-body">
+        <ul class="oc-flow">
+          <li>The session turns the defined workflow into a physical board view that the team can operate from every day.</li>
+          <li>The content examines what a useful board shows — ownership, priority, blockers, and work status — and what a noisy board shows instead: excessive metadata that competes with the signal the team actually needs.</li>
+          <li>Two board views are compared side by side: one overloaded with labels, tags, and fields the team never reads during a standup; one focused on the four questions that matter in daily delivery.</li>
+          <li>The four daily questions the board must answer quickly are addressed: What is moving? What is blocked? Who owns it? What needs attention now?</li>
+          <li class="ends">This stage ends with a board configured to answer those questions clearly — without requiring a verbal explanation from the PM to make sense of.</li>
+        </ul>
+
+        <div class="try-it">
+          <div class="try-it-label">Try it yourself</div>
+          <p>Look at the board you use (or have seen in your team). Can you answer all four questions in under 10 seconds by looking at it? If not — what is getting in the way?</p>
+          <button class="reveal-btn" onclick="toggleReveal(this)">Show the four questions</button>
+          <div class="reveal-answer">
+            <p><strong>1. What is moving?</strong> — Items in In Progress, with a named owner.<br>
+            <strong>2. What is blocked?</strong> — Items in Blocked, with a named cause.<br>
+            <strong>3. Who owns it?</strong> — Visible on every active ticket without opening it.<br>
+            <strong>4. What needs attention now?</strong> — Blocked items, items in Review too long, items approaching a deadline.</p>
+          </div>
+        </div>
+
+        <div class="oc-outcome" style="margin-top:20px;">
+          <div class="oc-outcome-icon">🎯</div>
+          <p class="oc-outcome-text">Outcome: A board view that supports daily standup, surfaces blockers at a glance, and makes ownership visible without requiring anyone to decode it.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- STAGE 5 -->
+    <div class="outline-card">
+      <div class="oc-header" onclick="toggleCard(this)">
+        <div class="oc-num">5</div>
+        <div class="oc-title">Preparing sprint-ready work and creating the first sprint</div>
+        <div class="oc-time">45 min</div>
+        <div class="oc-toggle">▼</div>
+      </div>
+      <div class="oc-body">
+        <ul class="oc-flow">
+          <li>The session moves from backlog order into near-term execution planning — the step where what should happen becomes what the team actually commits to.</li>
+          <li>The content covers sprint-ready selection: which items meet the criteria to enter the sprint (scoped, unblocked, owned, sized) versus which items must wait.</li>
+          <li>Dependency awareness is applied at the sprint level: items that unblock later work are prioritized for the first sprint even if individually they feel smaller than other candidates.</li>
+          <li>The session covers the mechanics of creating the first sprint in Jira — moving items from the ordered backlog top into a bounded sprint with a goal, a scope, and a start date.</li>
+          <li>The session distinguishes a sprint from a wish list: a sprint is a real commitment, not everything the team hopes to complete soon.</li>
+          <li class="ends">This stage ends with a first sprint created in Jira — bounded, executable, and drawn from the structured backlog.</li>
+        </ul>
+
+        <div class="flow-row">
+          <div class="flow-step">
+            <div class="flow-step-num">Step 1</div>
+            <div class="flow-step-name">Order the backlog</div>
+            <div class="flow-step-desc">Apply the three lenses</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-step-num">Step 2</div>
+            <div class="flow-step-name">Check sprint-readiness</div>
+            <div class="flow-step-desc">Scoped, unblocked, owned</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-step-num">Step 3</div>
+            <div class="flow-step-name">Set sprint goal</div>
+            <div class="flow-step-desc">One sentence — what closes</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-step-num">Step 4</div>
+            <div class="flow-step-name">Start the sprint</div>
+            <div class="flow-step-desc">Commit, don't estimate forever</div>
+          </div>
+        </div>
+
+        <div class="oc-outcome">
+          <div class="oc-outcome-icon">🎯</div>
+          <p class="oc-outcome-text">Outcome: A first sprint in Jira with a sprint goal, a bounded scope of executable items, and dependency order respected — ready to run.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- STAGE 6 -->
+    <div class="outline-card">
+      <div class="oc-header" onclick="toggleCard(this)">
+        <div class="oc-num">6</div>
+        <div class="oc-title">Managing blockers, handoffs, and delivery controls</div>
+        <div class="oc-time">25 min</div>
+        <div class="oc-toggle">▼</div>
+      </div>
+      <div class="oc-body">
+        <ul class="oc-flow">
+          <li>The session focuses on how the workflow handles the friction that always appears during live delivery: work that gets blocked, work that needs to move between owners, and work that must pass a review gate before it can close.</li>
+          <li>The content keeps the emphasis on delivery control — not project management theory. The goal is a workflow that makes problems visible before they cause delays.</li>
+          <li>Blocked work is examined as a signal, not a status: when an item moves to Blocked, the cause should be visible without opening the ticket.</li>
+          <li>Handoff moments — where one person completes and another must pick up — are mapped into the workflow so they do not become invisible gaps.</li>
+          <li class="ends">This stage ends with a workflow configured to surface friction early and support smoother execution across the team — not just track tickets.</li>
+        </ul>
+
+        <div class="callout callout-amber">
+          <div class="callout-label">Delivery control principle</div>
+          <p>A blocked item with no named cause is not a delivery signal — it is just a badge. The workflow's job is to make the cause visible, not confirm that someone remembered to change a status.</p>
+        </div>
+
+        <div class="oc-outcome" style="margin-top:20px;">
+          <div class="oc-outcome-icon">🎯</div>
+          <p class="oc-outcome-text">Outcome: A workflow that makes blockers, review states, and handoff points visible during execution — so the team can respond before delays compound.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- STAGE 7 -->
+    <div class="outline-card">
+      <div class="oc-header" onclick="toggleCard(this)">
+        <div class="oc-num">7</div>
+        <div class="oc-title">Adding basic dashboards and lightweight automation</div>
+        <div class="oc-time">25 min</div>
+        <div class="oc-toggle">▼</div>
+      </div>
+      <div class="oc-body">
+        <ul class="oc-flow">
+          <li>The session introduces the minimum reporting and automation layer needed to keep the workspace usable without becoming a full-time maintenance job.</li>
+          <li>The content covers simple dashboard elements that give the team and stakeholders an accurate read on sprint progress, blocked count, and items in review — without requiring manual status updates.</li>
+          <li>Basic automation rules are introduced to reduce the manual tracking that causes drift: auto-transitions, assignment triggers, and notification rules that keep the board reflecting reality.</li>
+          <li>The session frames dashboards as a visibility tool — not a reporting theater. A dashboard that requires data entry to stay accurate is not serving the team.</li>
+          <li class="ends">This stage ends with a Jira workspace that is genuinely usable for live execution, team coordination, and stakeholder follow-up — with minimal manual overhead.</li>
+        </ul>
+
+        <div class="try-it">
+          <div class="try-it-label">Discussion prompt</div>
+          <p>What is the minimum information a dashboard needs to show for a stakeholder to understand the sprint's health at a glance — without being walked through it?</p>
+          <button class="reveal-btn" onclick="toggleReveal(this)">Show example answer</button>
+          <div class="reveal-answer">
+            <p>Sprint goal and whether the team is on track to meet it. Items remaining vs. items closed. Blocked count and named blockers. Any item in Review for more than two days. That is enough for a meaningful check-in — anything else is noise.</p>
+          </div>
+        </div>
+
+        <div class="oc-outcome" style="margin-top:20px;">
+          <div class="oc-outcome-icon">🎯</div>
+          <p class="oc-outcome-text">Outcome: A lightweight dashboard and at least two automation rules that keep the workspace accurate without requiring someone to manually maintain it.</p>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
-<div class="section-divider"></div>
-
-<!-- ══════════════════════════════════════
-     S5 — TOOLS
-══════════════════════════════════════ -->
-<section class="page-section sec-warm" id="s5">
+<!-- ════════ SECTION 3: LEARNING OBJECTIVES ════════ -->
+<section class="sec-warm" id="objectives">
   <div class="wrap">
-    <div class="sec-label"><span class="sec-num" style="background:var(--ink);">5</span> Section 5</div>
-    <h2 class="section-title">Building in Tools — Power BI + Looker Studio</h2>
-    <p class="section-sub">Tools execute the logic you have already defined. Power BI is the main build. Looker Studio is a translation — not a second full build.</p>
+    <div class="sec-num">Section 3</div>
+    <h2 class="sec-title">Learning Objectives</h2>
+    <p class="sec-sub">After this session, the trainee should be able to:</p>
 
-    <div class="callout navy">
-      <strong>The key principle:</strong> If you needed to relearn everything for each new tool, you did not really understand dashboards. The logic — question, KPIs, layout — is tool-independent.
-    </div>
+    <div class="stripe">Each objective below maps directly to content covered in the session. These are not aspirational — they describe what the session specifically builds toward.</div>
 
-    <!-- Power BI -->
-    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 10px;">Power BI — build reference</h3>
-    <p style="font-size:13.5px;color:var(--ink-2);margin-bottom:12px;line-height:1.6;">In Power BI, your KPIs become Measures created in the Modeling tab. Your layout plan from Section 4 becomes the report canvas. Your dimensions become the fields you use for slicers and chart axes.</p>
-    <div class="card" style="margin-bottom:14px;">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-muted);margin-bottom:10px;">Core DAX Measures — StyleHub</div>
-      <div style="background:var(--ink);border-radius:var(--r);padding:14px 18px;font-family:monospace;font-size:12.5px;line-height:1.8;color:#D4CFC8;">
-        <div><span style="color:#C74B2C;">Total Revenue</span> = SUM(Sales[Revenue])</div>
-        <div><span style="color:#C74B2C;">Total Orders</span> = COUNT(Sales[Order_ID])</div>
-        <div><span style="color:#C74B2C;">Avg Order Value</span> = DIVIDE([Total Revenue], [Total Orders])</div>
-        <div><span style="color:#C74B2C;">Conversion Rate</span> = DIVIDE([Total Orders], [Total Visits])</div>
+    <div class="objectives-grid" style="margin-top:24px;">
+      <div class="obj-card">
+        <div class="obj-verb">Convert</div>
+        <div class="obj-text">A planning-ready backlog into a structured Jira setup using epics, stories, tasks, and subtasks where needed.</div>
       </div>
-    </div>
-    <div class="compare-2" style="margin:16px 0 0;">
-      <div class="compare-col">
-        <div class="compare-head bad">What changes between tools</div>
-        <ul class="compare-body">
-          <li>Where to click to create a measure or calculated field</li>
-          <li>How filters (slicers vs. filter controls) are added</li>
-          <li>How to connect and refresh your data source</li>
-          <li>The default color palette and publishing method</li>
-        </ul>
+      <div class="obj-card">
+        <div class="obj-verb">Organize</div>
+        <div class="obj-text">And rank backlog items inside Jira in a way that supports practical delivery planning — not just a wish list.</div>
       </div>
-      <div class="compare-col">
-        <div class="compare-head good">What never changes</div>
-        <ul class="compare-body">
-          <li class="good-item">The business question and purpose statement</li>
-          <li class="good-item">All KPI definitions and formulas</li>
-          <li class="good-item">The layout logic (KPIs → Trend → Breakdowns → Filters)</li>
-          <li class="good-item">The dimensions and filter fields</li>
-        </ul>
+      <div class="obj-card">
+        <div class="obj-verb">Define</div>
+        <div class="obj-text">Workflow statuses and explain what each status reflects: readiness, progress, review, blockers, and completion.</div>
       </div>
-    </div>
-
-    <!-- Looker translation -->
-    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:28px 0 10px;">From Dashboard Plan → Tool Build</h3>
-    <div class="card" style="margin-bottom:14px;">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-muted);margin-bottom:12px;">Dashboard logic → Power BI equivalent</div>
-      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;font-size:13px;">
-        <div style="color:var(--navy);font-weight:600;">KPI cards (Status)</div><div style="color:var(--ink-muted);">→</div><div style="color:var(--ink-2);">Card visuals + Measure values</div>
-        <div style="color:var(--navy);font-weight:600;">Trend chart (When)</div><div style="color:var(--ink-muted);">→</div><div style="color:var(--ink-2);">Line chart + Date axis</div>
-        <div style="color:var(--navy);font-weight:600;">Breakdown by channel (Where)</div><div style="color:var(--ink-muted);">→</div><div style="color:var(--ink-2);">Bar chart + Channel dimension</div>
-        <div style="color:var(--navy);font-weight:600;">Filters (Scope)</div><div style="color:var(--ink-muted);">→</div><div style="color:var(--ink-2);">Slicers (Date, Channel, Customer Type)</div>
+      <div class="obj-card">
+        <div class="obj-verb">Translate</div>
+        <div class="obj-text">Workflow logic into a Jira board structure that supports clear daily delivery visibility for the whole team.</div>
       </div>
-      <div style="border-top:1px solid var(--border);margin-top:14px;padding-top:12px;">
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-muted);margin-bottom:10px;">Same logic in Looker Studio</div>
-        <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;font-size:13px;">
-          <div style="color:var(--green);font-weight:600;">KPI cards</div><div style="color:var(--ink-muted);">→</div><div style="color:var(--ink-2);">Scorecards</div>
-          <div style="color:var(--green);font-weight:600;">Trend chart</div><div style="color:var(--ink-muted);">→</div><div style="color:var(--ink-2);">Time series</div>
-          <div style="color:var(--green);font-weight:600;">Channel breakdown</div><div style="color:var(--ink-muted);">→</div><div style="color:var(--ink-2);">Bar chart</div>
-          <div style="color:var(--green);font-weight:600;">Filters</div><div style="color:var(--ink-muted);">→</div><div style="color:var(--ink-2);">Filter controls</div>
-        </div>
+      <div class="obj-card">
+        <div class="obj-verb">Prepare</div>
+        <div class="obj-text">Work for execution by identifying priority order, near-term scope, and key dependencies before the sprint starts.</div>
+      </div>
+      <div class="obj-card">
+        <div class="obj-verb">Create</div>
+        <div class="obj-text">A first sprint in Jira from a structured and prioritized backlog — with a goal, bounded scope, and executable items.</div>
+      </div>
+      <div class="obj-card">
+        <div class="obj-verb">Distinguish</div>
+        <div class="obj-text">Between backlog structure, board workflow, and sprint planning as separate — and non-interchangeable — layers of delivery management.</div>
+      </div>
+      <div class="obj-card">
+        <div class="obj-verb">Apply</div>
+        <div class="obj-text">Basic delivery controls such as review stages, blocked states, and progress tracking inside the workflow to make problems visible early.</div>
+      </div>
+      <div class="obj-card">
+        <div class="obj-verb">Use</div>
+        <div class="obj-text">Jira to make ownership, blockers, handoffs, and work status visible across a team — without requiring a verbal explanation.</div>
+      </div>
+      <div class="obj-card">
+        <div class="obj-verb">Build</div>
+        <div class="obj-text">A Jira workspace that is usable for live execution, team coordination, and stakeholder follow-up with minimal manual maintenance.</div>
       </div>
     </div>
 
-    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:28px 0 10px;">Looker Studio — translation, not reinvention</h3>
-    <div class="callout warm">
-      <strong>This is not a second full build from zero.</strong> This is a translation exercise. The purpose is to prove that BI logic survives the tool change — same question, same KPI model, same structure, different platform.
+    <div class="callout callout-green" style="margin-top:36px;">
+      <div class="callout-label">End state</div>
+      <p>By the close of this session, you will have operated all three Jira surfaces — backlog, board, and sprint — with the real Support Escalation project used throughout the training. The workspace will be usable immediately for live delivery.</p>
     </div>
-    <div class="decision-chain" style="margin-top:14px;">
-      <div class="dc-item">
-        <div class="dc-stage">Translate · Step 1</div>
-        <div class="dc-content">Connect data: lookerstudio.google.com → Blank Report → Add Data → select your cleaned StyleHub dataset</div>
-      </div>
-      <div class="dc-item accent">
-        <div class="dc-stage">Translate · Step 2</div>
-        <div class="dc-content">Add Scorecards for Revenue, Orders, and Conversion Rate. Enable comparison to previous period.</div>
-      </div>
-      <div class="dc-item green">
-        <div class="dc-stage">Translate · Step 3</div>
-        <div class="dc-content">Add Time Series chart: Dimension = Order Date, Metric = Conversion Rate. Same trend you built in Power BI.</div>
-      </div>
-      <div class="dc-item blue">
-        <div class="dc-stage">Translate · Step 4</div>
-        <div class="dc-content">Add Bar Chart: Dimension = Channel, Metric = Conversion Rate. Then add Date Range, Channel, and Customer Type filter controls.</div>
-      </div>
-    </div>
-    <div class="card" style="margin-top:14px;">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--green);margin-bottom:8px;">Translation success check</div>
-      <div style="display:flex;flex-direction:column;gap:5px;font-size:13px;color:var(--ink-2);">
-        <div>&#x2713; &nbsp;Same KPI formulas and definitions as Power BI?</div>
-        <div>&#x2713; &nbsp;Same layout: KPI Cards → Trend → Breakdowns → Filters?</div>
-        <div>&#x2713; &nbsp;The CEO can answer the same questions from both dashboards?</div>
-      </div>
-    </div>
-    <div class="strip ink" style="margin-top:16px;">"Consistency across tools builds trust. Variation between tools destroys it."</div>
+
   </div>
 </section>
 
-<div class="section-divider"></div>
-
-<!-- ══════════════════════════════════════
-     S6 — INTERPRETATION
-══════════════════════════════════════ -->
-<section class="page-section sec-white" id="s6">
-  <div class="wrap">
-    <div class="sec-label"><span class="sec-num" style="background:var(--accent);">6</span> Section 6</div>
-    <h2 class="section-title">Interpretation, Narrative &amp; Action</h2>
-    <p class="section-sub">This is where you shift from dashboard builder to analyst. Your job is to explain what the data means and what it demands — from the CEO-facing dashboard you built.</p>
-
-    <div class="callout red">
-      <strong>The critical gap:</strong> Anyone can build charts. The analyst who can explain what they mean — and recommend action specifically — is the one who earns trust.
-    </div>
-
-    <!-- Business impact, not chart behavior -->
-    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 10px;">Describe business impact — not chart behavior</h3>
-    <div class="compare-2">
-      <div class="compare-col">
-        <div class="compare-head bad">Describing the chart</div>
-        <ul class="compare-body">
-          <li class="bad-item">"The line in the conversion rate chart goes down."</li>
-          <li class="bad-item">Forces the reader to interpret it themselves</li>
-          <li class="bad-item">Tells them nothing about consequence or urgency</li>
-        </ul>
-      </div>
-      <div class="compare-col">
-        <div class="compare-head good">Describing the business</div>
-        <ul class="compare-body">
-          <li class="good-item">"Conversion rate has fallen 38%, from 3.4% to 2.1% — a drop that directly reduces the revenue generated per visitor."</li>
-          <li class="good-item">States scale, timeframe, and business consequence</li>
-          <li class="good-item">CEO immediately understands the size of the problem</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Pattern types -->
-    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 10px;">Four pattern types to look for in every breakdown</h3>
-    <div class="grid-2">
-      <div class="card">
-        <h3 class="card-title" style="color:var(--navy);">Trends</h3>
-        <p class="card-body">Is a metric moving consistently up or down over time? A 5-week decline is different from a single bad week — it points to a structural issue, not a one-time event.</p>
-      </div>
-      <div class="card">
-        <h3 class="card-title" style="color:var(--accent);">Anomalies</h3>
-        <p class="card-body">A sudden spike or drop that breaks the pattern. Anomalies often correlate with a specific event: a campaign launch, a technical issue, a promotional period.</p>
-      </div>
-      <div class="card">
-        <h3 class="card-title" style="color:var(--green);">Comparisons</h3>
-        <p class="card-body">How does one channel compare to another? How does this month compare to last? Comparisons reveal relative performance that single numbers hide.</p>
-      </div>
-      <div class="card">
-        <h3 class="card-title" style="color:var(--disc-blue);">Contributions</h3>
-        <p class="card-body">Which segment or channel is driving the overall change? A decline concentrated in one channel tells a very different story than an even decline across all channels.</p>
-      </div>
-    </div>
-
-    <!-- Pattern vs proof warning -->
-    <div class="callout yellow" style="margin-top:8px;">
-      <strong>Pattern vs. Proof — a critical professional distinction.</strong> Dashboards reveal concentration points and suggest likely causes — they do not prove causation. A strong correlation is a hypothesis to test, not a confirmed conclusion. Frame recommendations as: "The data strongly suggests X — we recommend action Y to test and validate this direction."
-    </div>
-
-    <!-- 4-step narrative -->
-    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 10px;">The four-step narrative framework</h3>
-    <div class="narrative-steps">
-      <div class="ns-card">
-        <div class="ns-num">01 · What happened</div>
-        <div class="ns-title">State the change with scale</div>
-        <div class="ns-ex">"Conversion rate has declined 38% over two months, from 3.4% to 2.1%."</div>
-      </div>
-      <div class="ns-card">
-        <div class="ns-num">02 · Where</div>
-        <div class="ns-title">Locate the concentration</div>
-        <div class="ns-ex">"The drop is concentrated in one specific traffic source and among new customers."</div>
-      </div>
-      <div class="ns-card">
-        <div class="ns-num">03 · Why likely</div>
-        <div class="ns-title">Offer a grounded hypothesis</div>
-        <div class="ns-ex">"The pattern suggests a possible acquisition or first-visit experience issue — new users are arriving but not completing purchases."</div>
-      </div>
-      <div class="ns-card">
-        <div class="ns-num">04 · What to do</div>
-        <div class="ns-title">One specific action to test</div>
-        <div class="ns-ex">"Audit audience targeting and A/B test landing page variations. Measure conversion improvement within 4 weeks."</div>
-      </div>
-    </div>
-
-    <!-- Vague vs specific recommendation -->
-    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 10px;">Specific recommendations earn trust. Vague ones do not.</h3>
-    <div class="compare-2">
-      <div class="compare-col">
-        <div class="compare-head bad">Vague — avoids commitment</div>
-        <ul class="compare-body">
-          <li class="bad-item">"We should improve our marketing."</li>
-          <li class="bad-item">"Review the targeting strategy."</li>
-          <li class="bad-item">Gives impression of analysis without substance</li>
-        </ul>
-      </div>
-      <div class="compare-col">
-        <div class="compare-head good">Specific — grounded and testable</div>
-        <ul class="compare-body">
-          <li class="good-item">Names the channel and the issue</li>
-          <li class="good-item">States the test to run</li>
-          <li class="good-item">Includes a time horizon to measure success</li>
-        </ul>
-      </div>
-    </div>
-    <div class="strip accent" style="margin-top:16px;">Rule: If your analysis does not end with a specific, testable action — it is not finished.</div>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- ══════════════════════════════════════
-     S7 — AI SUPPORT + DAY OUTPUT
-══════════════════════════════════════ -->
-<section class="page-section sec-warm" id="s7">
-  <div class="wrap">
-    <div class="sec-label"><span class="sec-num" style="background:var(--green);">7</span> Section 7</div>
-    <h2 class="section-title">AI Support &amp; Day 2 Output</h2>
-    <p class="section-sub">AI accelerates the communication layer of analysis. It does not replace your thinking, your data, or your judgment.</p>
-
-    <div class="callout navy">
-      <strong>Where AI fits:</strong> Data → KPIs → Dashboard → <strong>Interpretation ↔ AI</strong> → <strong>Communication ↔ AI</strong>. AI adds value at the last two stages only — after your analytical foundation is in place.
-    </div>
-
-    <!-- Where AI helps -->
-    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 10px;">What AI can genuinely help with — in the Day 2 workflow</h3>
-    <div class="grid-2">
-      <div class="card green-top">
-        <h3 class="card-title">Refining KPI names</h3>
-        <p class="card-body">AI can sharpen a rough KPI label so it clearly reflects the business question it serves. The definition must be correct first — AI improves the wording, not the logic.</p>
-      </div>
-      <div class="card green-top">
-        <h3 class="card-title">Critiquing dashboard structure</h3>
-        <p class="card-body">Describe your dashboard layout and purpose statement to AI and ask it to identify gaps. It can spot missing KPIs or filter options that do not serve the CEO's question.</p>
-      </div>
-      <div class="card green-top">
-        <h3 class="card-title">Drafting an executive summary</h3>
-        <p class="card-body">After you have identified key patterns, AI can draft a professional summary based on your dashboard findings. You validate it against the data before using it.</p>
-      </div>
-      <div class="card green-top">
-        <h3 class="card-title">Sharpening recommendation phrasing</h3>
-        <p class="card-body">AI can help frame a vague conclusion as a specific, data-grounded recommendation with a testable action — once you have supplied the analytical finding it should be based on.</p>
-      </div>
-    </div>
-
-    <!-- Prompt compare -->
-    <h3 style="font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 10px;">Good prompt vs. weak prompt — the formula matters</h3>
-    <div class="prompt-compare">
-      <div class="pc-card">
-        <div class="pc-head weak">Weak prompt</div>
-        <div class="pc-body">
-          <div class="pc-prompt">"Write an executive summary about our marketing performance."</div>
-          <div class="pc-why">No data. No context. No format guidance. AI will produce something generic and ungrounded that cannot be used.</div>
-        </div>
-      </div>
-      <div class="pc-card">
-        <div class="pc-head strong">Strong prompt</div>
-        <div class="pc-body">
-          <div class="pc-prompt">"You are a business analyst for an online fashion e-commerce company. Traffic increased 20%, conversion rate dropped from 3.4% to 2.1%, concentrated in one specific channel. Write a 3-sentence executive summary with one specific recommendation. Plain business language."</div>
-          <div class="pc-why">Context + Data + Task + Format = usable output every time.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- AI limits -->
-    <div class="callout red">
-      <strong>What AI cannot do:</strong> Know your organization's internal context or priorities. Know what your CEO cares about this week. Validate outputs against real data. Own or be accountable for a recommendation. The analyst owns all of these. AI is a tool that makes a skilled analyst faster — it does not make an unskilled person into an analyst.
-    </div>
-
-    <!-- Day 2 Outputs -->
-    <h3 style="font-size:16px;font-weight:700;color:var(--ink);margin:36px 0 10px;font-family:Georgia,serif;">What You Should Be Able to Produce After Day 2</h3>
-    <p style="font-size:13.5px;color:var(--ink-2);margin-bottom:16px;line-height:1.6;">These are the five concrete outputs a working analyst produces from this day's process. Not reflections — real deliverables.</p>
-    <ul class="output-list">
-      <li>
-        <div class="out-num">01</div>
-        <div>
-          <div style="font-weight:700;color:var(--ink);margin-bottom:3px;">A one-sentence dashboard purpose statement</div>
-          <div style="font-size:12.5px;color:var(--ink-muted);">States what the dashboard is for, who it serves, and what decision it supports. Filters every design choice.</div>
-        </div>
-      </li>
-      <li>
-        <div class="out-num">02</div>
-        <div>
-          <div style="font-weight:700;color:var(--ink);margin-bottom:3px;">A KPI list with definitions</div>
-          <div style="font-size:12.5px;color:var(--ink-muted);">3–5 KPIs. Each with: name, plain-language definition, exact formula, dimension, and target or benchmark.</div>
-        </div>
-      </li>
-      <li>
-        <div class="out-num">03</div>
-        <div>
-          <div style="font-weight:700;color:var(--ink);margin-bottom:3px;">A cleaned data checklist or mini data dictionary</div>
-          <div style="font-size:12.5px;color:var(--ink-muted);">Documents every cleaning decision with before/after. Confirms data is report-ready: right granularity, right structure, right field names.</div>
-        </div>
-      </li>
-      <li>
-        <div class="out-num">04</div>
-        <div>
-          <div style="font-weight:700;color:var(--ink);margin-bottom:3px;">A dashboard wireframe or layout plan</div>
-          <div style="font-size:12.5px;color:var(--ink-muted);">Shows what goes where and why. Each visual tied to a specific part of the purpose statement. Not a design — a justified plan.</div>
-        </div>
-      </li>
-      <li>
-        <div class="out-num">05</div>
-        <div>
-          <div style="font-weight:700;color:var(--ink);margin-bottom:3px;">A short executive summary with one recommendation</div>
-          <div style="font-size:12.5px;color:var(--ink-muted);">3–5 sentences. Follows: What happened → Where → Why likely → What to do. Includes a time horizon to measure impact.</div>
-        </div>
-      </li>
-    </ul>
-
-    <div class="card" style="margin-top:20px;border-left:3px solid var(--green);">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--green);margin-bottom:10px;">How to know your output is strong</div>
-      <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--ink-2);">
-        <div>&#x2713; &nbsp;The purpose statement names a specific decision — not just a topic</div>
-        <div>&#x2713; &nbsp;Every KPI has a formula that produces the same result regardless of who runs it</div>
-        <div>&#x2713; &nbsp;The data checklist explains structural readiness — not just that it was "cleaned"</div>
-        <div>&#x2713; &nbsp;The dashboard layout shows a clear hierarchy: status, then trend, then breakdown</div>
-        <div>&#x2713; &nbsp;The executive summary separates what the data shows from what you believe it means</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- ══════════════════════════════════════
-     FULL WORKFLOW
-══════════════════════════════════════ -->
-<section class="page-section sec-white" id="workflow">
-  <div class="wrap">
-    <div class="sec-label"><span class="sec-num" style="background:var(--ink);">↔</span> Full Workflow</div>
-    <h2 class="section-title">The complete Day 2 thinking sequence</h2>
-    <p class="section-sub">One clear path from question to communication. Every section today serves a step in this chain.</p>
-
-    <div class="system-map">
-      <div class="sm-block sm-1"><div class="sm-num">S1</div><div class="sm-name">Question</div><div class="sm-tool">Framing</div></div>
-      <div class="sm-arrow">→</div>
-      <div class="sm-block sm-2"><div class="sm-num">S2</div><div class="sm-name">KPI Model</div><div class="sm-tool">Define</div></div>
-      <div class="sm-arrow">→</div>
-      <div class="sm-block sm-3"><div class="sm-num">S3</div><div class="sm-name">Data Ready</div><div class="sm-tool">Prepare</div></div>
-      <div class="sm-arrow">→</div>
-      <div class="sm-block sm-4"><div class="sm-num">S4</div><div class="sm-name">Dashboard</div><div class="sm-tool">Structure</div></div>
-      <div class="sm-arrow">→</div>
-      <div class="sm-block sm-5"><div class="sm-num">S5</div><div class="sm-name">Build</div><div class="sm-tool">Power BI / Looker</div></div>
-      <div class="sm-arrow">→</div>
-      <div class="sm-block sm-6"><div class="sm-num">S6</div><div class="sm-name">Interpret</div><div class="sm-tool">Narrative</div></div>
-      <div class="sm-arrow">→</div>
-      <div class="sm-block sm-7"><div class="sm-num">S7</div><div class="sm-name">Recommend</div><div class="sm-tool">+ Communicate</div></div>
-    </div>
-
-    <div class="final-hero">
-      <div class="final-hero-inner">
-        <div class="fh-eyebrow">The rule that holds across every step</div>
-        <h3 class="fh-title">Every decision in this workflow must be traceable back to the business question.</h3>
-        <ul class="fh-list">
-          <li><div class="fh-num">01</div><div>If a KPI does not answer the question — remove it</div></li>
-          <li><div class="fh-num">02</div><div>If a data field does not support a KPI — remove it</div></li>
-          <li><div class="fh-num">03</div><div>If a visual does not serve the purpose statement — remove it</div></li>
-          <li><div class="fh-num">04</div><div>If a recommendation is not traceable to the data — it is a guess</div></li>
-          <li><div class="fh-num">05</div><div>If AI output cannot be validated against real data — do not use it</div></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- ══════════════════════════════════════
-     CHEAT SHEET
-══════════════════════════════════════ -->
-<section class="page-section sec-warm" id="cheat">
-  <div class="wrap">
-    <div class="sec-label"><span class="sec-num" style="background:var(--ink);">⊞</span> Cheat Sheet</div>
-    <h2 class="section-title">Day 2 rules at a glance</h2>
-    <p class="section-sub">One rule per stage. If something is not working, check the relevant rule first.</p>
-
-    <div class="cheat-grid">
-      <div class="cheat-card">
-        <div class="cc-title">Question Rule</div>
-        <ul>
-          <li>Define the question before opening any tool</li>
-          <li>Observations are not questions</li>
-          <li>The question must be specific and measurable</li>
-          <li>Write a one-sentence purpose statement</li>
-        </ul>
-      </div>
-      <div class="cheat-card">
-        <div class="cc-title">KPI Rule</div>
-        <ul>
-          <li>KPI = Metric + Context + Purpose</li>
-          <li>If you cannot say what decision it supports — it is not a KPI</li>
-          <li>Every KPI needs definition, formula, dimension, filter</li>
-          <li>Document everything in a data dictionary</li>
-        </ul>
-      </div>
-      <div class="cheat-card">
-        <div class="cc-title">Data Rule</div>
-        <ul>
-          <li>Never build directly on raw data</li>
-          <li>Standardise naming before anything else</li>
-          <li>Missing values are decisions — document them</li>
-          <li>Structure must match KPI logic: same granularity</li>
-        </ul>
-      </div>
-      <div class="cheat-card">
-        <div class="cc-title">Dashboard Rule</div>
-        <ul>
-          <li>Plan the layout before building</li>
-          <li>KPIs at the top — visible in 5 seconds</li>
-          <li>Every visual must earn its place</li>
-          <li>Validate against the purpose statement before sharing</li>
-        </ul>
-      </div>
-      <div class="cheat-card">
-        <div class="cc-title">Interpretation Rule</div>
-        <ul>
-          <li>Describe business impact — not chart appearance</li>
-          <li>Patterns suggest causes — they do not prove them</li>
-          <li>Use the 4-step narrative: What / Where / Why / Do</li>
-          <li>One specific, testable recommendation — not general advice</li>
-        </ul>
-      </div>
-      <div class="cheat-card">
-        <div class="cc-title">AI Rule</div>
-        <ul>
-          <li>Context + Data + Task + Format = useful output</li>
-          <li>AI drafts — you validate and own the final output</li>
-          <li>AI generates hypotheses — you test them against data</li>
-          <li>Never copy-paste AI output directly to a stakeholder</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- ══════════════════════════════════════
-     GLOSSARY
-══════════════════════════════════════ -->
-<section class="page-section sec-white" id="glossary">
-  <div class="wrap-sm">
-    <div class="sec-label"><span class="sec-num" style="background:var(--ink);">G</span> Glossary</div>
-    <h2 class="section-title">Key terms — Day 2</h2>
-    <p class="section-sub">Click any term to expand the definition.</p>
-    <div class="glossary-list" id="glossList"></div>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- ══════════════════════════════════════
-     SELF CHECK
-══════════════════════════════════════ -->
-<section class="page-section sec-warm" id="selfcheck">
-  <div class="wrap-sm">
-    <div class="sec-label"><span class="sec-num" style="background:var(--green);">✓</span> Self-Check</div>
-    <h2 class="section-title">Can you do this?</h2>
-    <p class="section-sub">Click each statement to mark it. If you cannot confidently tick it — revisit that section before the session ends.</p>
-
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;font-size:14px;color:var(--ink-muted);">
-      <span id="checkCount" style="font-size:24px;font-weight:700;color:var(--navy);">0</span>
-      <span>of <span id="checkTotal"></span> — <span id="checkMsg" style="color:var(--green);">keep going</span></span>
-    </div>
-
-    <ul class="self-check-list" id="selfCheckList"></ul>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════
-     FOOTER
-══════════════════════════════════════ -->
-<footer class="page-footer">
-  Day 2 · BI Dashboards &amp; Reporting Production · Student Handout · StyleHub Case Study
+<!-- FOOTER -->
+<footer class="footer">
+  <strong>Day 2 · PRD → Jira Delivery Plan</strong><br>
+  Student Handout · Confidential Training Material
 </footer>
 
 <script>
-// ── ROADMAP DATA ──
-const RM_DATA = [
-  {name:'Framing', anchor:'s1', desc:'<strong>Section 1 — Framing the Reporting Question.</strong> Define a precise analytical question before touching any tool — because everything that follows depends on it. Covers: observation vs. question, CEO vs. marketing manager audience logic, the data → metric → KPI hierarchy, and the purpose statement that filters every design decision.'},
-  {name:'KPI Model', anchor:'s2', desc:'<strong>Section 2 — KPI Model &amp; Data Dictionary.</strong> Once the question is clear, define how the numbers will answer it — because without a shared model, analysts produce different results from the same data. Covers: the four required KPI components, what dimensions reveal about where a problem lives, and why a data dictionary prevents costly disagreements.'},
-  {name:'Data Prep', anchor:'s3', desc:'<strong>Section 3 — Preparing Data for Reporting.</strong> Clean and structure data so that your KPI formulas can actually be calculated — because a well-designed KPI model means nothing if the data cannot support it. Covers: the 5-step cleaning checklist, before vs. after comparison, and the bridge from cleaned data to report-ready structure.'},
-  {name:'Dashboard', anchor:'s4', desc:'<strong>Section 4 — Dashboard Structure &amp; Design Logic.</strong> Translate your question and KPI model into a layout that communicates clearly — because a dashboard that requires effort to read defeats its purpose. Covers: layout logic (KPIs → Trend → Breakdowns → Filters), chart type by question, the StyleHub CEO wireframe, and the validation checklist.'},
-  {name:'Tools', anchor:'s5', desc:'<strong>Section 5 — Building in Tools.</strong> Execute the logic you already defined in Power BI, then prove it is tool-independent by translating it to Looker Studio — because BI logic that only works in one tool was never really understood. Covers: DAX Measures, the dashboard plan-to-tool mapping, and the translation checklist.'},
-  {name:'Interpret', anchor:'s6', desc:'<strong>Section 6 — Interpretation, Narrative &amp; Action.</strong> Read the dashboard as an analyst — not as a chart viewer — so the CEO receives a clear recommendation, not raw observations. Covers: business impact vs. chart behavior, four pattern types, the pattern-vs-proof distinction, the four-step narrative, and specific recommendations.'},
-  {name:'AI + Output', anchor:'s7', desc:'<strong>Section 7 — AI Support &amp; Day Output.</strong> Use AI to accelerate the communication layer after the analytical work is done — not before. Covers: where AI fits in the Day 2 workflow, four Day 2-specific use cases, the strong prompt formula, AI limits, and the five concrete deliverables you must be able to produce.'},
-];
-
-const roadmapRow = document.getElementById('roadmapRow');
-const roadmapPreview = document.getElementById('roadmapPreview');
-
-roadmapRow.querySelectorAll('.roadmap-item').forEach((item, i) => {
-  item.addEventListener('click', () => {
-    roadmapRow.querySelectorAll('.roadmap-item').forEach(el => el.classList.remove('active'));
-    item.classList.add('active');
-    roadmapPreview.innerHTML = RM_DATA[i].desc + ' <a href="#' + RM_DATA[i].anchor + '" style="display:inline-block;margin-top:8px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--navy);text-decoration:none;border-bottom:1px solid rgba(29,53,87,.25);">&#8595; Jump to section</a>';
-    roadmapPreview.classList.add('visible');
-    const target = document.getElementById(RM_DATA[i].anchor);
-    if (target) {
-      const top = target.getBoundingClientRect().top + window.scrollY - 64;
-      window.scrollTo({top, behavior:'smooth'});
-    }
-  });
-});
-roadmapPreview.innerHTML = RM_DATA[0].desc + ' <a href="#s1" style="display:inline-block;margin-top:8px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--navy);text-decoration:none;border-bottom:1px solid rgba(29,53,87,.25);">&#8595; Jump to section</a>';
-
-// ── FIELD PILLS ──
-function toggleField(pill) {
-  const isOpen = pill.classList.contains('open');
-  document.querySelectorAll('.field-pill').forEach(p => p.classList.remove('open'));
-  if (!isOpen) pill.classList.add('open');
+// Expand/collapse outline cards
+function toggleCard(header) {
+  header.classList.toggle('open');
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
 }
 
-// ── BEFORE/AFTER TOGGLE ──
-function toggleBA(id, state, btn) {
-  const wrap = btn.closest('.ba-wrap');
-  wrap.querySelectorAll('.ba-tab').forEach(t => t.classList.remove('active'));
-  wrap.querySelectorAll('.ba-panel').forEach(p => p.classList.remove('active'));
+// Lens tab switching
+function switchLens(btn, groupId) {
+  const group = document.getElementById(groupId);
+  const tabs = group.querySelectorAll('.lens-tab');
+  tabs.forEach(t => t.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById(id + '-' + state).classList.add('active');
+
+  const panelId = btn.getAttribute('data-panel');
+  const allPanels = btn.closest('.oc-body').querySelectorAll('.lens-panel');
+  allPanels.forEach(p => p.classList.remove('active'));
+  document.getElementById(panelId).classList.add('active');
 }
 
-// ── GLOSSARY ──
-const TERMS = [
-  {term:'KPI', def:'Key Performance Indicator. A metric connected to a specific business goal and a specific decision. Formula: KPI = Metric + Context + Purpose. Not all numbers are KPIs — only those that drive decisions.'},
-  {term:'Metric', def:'A calculated value derived from raw data. Total Revenue, Order Count, and Average Order Value are all metrics. They describe a situation but do not tell you whether it is good or bad without additional context.'},
-  {term:'Dimension', def:'A field used to break down a metric — the "by" in a KPI. Channel, Customer Type, and Time Period are dimensions. They answer "where?" and "who?" — revealing where a problem is concentrated.'},
-  {term:'Measure', def:'In BI tools, a Measure is a saved calculation that produces a KPI value. Every KPI you define should exist as a Measure in your BI tool — no more, no fewer.'},
-  {term:'Filter', def:'A control that includes or excludes data from a view. Date range, Channel selector, and Customer Type are filters in the StyleHub dashboard. CEO dashboards should have no more than three filters.'},
-  {term:'Data Dictionary', def:'A document that defines every field in a dataset: its name, meaning, formula, valid values, and type (dimension or measure). Prevents different analysts producing different numbers from the same data.'},
-  {term:'Granularity', def:'The level of detail at which data is recorded. Daily vs. monthly. Session-level vs. order-level. Mismatched granularity makes KPI calculations meaningless — Conversion Rate requires visits and orders at the same level.'},
-  {term:'Dashboard Purpose Statement', def:'A one-sentence definition of what a dashboard is for, who reads it, and what decision it supports. Every visual, metric, and filter must serve this statement. If something does not — it does not belong.'},
-  {term:'Observation', def:'A factual description of something noticed: "sales are dropping." An observation is not an analytical question — it cannot direct a dashboard because it is too vague to point to specific data.'},
-  {term:'Analytical Question', def:'A precise, measurable question that points directly to the data needed to answer it. "Why is conversion rate declining despite rising traffic?" is an analytical question. It specifies the KPI, the direction, and the contrast.'},
-  {term:'Hypothesis', def:'A possible explanation for a pattern in the data, based on evidence but not yet proved. Dashboards generate hypotheses — they do not confirm them. A hypothesis must be tested before it becomes a recommendation.'},
-  {term:'Conversion Rate', def:'The percentage of website sessions (or visits) that result in a completed purchase. Formula: COUNT(completed orders) ÷ COUNT(unique sessions). Must always be defined at a specific level — by channel, by session type, over a specific time window.'},
-  {term:'Executive Summary', def:'A short (3–5 sentence) document that presents the key finding and one specific recommendation for a decision-maker. It follows the four-step narrative: What happened → Where → Why likely → What to do.'},
-  {term:'Report-ready data', def:'A cleaned dataset that is also structurally aligned with the KPI model: correct field names, correct data types, consistent granularity, and the right dimensions present to support all planned calculations.'},
-];
-
-const glossList = document.getElementById('glossList');
-TERMS.forEach(t => {
-  const div = document.createElement('div');
-  div.className = 'gloss-item';
-  div.innerHTML = `
-    <div class="gloss-trigger" onclick="toggleGloss(this.parentElement)">
-      <span>${t.term}</span>
-      <span class="gt-arrow">+</span>
-    </div>
-    <div class="gloss-def">${t.def}</div>`;
-  glossList.appendChild(div);
-});
-
-function toggleGloss(item) {
-  item.classList.toggle('open');
+// Reveal button toggling
+function toggleReveal(btn) {
+  const answer = btn.nextElementSibling;
+  const isShown = answer.classList.contains('shown');
+  answer.classList.toggle('shown');
+  btn.textContent = isShown ? btn.textContent.replace('Hide', 'Show') : btn.textContent.replace('Show', 'Hide');
+  if (!isShown) {
+    btn.textContent = btn.textContent.includes('four') ? 'Hide the four questions' : 'Hide example answer';
+  } else {
+    btn.textContent = btn.textContent.includes('four') ? 'Show the four questions' : 'Show example answer';
+  }
 }
 
-// ── SELF CHECK ──
-const CHECKS = [
-  'I can turn a vague management observation into a precise analytical question.',
-  'I can write a one-sentence dashboard purpose statement that filters every design choice.',
-  'I can explain the difference between raw data, metrics, and KPIs — with an example of each.',
-  'I can explain why the same metric is not a KPI without context and purpose.',
-  'I can name the four required components of every KPI definition.',
-  'I can explain what dimensions are and why they reveal where a problem is concentrated.',
-  'I can explain why a data dictionary prevents analytical disagreements.',
-  'I can name the 5 data cleaning steps and explain why each one matters.',
-  'I can explain the difference between "cleaned data" and "report-ready data."',
-  'I can describe the StyleHub dashboard layout and justify each element\'s position.',
-  'I can select the correct chart type for a given type of question — and explain why.',
-  'I can explain why the Looker Studio section is a translation — not a second full build.',
-  'I can describe the four pattern types to look for when reading a dashboard breakdown.',
-  'I can explain the difference between a pattern that suggests a cause and proof of that cause.',
-  'I can write a specific, testable recommendation using the four-step narrative framework.',
-  'I can explain where in the workflow AI adds value — and where it must not lead.',
-  'I can name the five Day 2 deliverables and describe what each one contains.',
-];
-
-const scList = document.getElementById('selfCheckList');
-const checkCount = document.getElementById('checkCount');
-const checkTotal = document.getElementById('checkTotal');
-const checkMsg   = document.getElementById('checkMsg');
-checkTotal.textContent = CHECKS.length;
-
-CHECKS.forEach((q, i) => {
-  const li = document.createElement('li');
-  li.innerHTML = `<div class="sc-box">&#x2713;</div><span>${q}</span>`;
-  li.addEventListener('click', () => {
-    li.classList.toggle('checked');
-    const done = document.querySelectorAll('#selfCheckList li.checked').length;
-    checkCount.textContent = done;
-    checkMsg.textContent = done === 0 ? 'keep going' : done < 6 ? 'good start' : done < CHECKS.length ? 'almost there' : '— you are ready for Day 3';
-  });
-  scList.appendChild(li);
-});
-
-// ── PROGRESS BAR ──
-const fill = document.getElementById('progressFill');
-window.addEventListener('scroll', () => {
-  const h = document.documentElement.scrollHeight - window.innerHeight;
-  fill.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
+// Open first card by default
+document.addEventListener('DOMContentLoaded', () => {
+  const firstHeader = document.querySelector('.oc-header');
+  if (firstHeader) {
+    firstHeader.classList.add('open');
+    firstHeader.nextElementSibling.classList.add('open');
+  }
 });
 </script>
+
 </body>
 </html>
