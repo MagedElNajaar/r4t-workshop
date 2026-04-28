@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Day 3 — Student Handout · AI Dev Stack + Latest Tool Updates</title>
+<style>
+:root{
+  --bg:#F5F3EE;--surface:#FFFFFF;--surface-2:#EDEAE3;--ink:#1A1824;--ink-2:#4A4760;--muted:#8E8C9A;
+  --navy:#1D3557;--navy-2:#2A4A73;--accent:#C74B2C;--green:#2A7251;--blue:#1A56A0;
+  --blue-bg:#EEF4FB;--border:#DDD9D0;--bad:#8B2635;--bad-bg:#FFF5F5;--bad-border:#EAABAB;
+  --good-bg:#F1FAF5;--good-border:#8EC9A8;--amber:#8A5C00;--amber-bg:#FFF8EA;--amber-border:#DDBE6A;
+  --sh:0 1px 3px rgba(0,0,0,.05),0 4px 16px rgba(0,0,0,.04);--sh-md:0 2px 8px rgba(0,0,0,.07),0 10px 32px rgba(0,0,0,.06);
+  --r:10px;--rl:16px;--t:all .2s ease;
+}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{background:var(--bg);color:var(--ink);font-family:Helvetica Neue,Arial,sans-serif;font-size:15px;line-height:1.62;-webkit-font-smoothing:antialiased}.progress{position:fixed;top:0;left:0;right:0;height:3px;background:var(--surface-2);z-index:400}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--navy));transition:width .15s ease}.topnav{position:fixed;top:3px;left:0;right:0;height:50px;background:rgba(26,24,36,.95);backdrop-filter:blur(12px);z-index:300;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid rgba(255,255,255,.06)}.brand{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.45);white-space:nowrap}.brand strong{color:rgba(255,255,255,.78)}.nav-pill{font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:rgba(255,255,255,.45);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:100px;padding:4px 12px}.hero{min-height:100vh;background:var(--navy);padding:105px 28px 78px;display:flex;align-items:center;position:relative;overflow:hidden}.hero:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 60% 70% at 8% 65%,rgba(199,75,44,.18) 0%,transparent 65%),radial-gradient(ellipse 50% 55% at 92% 18%,rgba(26,86,160,.16) 0%,transparent 55%),radial-gradient(ellipse 80% 40% at 50% 100%,rgba(0,0,0,.25) 0%,transparent 60%)}.wrap{max-width:980px;margin:0 auto;width:100%}.hero-inner{position:relative;z-index:1}.eyebrow{font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:rgba(255,255,255,.36);margin-bottom:18px;display:flex;align-items:center;gap:10px}.eyebrow:after{content:"";width:34px;height:1px;background:rgba(255,255,255,.22)}.hero-title{font-family:Georgia,Times New Roman,serif;font-size:clamp(30px,5vw,56px);font-weight:400;color:#fff;line-height:1.12;letter-spacing:-.02em;max-width:760px;margin-bottom:18px}.hero-title em{color:rgba(255,255,255,.65);font-style:italic}.hero-sub{font-size:clamp(14px,2vw,18px);color:rgba(255,255,255,.56);max-width:650px;line-height:1.7;margin-bottom:34px}.carry{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.1);border-left:4px solid rgba(199,75,44,.7);border-radius:var(--r);padding:20px 24px;max-width:680px;margin-bottom:34px}.carry-label{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.34);font-weight:700;margin-bottom:8px}.carry p{color:rgba(255,255,255,.72);margin:0}.hero-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:780px}.hero-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--r);padding:14px 15px}.hc-label{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.32);font-weight:700;margin-bottom:5px}.hc-name{font-size:14px;color:rgba(255,255,255,.86);font-weight:700;line-height:1.3}.hc-desc{font-size:12px;color:rgba(255,255,255,.42);line-height:1.4;margin-top:3px}section{scroll-margin-top:55px;padding:78px 28px 82px}.white{background:var(--surface)}.warm{background:var(--bg)}.label{font-size:10px;letter-spacing:.17em;text-transform:uppercase;font-weight:700;color:var(--accent);margin-bottom:10px;display:flex;align-items:center;gap:10px}.label:after{content:"";height:1px;flex:1;background:var(--border)}.title{font-family:Georgia,Times New Roman,serif;font-size:clamp(23px,3.5vw,38px);font-weight:400;line-height:1.22;color:var(--ink);letter-spacing:-.015em;margin-bottom:12px}.sub{font-size:clamp(14px,1.8vw,16.5px);color:var(--ink-2);max-width:740px;line-height:1.7;margin-bottom:30px}.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:22px 0}.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0}.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0}.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh)}.warm .card{background:#fff}.card.top-navy{border-top:3px solid var(--navy)}.card.top-accent{border-top:3px solid var(--accent)}.card.top-green{border-top:3px solid var(--green)}.card.top-blue{border-top:3px solid var(--blue)}.card.top-bad{border-top:3px solid var(--bad)}.card h3{font-size:14px;color:var(--ink);margin-bottom:7px;line-height:1.35}.card p,.card li{font-size:13.5px;color:var(--ink-2);line-height:1.55}.tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border-radius:5px;padding:3px 9px;margin-bottom:8px}.tag.navy{background:rgba(29,53,87,.09);color:var(--navy);border:1px solid rgba(29,53,87,.16)}.tag.green{background:rgba(42,114,81,.09);color:var(--green);border:1px solid var(--good-border)}.tag.blue{background:var(--blue-bg);color:var(--blue);border:1px solid rgba(26,86,160,.18)}.tag.accent{background:rgba(199,75,44,.08);color:var(--accent);border:1px solid rgba(199,75,44,.2)}.tag.bad{background:var(--bad-bg);color:var(--bad);border:1px solid var(--bad-border)}.tag.amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}.callout{border-radius:var(--r);padding:16px 20px;margin:22px 0;font-size:14px;line-height:1.6}.callout.navy{background:var(--navy);color:#fff}.callout.navy p{color:rgba(255,255,255,.76)}.callout.blue{background:var(--blue-bg);border:1px solid rgba(26,86,160,.22);border-left:4px solid var(--blue);color:var(--navy)}.callout.green{background:var(--good-bg);border:1px solid var(--good-border);border-left:4px solid var(--green)}.callout.amber{background:var(--amber-bg);border:1px solid var(--amber-border);border-left:4px solid var(--amber)}.callout.red{background:var(--bad-bg);border:1px solid var(--bad-border);border-left:4px solid var(--bad);color:var(--bad)}.journey{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);box-shadow:var(--sh-md);overflow:hidden;margin:26px 0}.journey-row{display:grid;grid-template-columns:76px 1fr 1.2fr;border-bottom:1px solid var(--border);align-items:center}.journey-row:last-child{border-bottom:none}.jr-time{font-family:Courier New,monospace;font-size:12px;color:var(--muted);padding:14px 18px;background:var(--surface-2);height:100%;display:flex;align-items:center}.jr-title{font-size:14px;font-weight:700;color:var(--ink);padding:14px 16px}.jr-desc{font-size:13px;color:var(--ink-2);padding:14px 18px;border-left:1px solid var(--border);line-height:1.45}.compare{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh-md);margin:22px 0}.comp-col:first-child{border-right:1px solid var(--border)}.comp-head{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:10px 16px;border-bottom:1px solid var(--border)}.weak .comp-head{background:var(--bad-bg);color:var(--bad);border-color:var(--bad-border)}.strong .comp-head{background:var(--good-bg);color:var(--green);border-color:var(--good-border)}.comp-item{padding:9px 16px;font-size:13px;color:var(--ink-2);border-bottom:1px solid var(--border);line-height:1.45}.comp-item:last-child{border-bottom:none}.weak .comp-item{color:var(--bad);font-style:italic}.strong .comp-item{color:var(--ink-2)}.flow{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh-md);margin:22px 0}.flow-head{background:var(--navy);color:#fff;padding:12px 20px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}.flow-row{display:grid;grid-template-columns:160px 1fr;border-bottom:1px solid var(--border)}.flow-row:last-child{border-bottom:none}.flow-key{background:var(--surface-2);border-right:1px solid var(--border);padding:12px 15px;font-size:11px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;color:var(--muted)}.flow-val{padding:12px 16px;font-size:13.5px;color:var(--ink-2);line-height:1.55}.table{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh-md);margin:22px 0}.tr{display:grid;grid-template-columns:1fr 1.4fr;border-bottom:1px solid var(--border)}.tr:last-child{border-bottom:none}.tr.head{background:var(--navy);color:#fff}.td{padding:11px 15px;font-size:13.2px;color:var(--ink-2);line-height:1.5;border-right:1px solid var(--border)}.td:last-child{border-right:none}.tr.head .td{color:rgba(255,255,255,.76);font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}.collapse{margin:18px 0;border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;background:var(--surface);box-shadow:var(--sh)}.coll-head{display:flex;align-items:center;gap:12px;padding:16px 20px;background:var(--surface-2);cursor:pointer;user-select:none}.coll-num{width:28px;height:28px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}.coll-title{font-size:15px;font-weight:700;color:var(--ink);line-height:1.35;flex:1}.coll-toggle{font-size:18px;color:var(--muted);transition:var(--t)}.coll-head.open .coll-toggle{transform:rotate(45deg);color:var(--accent)}.coll-body{display:none;padding:22px}.coll-body.open{display:block}.mini-list{list-style:none;margin:10px 0}.mini-list li{position:relative;padding:8px 0 8px 18px;border-bottom:1px solid var(--border);font-size:13.5px;color:var(--ink-2);line-height:1.5}.mini-list li:last-child{border-bottom:none}.mini-list li:before{content:"";position:absolute;left:3px;top:17px;width:6px;height:6px;border-radius:50%;background:var(--accent)}.checkgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:20px 0}.check{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--navy);border-radius:var(--r);padding:12px 15px;font-size:13.2px;color:var(--ink-2);line-height:1.5}.gloss{margin:20px 0}.gloss-item{border-bottom:1px solid var(--border)}.gloss-item:first-child{border-top:1px solid var(--border)}.gloss-q{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:12px 4px;font-size:14px;font-weight:700;color:var(--ink)}.gloss-q span{color:var(--muted);font-size:18px;transition:var(--t)}.gloss-item.open .gloss-q span{transform:rotate(45deg);color:var(--accent)}.gloss-a{display:none;padding:0 4px 13px;font-size:13.5px;color:var(--ink-2);line-height:1.6}.gloss-item.open .gloss-a{display:block}.final{background:var(--navy);border-radius:var(--rl);padding:30px 34px;color:#fff;position:relative;overflow:hidden;box-shadow:var(--sh-md);margin:26px 0}.final:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 55% 60% at 92% 8%,rgba(42,114,81,.2) 0%,transparent 55%),radial-gradient(ellipse 50% 55% at 8% 90%,rgba(199,75,44,.16) 0%,transparent 55%)}.final > *{position:relative;z-index:1}.final h2{font-family:Georgia,serif;font-weight:400;line-height:1.25;font-size:clamp(20px,3vw,30px);margin-bottom:16px}.final p{color:rgba(255,255,255,.74)}.footer{padding:26px 24px 42px;text-align:center;background:#14121E;color:rgba(255,255,255,.45);font-size:12px;letter-spacing:.05em;text-transform:uppercase}@media(max-width:800px){.hero-grid,.grid-4{grid-template-columns:repeat(2,1fr)}.grid-3,.grid-2,.checkgrid{grid-template-columns:1fr}.journey-row{grid-template-columns:1fr}.jr-time{height:auto}.jr-desc{border-left:none;border-top:1px solid var(--border)}.flow-row,.tr{grid-template-columns:1fr}.flow-key{border-right:none;border-bottom:1px solid var(--border)}.td{border-right:none;border-bottom:1px solid var(--border)}.td:last-child{border-bottom:none}.compare{grid-template-columns:1fr}.comp-col:first-child{border-right:none;border-bottom:1px solid var(--border)}}@media(max-width:560px){.topnav{padding:0 14px}.nav-pill{display:none}.hero{padding:92px 20px 60px}section{padding:64px 20px}.hero-grid{grid-template-columns:1fr}.coll-body{padding:18px}.final{padding:24px 22px}}
+@media print{.progress,.topnav{display:none}.hero{min-height:auto;padding:42px 22px}.hero:before{display:none}section{padding:32px 22px}.collapse .coll-body{display:block}.footer{display:none}body{background:#fff}.card,.journey,.collapse,.flow,.table,.compare{box-shadow:none}}
+</style>
+</head>
+<body>
+<div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+<nav class="topnav"><div class="brand"><strong>Day 3</strong> · Student Handout</div><div class="nav-pill">AI Dev Stack + Tool Updates</div></nav>
+
+<header class="hero" id="top">
+  <div class="wrap hero-inner">
+    <div class="eyebrow">Tech Program · Day 3</div>
+    <h1 class="hero-title">AI tools can help.<br><em>Engineering judgment decides how.</em></h1>
+    <p class="hero-sub">Today is about using AI inside real engineering work without turning the workflow into a guessing game. The goal is not to choose the coolest tool. The goal is to choose the right tool pattern, give the right context, and verify the result with evidence.</p>
+    <div class="carry">
+      <div class="carry-label">Carried forward from Day 1 and Day 2</div>
+      <p>The support escalation / issue triage workflow already has planning logic and Jira delivery structure. Today it becomes active codebase work: SLA status, routing logic, agent-facing UI, debugging, tests, review, and update habits.</p>
+    </div>
+    <div class="hero-grid">
+      <div class="hero-card"><div class="hc-label">Start</div><div class="hc-name">Task fit</div><div class="hc-desc">Name the engineering task first.</div></div>
+      <div class="hero-card"><div class="hc-label">Middle</div><div class="hc-name">Context + access</div><div class="hc-desc">Decide what the AI can see or run.</div></div>
+      <div class="hero-card"><div class="hc-label">Control</div><div class="hc-name">Workflow</div><div class="hc-desc">Plan, implement, inspect, verify.</div></div>
+      <div class="hero-card"><div class="hc-label">End</div><div class="hc-name">Evidence</div><div class="hc-desc">Keep, revise, reject, or roll back.</div></div>
+    </div>
+  </div>
+</header>
+
+<section class="warm" id="overview">
+  <div class="wrap">
+    <div class="label">1 · What this day is about</div>
+    <h2 class="title">AI-assisted development is not a shortcut around engineering process.</h2>
+    <p class="sub">Day 3 teaches how to use AI tools inside an engineering workflow while keeping control over scope, context, access, testing, review, and human judgment.</p>
+
+    <div class="compare">
+      <div class="comp-col weak">
+        <div class="comp-head">Weak mindset</div>
+        <div class="comp-item">Start with the tool name.</div>
+        <div class="comp-item">Ask for code immediately.</div>
+        <div class="comp-item">Trust the explanation because it sounds confident.</div>
+        <div class="comp-item">Treat repo or command access as automatically safe.</div>
+      </div>
+      <div class="comp-col strong">
+        <div class="comp-head">Stronger mindset</div>
+        <div class="comp-item">Start with the task shape.</div>
+        <div class="comp-item">Ask for a plan before code.</div>
+        <div class="comp-item">Inspect the diff, tests, logs, and runtime behavior.</div>
+        <div class="comp-item">Give only the access that the task needs.</div>
+      </div>
+    </div>
+
+    <div class="callout navy"><p><strong>Core idea:</strong> Do not judge AI engineering tools by speed or demo impressiveness. Judge them by task fit, context access, workflow control, and verifiable evidence.</p></div>
+  </div>
+</section>
+
+<section class="white" id="journey">
+  <div class="wrap">
+    <div class="label">2 · The journey across Day 3</div>
+    <h2 class="title">The session moves from tool choice to controlled AI workflows.</h2>
+    <p class="sub">Each part answers a different question about safe and useful AI-assisted engineering work.</p>
+    <div class="journey">
+      <div class="journey-row"><div class="jr-time">0:10</div><div class="jr-title">Opening</div><div class="jr-desc">The project is now active engineering work, not a new standalone AI demo.</div></div>
+      <div class="journey-row"><div class="jr-time">0:25</div><div class="jr-title">Tool Fit</div><div class="jr-desc">Choose support based on implementation, debugging, tests, documentation, repo investigation, or review work.</div></div>
+      <div class="journey-row"><div class="jr-time">0:55</div><div class="jr-title">Context + Access</div><div class="jr-desc">Decide what the AI can see, reach, run, or change before trusting output quality.</div></div>
+      <div class="journey-row"><div class="jr-time">1:35</div><div class="jr-title">Coding Workflows</div><div class="jr-desc">Use plan-first implementation, bounded changes, diff inspection, checks, and review.</div></div>
+      <div class="journey-row"><div class="jr-time">2:05</div><div class="jr-title">Debugging + Tests</div><div class="jr-desc">Investigate and reproduce before accepting a patch.</div></div>
+      <div class="journey-row"><div class="jr-time">2:35</div><div class="jr-title">Verification</div><div class="jr-desc">Review evidence: diff, tests, logs, runtime behavior, and decision quality.</div></div>
+      <div class="journey-row"><div class="jr-time">3:05</div><div class="jr-title">Staying Current</div><div class="jr-desc">Use official sources and refresh habits because AI tool behavior changes quickly.</div></div>
+      <div class="journey-row"><div class="jr-time">3:25</div><div class="jr-title">Agent Workflows</div><div class="jr-desc">Design bounded, visible, reviewable loops with human decision points.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="warm" id="objectives">
+  <div class="wrap">
+    <div class="label">3 · By the end, you should be able to</div>
+    <h2 class="title">Use AI as part of an engineering system, not as a black box.</h2>
+    <div class="grid-3">
+      <div class="card top-navy"><span class="tag navy">Choose</span><h3>Match tool pattern to task shape</h3><p>Explain why a coding, debugging, test, documentation, review, or repo-investigation task may need different AI support.</p></div>
+      <div class="card top-accent"><span class="tag accent">Control</span><h3>Set context and access boundaries</h3><p>Decide whether the tool needs prompt-only context, a single file, module, full repo, command access, or connected-system access.</p></div>
+      <div class="card top-green"><span class="tag green">Verify</span><h3>Review output with evidence</h3><p>Judge an AI-assisted change through diff, tests, logs, runtime behavior, and a clear human decision.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="white" id="sections">
+  <div class="wrap">
+    <div class="label">4 · Section reference</div>
+    <h2 class="title">Use this as your quick reference during the session.</h2>
+    <p class="sub">Open each section to review the core idea, decision rules, and what to watch for.</p>
+
+    <div class="collapse">
+      <div class="coll-head open"><div class="coll-num">1</div><div class="coll-title">Tool Fit — task shape before tool name</div><div class="coll-toggle">+</div></div>
+      <div class="coll-body open">
+        <div class="grid-2">
+          <div class="card top-navy"><h3>Engineering task types</h3><ul class="mini-list"><li>Implementation: add or change product behavior.</li><li>Refactoring: improve structure without changing behavior.</li><li>Debugging: investigate unknown cause before patching.</li><li>Tests: prove important behavior and edge cases.</li><li>Documentation: explain decisions, usage, or tradeoffs.</li><li>Repo investigation: understand existing code paths and patterns.</li><li>Review support: inspect diffs and possible risks.</li></ul></div>
+          <div class="card top-accent"><h3>Tool pattern choices</h3><ul class="mini-list"><li>Editor-native agent: close to the code being edited.</li><li>Terminal / CLI agent: useful when commands, tests, and repo operations matter.</li><li>Connected-tool agent: useful when tickets, docs, issues, or design files matter.</li><li>Review / automation support: useful for diff inspection, summaries, checks, and reminders.</li></ul></div>
+        </div>
+        <div class="callout blue"><strong>Ask first:</strong> What task am I doing, what context does it need, what output should I inspect, and what evidence will prove it worked?</div>
+      </div>
+    </div>
+
+    <div class="collapse">
+      <div class="coll-head"><div class="coll-num">2</div><div class="coll-title">Context + Access — what the AI can see, reach, and use</div><div class="coll-toggle">+</div></div>
+      <div class="coll-body">
+        <div class="table">
+          <div class="tr head"><div class="td">Access level</div><div class="td">What it changes</div></div>
+          <div class="tr"><div class="td"><strong>Prompt only</strong></div><div class="td">Can be useful for general reasoning, but may miss project-specific behavior.</div></div>
+          <div class="tr"><div class="td"><strong>Single file</strong></div><div class="td">Can edit local logic, but may miss related modules and contracts.</div></div>
+          <div class="tr"><div class="td"><strong>Module / feature area</strong></div><div class="td">Can follow related code paths and preserve local patterns better.</div></div>
+          <div class="tr"><div class="td"><strong>Full repo</strong></div><div class="td">Can trace dependencies, conventions, tests, and existing architecture.</div></div>
+          <div class="tr"><div class="td"><strong>Command access</strong></div><div class="td">Can run tests, lint, builds, and reproduction steps; requires stronger review.</div></div>
+          <div class="tr"><div class="td"><strong>Connected systems</strong></div><div class="td">Can use issues, docs, designs, databases, or tickets; increases responsibility and risk.</div></div>
+        </div>
+        <div class="callout amber"><strong>Remember:</strong> more access is not always better. The goal is the right access for the task, paired with the right review standard.</div>
+      </div>
+    </div>
+
+    <div class="collapse">
+      <div class="coll-head"><div class="coll-num">3</div><div class="coll-title">Coding Workflows — plan before code, inspect before accepting</div><div class="coll-toggle">+</div></div>
+      <div class="coll-body">
+        <div class="flow">
+          <div class="flow-head">Stronger AI-assisted implementation loop</div>
+          <div class="flow-row"><div class="flow-key">1 · Define</div><div class="flow-val">State the feature, scope, constraints, and what must not break.</div></div>
+          <div class="flow-row"><div class="flow-key">2 · Context</div><div class="flow-val">Point the tool to relevant files, modules, ticket, acceptance criteria, and existing patterns.</div></div>
+          <div class="flow-row"><div class="flow-key">3 · Plan</div><div class="flow-val">Ask for an implementation plan before code. Review the plan for wrong scope or wrong files.</div></div>
+          <div class="flow-row"><div class="flow-key">4 · Implement</div><div class="flow-val">Keep the change small enough that the diff can be inspected.</div></div>
+          <div class="flow-row"><div class="flow-key">5 · Inspect</div><div class="flow-val">Review diff, edge cases, tests, runtime behavior, and side effects.</div></div>
+          <div class="flow-row"><div class="flow-key">6 · Decide</div><div class="flow-val">Keep, revise, reject, or roll back based on evidence.</div></div>
+        </div>
+        <div class="compare">
+          <div class="comp-col weak"><div class="comp-head">Weak request</div><div class="comp-item">Build the escalation status feature.</div></div>
+          <div class="comp-col strong"><div class="comp-head">Stronger request</div><div class="comp-item">For the support escalation workflow, inspect the existing SLA status logic and propose a small plan to add “approaching breach” handling without breaking current open, blocked, and resolved states. Do not code until the plan is reviewed.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="collapse">
+      <div class="coll-head"><div class="coll-num">4</div><div class="coll-title">Debugging + Tests — investigate before patching</div><div class="coll-toggle">+</div></div>
+      <div class="coll-body">
+        <div class="callout red"><strong>Do not start with:</strong> “Fix this bug.” That is often too early because the cause is still unknown.</div>
+        <div class="flow">
+          <div class="flow-head">Debugging loop</div>
+          <div class="flow-row"><div class="flow-key">Observe</div><div class="flow-val">What exactly failed? What is visible in UI, API, logs, or test output?</div></div>
+          <div class="flow-row"><div class="flow-key">Hypothesize</div><div class="flow-val">List possible causes instead of accepting the first explanation.</div></div>
+          <div class="flow-row"><div class="flow-key">Reproduce</div><div class="flow-val">Create a clear way to make the failure happen again.</div></div>
+          <div class="flow-row"><div class="flow-key">Trace</div><div class="flow-val">Find where the value, state, or behavior changes incorrectly.</div></div>
+          <div class="flow-row"><div class="flow-key">Patch</div><div class="flow-val">Change the smallest responsible area.</div></div>
+          <div class="flow-row"><div class="flow-key">Verify</div><div class="flow-val">Run the test or check that proves the original failure is resolved.</div></div>
+        </div>
+        <div class="callout blue"><strong>Example:</strong> If backend status says “approaching breach” but the frontend badge says “normal,” inspect calculation, API contract, mapping, and UI rendering before patching.</div>
+      </div>
+    </div>
+
+    <div class="collapse">
+      <div class="coll-head"><div class="coll-num">5</div><div class="coll-title">Verification — evidence before trust</div><div class="coll-toggle">+</div></div>
+      <div class="coll-body">
+        <div class="grid-4">
+          <div class="card top-navy"><span class="tag navy">Diff</span><p>What changed? Is the change small, relevant, and aligned with project patterns?</p></div>
+          <div class="card top-green"><span class="tag green">Tests</span><p>Do tests cover the changed behavior and important edge cases?</p></div>
+          <div class="card top-blue"><span class="tag blue">Logs</span><p>Do logs or traces support the explanation of the fix?</p></div>
+          <div class="card top-accent"><span class="tag accent">Runtime</span><p>Does the feature behave correctly when actually run?</p></div>
+        </div>
+        <div class="table">
+          <div class="tr head"><div class="td">Decision</div><div class="td">Use when...</div></div>
+          <div class="tr"><div class="td"><strong>Keep</strong></div><div class="td">The change is scoped, tested, reviewed, and matches the intended behavior.</div></div>
+          <div class="tr"><div class="td"><strong>Revise</strong></div><div class="td">The idea is useful, but the implementation needs adjustment.</div></div>
+          <div class="tr"><div class="td"><strong>Reject</strong></div><div class="td">The approach is wrong, risky, unclear, or not supported by evidence.</div></div>
+          <div class="tr"><div class="td"><strong>Roll back</strong></div><div class="td">The change created damage or uncertainty that should not move forward.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="collapse">
+      <div class="coll-head"><div class="coll-num">6</div><div class="coll-title">Staying Current — official sources and refresh habits</div><div class="coll-toggle">+</div></div>
+      <div class="coll-body">
+        <p class="sub" style="margin-bottom:14px">AI engineering tools change quickly. A workflow built on old assumptions can become weak even if it used to be correct.</p>
+        <div class="grid-3">
+          <div class="card top-navy"><h3>Use official sources</h3><p>Check product docs, changelogs, release notes, and official announcements when capability matters.</p></div>
+          <div class="card top-accent"><h3>Refresh before teaching or using</h3><p>Before relying on a tool behavior, confirm whether access, agent behavior, pricing, or limits have changed.</p></div>
+          <div class="card top-green"><h3>Separate stable principles from changing features</h3><p>Task fit, evidence, and review stay stable. Specific tool capabilities can change quickly.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="collapse">
+      <div class="coll-head"><div class="coll-num">7</div><div class="coll-title">Agent Workflows — bounded, visible, reviewable loop</div><div class="coll-toggle">+</div></div>
+      <div class="coll-body">
+        <div class="flow">
+          <div class="flow-head">Agent workflow template</div>
+          <div class="flow-row"><div class="flow-key">Trigger</div><div class="flow-val">What starts the workflow? Ticket, failing test, issue, PR, or human request?</div></div>
+          <div class="flow-row"><div class="flow-key">Task</div><div class="flow-val">What exactly should the agent investigate, change, summarize, or verify?</div></div>
+          <div class="flow-row"><div class="flow-key">Scope</div><div class="flow-val">What files, modules, commands, or systems are in scope? What is out of scope?</div></div>
+          <div class="flow-row"><div class="flow-key">Access</div><div class="flow-val">What can the agent read, run, or edit?</div></div>
+          <div class="flow-row"><div class="flow-key">Loop</div><div class="flow-val">How does it plan, act, report, and pause for review?</div></div>
+          <div class="flow-row"><div class="flow-key">Evidence</div><div class="flow-val">What diff, tests, logs, or reasoning must it provide?</div></div>
+          <div class="flow-row"><div class="flow-key">Decision</div><div class="flow-val">Where does the human decide: keep, revise, reject, or roll back?</div></div>
+        </div>
+        <div class="callout green"><strong>Strong agent workflow:</strong> it does not hide the human. It makes human judgment more deliberate, visible, and defensible.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="warm" id="rules">
+  <div class="wrap">
+    <div class="label">5 · Core rules to remember</div>
+    <h2 class="title">The rules that protect AI-assisted engineering work.</h2>
+    <div class="checkgrid">
+      <div class="check">Name the engineering task before naming the tool.</div>
+      <div class="check">A tool that writes code is not automatically the right tool.</div>
+      <div class="check">Context is not decoration; it changes what the AI can safely do.</div>
+      <div class="check">More access is not always better access.</div>
+      <div class="check">Debugging starts with evidence, not with a patch.</div>
+      <div class="check">The AI explanation is not the object under review; the change is.</div>
+      <div class="check">Verification ends with a decision: keep, revise, reject, or roll back.</div>
+      <div class="check">Tool knowledge becomes stale; refresh from official sources.</div>
+      <div class="check">Agent workflows should be bounded, visible, and reviewable.</div>
+      <div class="check">Human judgment stays in the loop where the risk is real.</div>
+    </div>
+  </div>
+</section>
+
+<section class="white" id="glossary">
+  <div class="wrap">
+    <div class="label">6 · Glossary</div>
+    <h2 class="title">Key terms from Day 3.</h2>
+    <div class="gloss">
+      <div class="gloss-item"><div class="gloss-q">Task fit <span>+</span></div><div class="gloss-a">Choosing an AI tool or workflow based on the actual engineering task, not the tool brand or demo quality.</div></div>
+      <div class="gloss-item"><div class="gloss-q">Tool pattern <span>+</span></div><div class="gloss-a">The way a tool works inside the workflow, such as editor-native, terminal / CLI, connected-tool, or review-support pattern.</div></div>
+      <div class="gloss-item"><div class="gloss-q">Context access <span>+</span></div><div class="gloss-a">What the AI can see or use: prompt text, files, modules, repo, commands, tickets, docs, or connected systems.</div></div>
+      <div class="gloss-item"><div class="gloss-q">Command access <span>+</span></div><div class="gloss-a">The ability for an AI tool to run commands such as tests, lint, build, or reproduction steps. It is useful but raises the review bar.</div></div>
+      <div class="gloss-item"><div class="gloss-q">MCP / connected access <span>+</span></div><div class="gloss-a">A practical way for AI tools to connect to external systems for relevant context, such as docs, tickets, repositories, or internal tools.</div></div>
+      <div class="gloss-item"><div class="gloss-q">Plan-first workflow <span>+</span></div><div class="gloss-a">A workflow where the AI proposes a plan before writing code so the human can catch wrong scope, wrong files, or weak assumptions early.</div></div>
+      <div class="gloss-item"><div class="gloss-q">Evidence-backed debugging <span>+</span></div><div class="gloss-a">Debugging that starts from observed failure, reproduction, traces, and tests before accepting a fix.</div></div>
+      <div class="gloss-item"><div class="gloss-q">Verification evidence <span>+</span></div><div class="gloss-a">The proof used to judge a change: diff, tests, logs, runtime behavior, and review notes.</div></div>
+      <div class="gloss-item"><div class="gloss-q">Agent workflow <span>+</span></div><div class="gloss-a">A bounded workflow where an AI agent has a defined trigger, scope, access, loop, evidence requirement, and human decision point.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="warm" id="self-check">
+  <div class="wrap">
+    <div class="label">7 · Self-check</div>
+    <h2 class="title">Use these questions before you say “the AI helped.”</h2>
+    <div class="checkgrid">
+      <div class="check">Can I name the engineering task clearly before choosing the tool?</div>
+      <div class="check">Can I explain which workflow pattern fits this task?</div>
+      <div class="check">Can I define what context the AI needs and what access it should not have?</div>
+      <div class="check">Can I ask for a plan before code when the task affects real implementation?</div>
+      <div class="check">Can I inspect the diff instead of trusting the explanation?</div>
+      <div class="check">Can I reproduce a bug before accepting a patch?</div>
+      <div class="check">Can I identify the tests or logs that prove the change works?</div>
+      <div class="check">Can I decide whether to keep, revise, reject, or roll back?</div>
+      <div class="check">Can I check official sources when a tool capability may have changed?</div>
+      <div class="check">Can I design an agent workflow with a visible human checkpoint?</div>
+    </div>
+    <div class="final">
+      <h2>Final takeaway</h2>
+      <p>AI does not remove engineering responsibility. It increases the need for clear task framing, controlled access, visible workflow, and evidence-based review.</p>
+    </div>
+  </div>
+</section>
+
+<div class="footer">Day 3 Student Handout · AI Dev Stack + Latest Tool Updates</div>
+
+<script>
+const fill=document.getElementById('progressFill');
+function updateProgress(){const h=document.documentElement;const sc=h.scrollTop||document.body.scrollTop;const max=h.scrollHeight-h.clientHeight;fill.style.width=(max?sc/max*100:0)+'%'}
+window.addEventListener('scroll',updateProgress,{passive:true});updateProgress();
+
+document.querySelectorAll('.coll-head').forEach(head=>{head.addEventListener('click',()=>{head.classList.toggle('open');head.nextElementSibling.classList.toggle('open')})});
+document.querySelectorAll('.gloss-q').forEach(q=>{q.addEventListener('click',()=>q.parentElement.classList.toggle('open'))});
+</script>
+</body>
+</html>
