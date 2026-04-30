@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 3 · Student Handout · Automation Pipelines</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+
+:root {
+  --ink: #1C1917;
+  --ink-2: #44403C;
+  --muted: #78716C;
+  --bg: #FAFAF9;
+  --surface: #FFFFFF;
+  --border: #E7E5E4;
+  --border-2: #D6D3D1;
+  --navy: #1E3A5F;
+  --navy-light: #2563A8;
+  --accent: #C2410C;
+  --accent-light: #EA580C;
+  --green: #15803D;
+  --green-bg: #F0FDF4;
+  --amber: #B45309;
+  --amber-bg: #FFFBEB;
+  --blue-bg: #EFF6FF;
+  --red-bg: #FEF2F2;
+  --sh: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+  --sh-md: 0 2px 8px rgba(0,0,0,0.08), 0 12px 32px rgba(0,0,0,0.06);
+  --r: 8px;
+  --rl: 14px;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'DM Sans',sans-serif;
+  font-size:15px;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── TOPBAR ── */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:300;
+  height:52px;
+  background:var(--navy);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;
+  box-shadow:0 1px 0 rgba(255,255,255,0.06);
+}
+.topbar-brand{
+  font-family:'DM Sans',sans-serif;
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(255,255,255,.4);font-weight:600;
+}
+.topbar-brand strong{color:rgba(255,255,255,.75);font-weight:700;}
+.topbar-nav{display:flex;gap:6px;}
+.topbar-link{
+  font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  color:rgba(255,255,255,.4);font-weight:600;padding:5px 12px;
+  border-radius:4px;cursor:pointer;transition:all .2s;border:none;background:transparent;
+}
+.topbar-link:hover,.topbar-link.active{background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);}
+
+/* ── HERO ── */
+.hero{
+  margin-top:52px;
+  background:var(--navy);
+  padding:72px 40px 68px;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 70% at 85% -10%, rgba(37,99,168,.35) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 0% 110%, rgba(21,128,61,.12) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 50% at 55% 50%, rgba(0,0,0,.15) 0%, transparent 70%);
+}
+.hero-inner{max-width:860px;margin:0 auto;position:relative;z-index:1;}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:10px;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
+  border-radius:100px;padding:6px 18px;margin-bottom:28px;
+}
+.hero-dot{width:6px;height:6px;border-radius:50%;background:var(--accent-light);
+  animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.8);}}
+.hero-tag span{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.55);font-weight:600;}
+.hero h1{
+  font-family:'DM Serif Display',Georgia,serif;
+  font-size:clamp(30px,5vw,52px);
+  color:#fff;font-weight:400;line-height:1.12;
+  letter-spacing:-.02em;margin-bottom:18px;
+}
+.hero h1 em{font-style:italic;color:rgba(255,255,255,.65);}
+.hero-sub{
+  font-size:clamp(14px,2vw,17px);
+  color:rgba(255,255,255,.5);
+  max-width:560px;line-height:1.65;margin-bottom:36px;
+}
+.hero-meta{display:flex;gap:10px;flex-wrap:wrap;}
+.hero-pill{
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
+  border-radius:100px;padding:5px 16px;
+  font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(255,255,255,.45);font-weight:600;
+}
+.hero-pill.accent{background:rgba(194,65,12,.2);border-color:rgba(194,65,12,.3);color:rgba(255,180,150,.85);}
+
+/* ── MAIN LAYOUT ── */
+.page-wrap{max-width:980px;margin:0 auto;padding:0 32px 80px;}
+section.content-section{padding:56px 0 0;}
+.section-label{
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted);font-weight:700;margin-bottom:8px;
+  display:flex;align-items:center;gap:10px;
+}
+.section-label::before{content:'';display:block;width:24px;height:1px;background:var(--border-2);}
+.section-title{
+  font-family:'DM Serif Display',Georgia,serif;
+  font-size:clamp(22px,3.5vw,36px);
+  font-weight:400;line-height:1.2;letter-spacing:-.015em;
+  color:var(--ink);margin-bottom:12px;
+}
+.section-intro{
+  font-size:15px;color:var(--ink-2);line-height:1.7;
+  max-width:700px;margin-bottom:36px;
+  border-left:3px solid var(--border-2);padding-left:18px;
+}
+
+/* ── SESSION OVERVIEW OUTLINES ── */
+.outline-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:12px;
+  margin:28px 0;
+}
+.outline-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:16px 18px;
+  display:flex;gap:14px;
+  align-items:flex-start;
+  box-shadow:var(--sh);
+  transition:all .2s;
+}
+.outline-card:hover{border-color:var(--navy-light);box-shadow:var(--sh-md);}
+.oc-num{
+  width:26px;height:26px;border-radius:50%;
+  background:var(--navy);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;flex-shrink:0;
+  margin-top:1px;
+}
+.oc-body{}
+.oc-name{font-size:13px;font-weight:600;color:var(--ink);line-height:1.35;margin-bottom:4px;}
+.oc-time{
+  font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted);
+}
+
+/* ── DETAILED OUTLINE BLOCKS ── */
+.detail-block{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--rl);
+  overflow:hidden;
+  box-shadow:var(--sh);
+  margin-bottom:14px;
+}
+.db-header{
+  display:flex;align-items:center;gap:16px;
+  padding:16px 22px;
+  cursor:pointer;
+  transition:background .2s;
+}
+.db-header:hover{background:rgba(0,0,0,.015);}
+.db-num{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--navy);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;flex-shrink:0;
+}
+.db-title-wrap{flex:1;}
+.db-title{font-size:14px;font-weight:600;color:var(--ink);line-height:1.3;}
+.db-time{
+  font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--muted);margin-top:3px;
+}
+.db-chevron{
+  font-size:14px;color:var(--muted);
+  transition:transform .25s;flex-shrink:0;
+}
+.detail-block.open .db-chevron{transform:rotate(180deg);}
+.db-body{
+  display:none;
+  padding:0 22px 22px 22px;
+  border-top:1px solid var(--border);
+}
+.detail-block.open .db-body{display:block;}
+.db-body ul{list-style:none;display:flex;flex-direction:column;gap:8px;padding-top:16px;}
+.db-body li{
+  font-size:13.5px;color:var(--ink-2);line-height:1.6;
+  padding:8px 12px 8px 14px;
+  border-left:2px solid var(--border-2);
+  border-radius:0 6px 6px 0;
+  background:var(--bg);
+}
+.db-body li strong{color:var(--ink);font-weight:600;}
+.db-body li.li-begin{border-left-color:var(--navy);}
+.db-body li.li-covers{border-left-color:var(--amber);}
+.db-body li.li-ends{border-left-color:var(--green);}
+
+/* ── TOOLTIP ── */
+.tooltip-wrap{position:relative;display:inline;}
+.tooltip-trigger{
+  border-bottom:1.5px dashed var(--navy-light);color:var(--navy);
+  cursor:help;font-weight:500;
+}
+.tooltip-box{
+  display:none;
+  position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);
+  background:var(--ink);color:#fff;
+  font-size:12px;line-height:1.55;
+  padding:10px 14px;border-radius:8px;
+  width:240px;z-index:100;
+  box-shadow:var(--sh-md);
+}
+.tooltip-box::after{
+  content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:6px solid transparent;border-top-color:var(--ink);
+}
+.tooltip-wrap:hover .tooltip-box{display:block;}
+
+/* ── TAB COMPONENT ── */
+.tab-container{border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;margin:24px 0;box-shadow:var(--sh);}
+.tab-header{display:flex;background:var(--bg);border-bottom:1px solid var(--border);}
+.tab-btn{
+  flex:1;padding:12px 18px;border:none;background:transparent;
+  font-family:'DM Sans',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);cursor:pointer;transition:all .2s;
+}
+.tab-btn.active{background:var(--surface);color:var(--navy);border-bottom:2px solid var(--navy);}
+.tab-panel{display:none;padding:24px;}
+.tab-panel.active{display:block;}
+
+/* ── FLOW DIAGRAM ── */
+.flow-diagram{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin:24px 0;}
+.flow-node{
+  background:var(--surface);
+  border:1.5px solid var(--border-2);
+  border-radius:10px;
+  padding:10px 16px;
+  text-align:center;
+  min-width:110px;
+  box-shadow:var(--sh);
+}
+.flow-node .fn-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.flow-node .fn-text{font-size:13px;font-weight:600;color:var(--ink);line-height:1.3;}
+.flow-node.trigger{border-color:var(--accent);border-top:3px solid var(--accent);}
+.flow-node.trigger .fn-label{color:var(--accent);}
+.flow-node.action{border-color:var(--navy);border-top:3px solid var(--navy);}
+.flow-node.action .fn-label{color:var(--navy);}
+.flow-node.output{border-color:var(--green);border-top:3px solid var(--green);}
+.flow-node.output .fn-label{color:var(--green);}
+.flow-arrow{font-size:18px;color:var(--muted);}
+
+/* ── REVEAL CARD ── */
+.reveal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin:24px 0;}
+.reveal-card{
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:var(--r);padding:18px;box-shadow:var(--sh);
+  cursor:pointer;transition:all .2s;
+}
+.reveal-card:hover{border-color:var(--navy);box-shadow:var(--sh-md);}
+.reveal-card.open{border-color:var(--navy);border-top:3px solid var(--navy);}
+.rc-kicker{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.rc-question{font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.4;margin-bottom:10px;}
+.rc-prompt{font-size:12px;color:var(--muted);font-style:italic;}
+.rc-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--border);}
+.reveal-card.open .rc-answer{display:block;}
+.reveal-card.open .rc-prompt{display:none;}
+.rc-ans-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--green);margin-bottom:6px;}
+.rc-ans-text{font-size:13px;color:var(--ink-2);line-height:1.55;}
+
+/* ── OBJECTIVES LIST ── */
+.objectives-wrap{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--rl);
+  overflow:hidden;
+  box-shadow:var(--sh-md);
+  margin:28px 0;
+}
+.obj-header{
+  background:var(--navy);
+  padding:16px 24px;
+}
+.obj-header-text{
+  font-size:14px;color:rgba(255,255,255,.85);font-weight:500;line-height:1.5;
+  font-style:italic;
+}
+.obj-list{list-style:none;padding:4px 0;}
+.obj-item{
+  display:flex;gap:14px;align-items:flex-start;
+  padding:12px 24px;border-bottom:1px solid var(--border);
+  transition:background .15s;cursor:default;
+}
+.obj-item:last-child{border-bottom:none;}
+.obj-item:hover{background:var(--bg);}
+.obj-verb{
+  display:inline-block;
+  font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  background:rgba(30,58,95,.08);color:var(--navy);
+  border-radius:4px;padding:3px 9px;
+  white-space:nowrap;flex-shrink:0;margin-top:2px;
+}
+.obj-verb.green{background:rgba(21,128,61,.09);color:var(--green);}
+.obj-verb.amber{background:rgba(180,83,9,.09);color:var(--amber);}
+.obj-verb.red{background:rgba(194,65,12,.09);color:var(--accent);}
+.obj-text{font-size:13.5px;color:var(--ink-2);line-height:1.55;}
+
+/* ── TOOL COMPARISON TABLE ── */
+.compare-table{
+  border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;
+  box-shadow:var(--sh-md);margin:24px 0;
+}
+.ct-head{display:grid;grid-template-columns:160px 1fr 1fr;background:var(--bg);border-bottom:1px solid var(--border);}
+.ct-hcell{padding:11px 16px;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border-right:1px solid var(--border);}
+.ct-hcell:last-child{border-right:none;}
+.ct-hcell.zapier{color:var(--accent);}
+.ct-hcell.n8n{color:var(--green);}
+.ct-row{display:grid;grid-template-columns:160px 1fr 1fr;border-bottom:1px solid var(--border);}
+.ct-row:last-child{border-bottom:none;}
+.ct-cell{padding:12px 16px;font-size:13px;color:var(--ink-2);line-height:1.5;border-right:1px solid var(--border);}
+.ct-cell:last-child{border-right:none;}
+.ct-cell.dim{font-weight:600;color:var(--ink);font-size:12.5px;}
+
+/* ── CALLOUT BOXES ── */
+.callout{border-radius:var(--r);padding:16px 20px;margin:20px 0;}
+.callout.blue{background:var(--blue-bg);border:1px solid rgba(37,99,168,.15);border-left:4px solid var(--navy-light);}
+.callout.green{background:var(--green-bg);border:1px solid rgba(21,128,61,.15);border-left:4px solid var(--green);}
+.callout.amber{background:var(--amber-bg);border:1px solid rgba(180,83,9,.15);border-left:4px solid var(--amber);}
+.callout.red{background:var(--red-bg);border:1px solid rgba(194,65,12,.15);border-left:4px solid var(--accent);}
+.callout-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;}
+.callout.blue .callout-label{color:var(--navy-light);}
+.callout.green .callout-label{color:var(--green);}
+.callout.amber .callout-label{color:var(--amber);}
+.callout.red .callout-label{color:var(--accent);}
+.callout p{font-size:13.5px;color:var(--ink-2);line-height:1.6;margin:0;}
+
+/* ── DIVIDER BANNER ── */
+.section-divider{
+  background:var(--navy);
+  color:#fff;
+  padding:40px 0;
+  margin:56px 0 0;
+  position:relative;overflow:hidden;
+}
+.section-divider::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 70% 60% at 90% 20%, rgba(37,99,168,.2) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 50% at 5% 80%, rgba(21,128,61,.1) 0%, transparent 55%);
+}
+.section-divider .inner{max-width:980px;margin:0 auto;padding:0 32px;position:relative;z-index:1;}
+.section-divider .eyebrow{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.35);font-weight:700;margin-bottom:14px;}
+.section-divider h2{
+  font-family:'DM Serif Display',Georgia,serif;
+  font-size:clamp(22px,3.5vw,34px);
+  font-weight:400;color:#fff;
+  line-height:1.2;letter-spacing:-.015em;
+  margin-bottom:10px;
+}
+.section-divider p{font-size:14px;color:rgba(255,255,255,.5);max-width:540px;line-height:1.65;}
+
+/* ── SEPARATOR ── */
+.sep{height:1px;background:var(--border);margin:40px 0;}
+
+/* ── STICKY PROGRESS NAV ── */
+.progress-nav{
+  position:fixed;right:24px;top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:6px;z-index:200;
+}
+.pn-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--border-2);border:none;cursor:pointer;
+  transition:all .2s;padding:0;
+}
+.pn-dot.active{background:var(--accent);height:22px;border-radius:4px;}
+.pn-dot:hover:not(.active){background:var(--muted);}
+
+/* ── LEGEND STRIP ── */
+.legend-strip{
+  display:flex;gap:20px;flex-wrap:wrap;
+  padding:14px 20px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  margin-bottom:28px;
+}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-2);}
+.legend-bar{width:14px;height:14px;border-radius:3px;flex-shrink:0;}
+.legend-bar.begin{background:var(--navy);}
+.legend-bar.covers{background:var(--amber);}
+.legend-bar.ends{background:var(--green);}
+
+/* ── TRY IT BLOCK ── */
+.try-it{
+  background:linear-gradient(135deg, #1E3A5F 0%, #2563A8 100%);
+  border-radius:var(--rl);
+  padding:24px 28px;
+  margin:24px 0;
+  color:#fff;
+}
+.try-it-label{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:8px;}
+.try-it-prompt{font-size:15px;color:rgba(255,255,255,.9);line-height:1.6;font-style:italic;}
+.try-it-note{font-size:12px;color:rgba(255,255,255,.4);margin-top:10px;}
+
+/* ── TOOL TAG ── */
+.tool-tag{
+  display:inline-block;
+  font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  padding:3px 9px;border-radius:4px;margin-right:6px;
+  vertical-align:middle;
+}
+.tool-tag.zapier{background:rgba(255,95,36,.12);color:#E8480C;}
+.tool-tag.n8n{background:rgba(228,41,81,.1);color:#C43057;}
+.tool-tag.sheets{background:rgba(21,128,61,.09);color:var(--green);}
+.tool-tag.ai{background:rgba(37,99,168,.1);color:var(--navy-light);}
+
+/* ── TIMING BAR ── */
+.timing-overview{
+  display:flex;gap:0;border:1px solid var(--border);border-radius:var(--r);
+  overflow:hidden;margin:28px 0;box-shadow:var(--sh);
+}
+.timing-segment{
+  flex:1;padding:12px 14px;text-align:center;
+  border-right:1px solid var(--border);
+}
+.timing-segment:last-child{border-right:none;}
+.ts-time{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:4px;font-family:'DM Serif Display',serif;}
+.ts-label{font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);}
+
+/* responsive */
+@media(max-width:700px){
+  .page-wrap{padding:0 20px 60px;}
+  .hero{padding:52px 20px 52px;}
+  .compare-table,.ct-head,.ct-row{display:block;}
+  .ct-cell,.ct-hcell{display:block;border-right:none;border-bottom:1px solid var(--border);}
+  .topbar{padding:0 18px;}
+  .outline-grid{grid-template-columns:1fr;}
+  .progress-nav{display:none;}
+  .timing-overview{flex-direction:column;}
+  .timing-segment{border-right:none;border-bottom:1px solid var(--border);}
+}
+</style>
+</head>
+<body>
+
+<!-- ── TOPBAR ── -->
+<div class="topbar">
+  <div class="topbar-brand"><strong>Day 3</strong> · Automation Pipelines</div>
+  <div class="topbar-nav">
+    <button class="topbar-link active" onclick="scrollToSection('overview')">Overview</button>
+    <button class="topbar-link" onclick="scrollToSection('detailed')">Detailed</button>
+    <button class="topbar-link" onclick="scrollToSection('objectives')">Objectives</button>
+  </div>
+</div>
+
+<!-- ── PROGRESS DOTS ── -->
+<nav class="progress-nav" aria-label="Page sections">
+  <button class="pn-dot active" onclick="scrollToSection('hero')" title="Top"></button>
+  <button class="pn-dot" onclick="scrollToSection('overview')" title="Session Overview"></button>
+  <button class="pn-dot" onclick="scrollToSection('detailed')" title="Detailed Outlines"></button>
+  <button class="pn-dot" onclick="scrollToSection('objectives')" title="Learning Objectives"></button>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="hero" id="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">
+      <div class="hero-dot"></div>
+      <span>Student Handout</span>
+    </div>
+    <h1>Automation Pipelines<br><em>Zapier &amp; n8n</em></h1>
+    <p class="hero-sub">A structured guide to the session flow, delivery approach, and expected learning outcomes for Day 3 of the programme.</p>
+    <div class="hero-meta">
+      <div class="hero-pill">Day 3</div>
+      <div class="hero-pill">9 Teaching Stages</div>
+      <div class="hero-pill accent">~260 min total</div>
+      <div class="hero-pill">Zapier · n8n · AI-assisted design</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════ SECTION 1: OVERVIEW ════════════════ -->
+<div class="section-divider" id="overview">
+  <div class="inner">
+    <div class="eyebrow">Section 1</div>
+    <h2>Session Overview</h2>
+    <p>The teaching stages this session follows — from recognising automation opportunities through to building, testing, and refining real workflows with AI support.</p>
+  </div>
+</div>
+
+<div class="page-wrap">
+  <section class="content-section">
+    <div class="section-label">Teaching Stages at a Glance</div>
+
+    <div class="timing-overview">
+      <div class="timing-segment">
+        <div class="ts-time">25 min</div>
+        <div class="ts-label">Identifying candidates</div>
+      </div>
+      <div class="timing-segment">
+        <div class="ts-time">30 min</div>
+        <div class="ts-label">Mapping manually</div>
+      </div>
+      <div class="timing-segment">
+        <div class="ts-time">25 min</div>
+        <div class="ts-label">APIs &amp; tool logic</div>
+      </div>
+      <div class="timing-segment">
+        <div class="ts-time">40 min</div>
+        <div class="ts-label">Build in Zapier</div>
+      </div>
+      <div class="timing-segment">
+        <div class="ts-time">35 min</div>
+        <div class="ts-label">Build in n8n</div>
+      </div>
+      <div class="timing-segment">
+        <div class="ts-time">35 min</div>
+        <div class="ts-label">Safe design</div>
+      </div>
+      <div class="timing-segment">
+        <div class="ts-time">30 min</div>
+        <div class="ts-label">Branching &amp; paths</div>
+      </div>
+      <div class="timing-segment">
+        <div class="ts-time">20 min</div>
+        <div class="ts-label">Test &amp; impact</div>
+      </div>
+      <div class="timing-segment">
+        <div class="ts-time">20 min</div>
+        <div class="ts-label">AI-assisted design</div>
+      </div>
+    </div>
+
+    <div class="outline-grid">
+      <div class="outline-card">
+        <div class="oc-num">1</div>
+        <div class="oc-body">
+          <div class="oc-name">Identifying repeated workflows and automation opportunities</div>
+          <div class="oc-time">25 min · Light concepts</div>
+        </div>
+      </div>
+      <div class="outline-card">
+        <div class="oc-num">2</div>
+        <div class="oc-body">
+          <div class="oc-name">Mapping the workflow structure manually</div>
+          <div class="oc-time">30 min · Medium</div>
+        </div>
+      </div>
+      <div class="outline-card">
+        <div class="oc-num">3</div>
+        <div class="oc-body">
+          <div class="oc-name">Explaining APIs and connected-tool logic in a practical way</div>
+          <div class="oc-time">25 min · Light concepts</div>
+        </div>
+      </div>
+      <div class="outline-card">
+        <div class="oc-num">4</div>
+        <div class="oc-body">
+          <div class="oc-name">Building the first workflow in Zapier</div>
+          <div class="oc-time">40 min · Tool-heavy</div>
+        </div>
+      </div>
+      <div class="outline-card">
+        <div class="oc-num">5</div>
+        <div class="oc-body">
+          <div class="oc-name">Building the same workflow logic in n8n</div>
+          <div class="oc-time">35 min · Tool-heavy</div>
+        </div>
+      </div>
+      <div class="outline-card">
+        <div class="oc-num">6</div>
+        <div class="oc-body">
+          <div class="oc-name">Adding safe design and workflow control</div>
+          <div class="oc-time">35 min · Medium–Heavy</div>
+        </div>
+      </div>
+      <div class="outline-card">
+        <div class="oc-num">7</div>
+        <div class="oc-body">
+          <div class="oc-name">Extending the workflow with branching, approvals, and failure paths</div>
+          <div class="oc-time">30 min · Medium</div>
+        </div>
+      </div>
+      <div class="outline-card">
+        <div class="oc-num">8</div>
+        <div class="oc-body">
+          <div class="oc-name">Testing the workflow and estimating business impact</div>
+          <div class="oc-time">20 min · Light</div>
+        </div>
+      </div>
+      <div class="outline-card">
+        <div class="oc-num">9</div>
+        <div class="oc-body">
+          <div class="oc-name">Using AI to support automation design and refinement</div>
+          <div class="oc-time">20 min · Light</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout blue">
+      <div class="callout-label">How this session is structured</div>
+      <p>The session follows a deliberate progression: it begins with thinking and judgment (what is worth automating and why), moves through structured planning (mapping the workflow before opening any tool), enters tool-based building in two environments, and closes with reliability, complexity, testing, and AI-assisted refinement. Each stage depends on what came before it.</p>
+    </div>
+  </section>
+</div>
+
+
+<!-- ════════════════ SECTION 2: DETAILED OUTLINES ════════════════ -->
+<div class="section-divider" id="detailed">
+  <div class="inner">
+    <div class="eyebrow">Section 2</div>
+    <h2>Detailed Outlines</h2>
+    <p>A closer look at what each teaching stage introduces, covers, and delivers. Click any block to expand its full delivery description.</p>
+  </div>
+</div>
+
+<div class="page-wrap">
+  <section class="content-section">
+
+    <div class="legend-strip">
+      <div class="legend-item"><div class="legend-bar begin"></div> Session begins / moves into</div>
+      <div class="legend-item"><div class="legend-bar covers"></div> Content covers</div>
+      <div class="legend-item"><div class="legend-bar ends"></div> This section ends with</div>
+    </div>
+
+    <!-- BLOCK 1 -->
+    <div class="detail-block" id="block1">
+      <div class="db-header" onclick="toggleBlock(this)">
+        <div class="db-num">1</div>
+        <div class="db-title-wrap">
+          <div class="db-title">Identifying repeated workflows and automation opportunities</div>
+          <div class="db-time">25 min · Light concepts</div>
+        </div>
+        <div class="db-chevron">▾</div>
+      </div>
+      <div class="db-body">
+        <ul>
+          <li class="li-begin"><strong>The session begins</strong> with repeated workplace tasks that move across tools — form submissions, tracker updates, notifications, approvals, and follow-up actions. Learners look at where manual effort accumulates across a connected workflow.</li>
+          <li class="li-covers"><strong>The content clarifies</strong> which kinds of repeated work are suitable for automation and which parts still require human review. The distinction between automatable and human-required steps is the foundational judgment this stage develops.</li>
+          <li class="li-ends"><strong>This section ends</strong> with a set of realistic automation candidates that are suitable for workflow building — specific, grounded, and ready to carry into the next stage.</li>
+        </ul>
+
+        <div class="callout amber" style="margin-top:18px;">
+          <div class="callout-label">Key mindset shift</div>
+          <p>The session challenges the common impulse to automate everything. Good automation thinking is specific: which exact steps are repeated, rule-based, and add no value when performed by a human? That is a much smaller set than everything a team finds inconvenient.</p>
+        </div>
+
+        <div class="try-it">
+          <div class="try-it-label">Try it yourself</div>
+          <div class="try-it-prompt">Think about the last time you waited for someone to review something, had to send a follow-up reminder, or manually copied data from one tool into another. Which of those steps was truly judgment-free?</div>
+          <div class="try-it-note">This reflection is the starting point for identifying your own automation candidates.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK 2 -->
+    <div class="detail-block" id="block2">
+      <div class="db-header" onclick="toggleBlock(this)">
+        <div class="db-num">2</div>
+        <div class="db-title-wrap">
+          <div class="db-title">Mapping the workflow structure manually</div>
+          <div class="db-time">30 min · Medium</div>
+        </div>
+        <div class="db-chevron">▾</div>
+      </div>
+      <div class="db-body">
+        <ul>
+          <li class="li-begin"><strong>The session moves into</strong> the manual logic of the workflow before any automation tool is used. This stage establishes that a workflow map must exist before a build can begin — and that the map is the real asset, not the tool.</li>
+          <li class="li-covers"><strong>The content covers</strong> the five elements of a clear workflow map: the trigger, the incoming data, the transformation steps, the destination action, and the expected output. Learners also define what happens when a step fails.</li>
+          <li class="li-ends"><strong>This section ends</strong> with a clear, complete manual workflow map that is ready to be translated into an automation tool in the next stage.</li>
+        </ul>
+
+        <div style="margin-top:18px;">
+          <div class="section-label" style="margin-bottom:12px;">A well-mapped workflow has five layers</div>
+          <div class="flow-diagram">
+            <div class="flow-node trigger">
+              <div class="fn-label">Trigger</div>
+              <div class="fn-text">What starts it</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node">
+              <div class="fn-label">Incoming Data</div>
+              <div class="fn-text">What arrives</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node action">
+              <div class="fn-label">Action</div>
+              <div class="fn-text">What it does</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node output">
+              <div class="fn-label">Output</div>
+              <div class="fn-text">What is produced</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout green" style="margin-top:8px;">
+          <div class="callout-label">Why map before building</div>
+          <p>Automation does not fix an unclear workflow — it runs the confusion faster, at scale, without anyone noticing until something breaks. Mapping forces every assumption to be stated explicitly before a tool is opened.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK 3 -->
+    <div class="detail-block" id="block3">
+      <div class="db-header" onclick="toggleBlock(this)">
+        <div class="db-num">3</div>
+        <div class="db-title-wrap">
+          <div class="db-title">Explaining APIs and connected-tool logic in a practical way</div>
+          <div class="db-time">25 min · Light concepts</div>
+        </div>
+        <div class="db-chevron">▾</div>
+      </div>
+      <div class="db-body">
+        <ul>
+          <li class="li-begin"><strong>The session focuses on</strong> how tools exchange information inside an automation workflow, without turning the topic into a theory-heavy block. The goal is practical understanding, not technical depth.</li>
+          <li class="li-covers"><strong>The content covers</strong> API concepts at a working level: how one tool sends data, how another receives it, and how connected actions are triggered across a multi-tool workflow. The emphasis is on what this means in practice during a build — not on the underlying engineering.</li>
+          <li class="li-ends"><strong>This section ends</strong> with a usable understanding of how cross-tool automation works, sufficient for learners to follow and build the Zapier and n8n workflows in the next stages.</li>
+        </ul>
+
+        <div class="callout blue" style="margin-top:18px;">
+          <div class="callout-label">Practical framing</div>
+          <p>An <span class="tooltip-wrap"><span class="tooltip-trigger">API</span><div class="tooltip-box">Application Programming Interface — a set of rules that allows one tool to send information to another. In automation, APIs are how Zapier and n8n talk to Google Sheets, Slack, and other apps.</div></span> is the messenger between tools. When a status field changes in your tracker, the API tells the automation platform — which then triggers the next step. Understanding this flow is enough to build and troubleshoot reliably.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK 4 -->
+    <div class="detail-block" id="block4">
+      <div class="db-header" onclick="toggleBlock(this)">
+        <div class="db-num">4</div>
+        <div class="db-title-wrap">
+          <div class="db-title">Building the first workflow in Zapier</div>
+          <div class="db-time">40 min · Tool-heavy</div>
+        </div>
+        <div class="db-chevron">▾</div>
+      </div>
+      <div class="db-body">
+        <ul>
+          <li class="li-begin"><strong>The session moves into</strong> the first live automation build inside Zapier, using the workflow map produced in Stage 2 as the build specification.</li>
+          <li class="li-covers"><strong>The content covers</strong> trigger setup, field mapping, transformation steps, action configuration, and basic workflow testing — all within a real automation sequence connected to the team's existing tools. <span class="tool-tag zapier">Zapier</span></li>
+          <li class="li-ends"><strong>This section ends</strong> with a working Zapier automation that completes a realistic cross-tool task — specifically the status-change notification workflow mapped in the previous stage.</li>
+        </ul>
+
+        <div class="try-it" style="margin-top:18px;">
+          <div class="try-it-label">Before moving to the next step, always ask</div>
+          <div class="try-it-prompt">If this trigger fired for the wrong row — what would the team notice first? The wrong person notified, the wrong task name, or the workflow running at the wrong time?</div>
+          <div class="try-it-note">This check reveals whether the trigger is precise enough to be trusted in a real workflow.</div>
+        </div>
+
+        <div class="callout green" style="margin-top:14px;">
+          <div class="callout-label">Testing the output — not just the run</div>
+          <p>A green success message inside Zapier is not sufficient. The real test is whether the notification that arrives gives the recipient everything they need to act — without asking a follow-up question. Task name, owner, due date, and brief link should all be present and correct.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK 5 -->
+    <div class="detail-block" id="block5">
+      <div class="db-header" onclick="toggleBlock(this)">
+        <div class="db-num">5</div>
+        <div class="db-title-wrap">
+          <div class="db-title">Building the same workflow logic in n8n</div>
+          <div class="db-time">35 min · Tool-heavy</div>
+        </div>
+        <div class="db-chevron">▾</div>
+      </div>
+      <div class="db-body">
+        <ul>
+          <li class="li-begin"><strong>The session shifts into</strong> applying the same workflow structure inside n8n — a second build environment with a different interface model and a visual, canvas-based approach to workflow design.</li>
+          <li class="li-covers"><strong>The content covers</strong> the visual flow structure in n8n, node-based logic, how data moves between nodes, and the practical differences between the two tools when building the same automation. <span class="tool-tag n8n">n8n</span></li>
+          <li class="li-ends"><strong>This section ends</strong> with a working n8n flow that reflects the same automation logic as the Zapier build — proving that the workflow map is the portable asset, not the tool.</li>
+        </ul>
+
+        <div style="margin-top:18px;">
+          <div class="section-label" style="margin-bottom:12px;">Zapier vs n8n — side-by-side</div>
+          <div class="compare-table">
+            <div class="ct-head">
+              <div class="ct-hcell">Dimension</div>
+              <div class="ct-hcell zapier">Zapier</div>
+              <div class="ct-hcell n8n">n8n</div>
+            </div>
+            <div class="ct-row">
+              <div class="ct-cell dim">Starting the build</div>
+              <div class="ct-cell">Guided, step-by-step with clear prompts. Accessible from the first click.</div>
+              <div class="ct-cell">Canvas-first. Nodes are connected manually. Requires understanding the structure before starting.</div>
+            </div>
+            <div class="ct-row">
+              <div class="ct-cell dim">Workflow visibility</div>
+              <div class="ct-cell">Steps listed vertically in form format. Flow shape requires opening each step to read.</div>
+              <div class="ct-cell">Trigger, connections, and action nodes visible simultaneously. The shape is always present.</div>
+            </div>
+            <div class="ct-row">
+              <div class="ct-cell dim">Reviewing the logic</div>
+              <div class="ct-cell">Must open each step in sequence to read configuration.</div>
+              <div class="ct-cell">Flow structure is visible without opening nodes — easier to audit or explain.</div>
+            </div>
+            <div class="ct-row">
+              <div class="ct-cell dim">The workflow produced</div>
+              <div class="ct-cell">Identical to n8n for this use case.</div>
+              <div class="ct-cell">Identical to Zapier for this use case.</div>
+            </div>
+          </div>
+
+          <div class="callout amber">
+            <div class="callout-label">The key insight</div>
+            <p>The tool changed the experience of building. It did not change what was built. For this reason, the workflow map produced in Stage 2 is the durable asset — it can be executed in either environment.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK 6 -->
+    <div class="detail-block" id="block6">
+      <div class="db-header" onclick="toggleBlock(this)">
+        <div class="db-num">6</div>
+        <div class="db-title-wrap">
+          <div class="db-title">Adding safe design and workflow control</div>
+          <div class="db-time">35 min · Medium-Heavy</div>
+        </div>
+        <div class="db-chevron">▾</div>
+      </div>
+      <div class="db-body">
+        <ul>
+          <li class="li-begin"><strong>The session focuses on</strong> making both workflow builds reliable enough for practical use in real conditions — not just in the test environment where all data is clean.</li>
+          <li class="li-covers"><strong>The content covers</strong> input validation, retries, logging, basic <span class="tooltip-wrap"><span class="tooltip-trigger">rate-limit awareness</span><div class="tooltip-box">Rate limits restrict how many API requests a tool allows within a time period. Without awareness of these limits, a workflow can fail silently when it sends too many requests too quickly.</div></span>, simple failure handling, and the design decisions that reduce fragile or incorrect automation behaviour.</li>
+          <li class="li-ends"><strong>This section ends</strong> with a safer, more controlled workflow structure that handles missing data, duplicate triggers, and failures without running silently incorrect actions.</li>
+        </ul>
+
+        <div style="margin-top:18px;">
+          <div class="section-label" style="margin-bottom:12px;">Click each scenario to reveal the failure mode</div>
+          <div class="reveal-grid">
+            <div class="reveal-card" onclick="toggleReveal(this)">
+              <div class="rc-kicker">Scenario A</div>
+              <div class="rc-question">The approver field is blank when the status changes to In Review.</div>
+              <div class="rc-prompt">Click to see what happens →</div>
+              <div class="rc-answer">
+                <div class="rc-ans-label">What happens</div>
+                <div class="rc-ans-text">The trigger fires correctly. The action runs. But the recipient field resolves to nothing — the tool either sends to no one, throws a silent error, or logs a false success. The approver has no idea the task is waiting.</div>
+              </div>
+            </div>
+            <div class="reveal-card" onclick="toggleReveal(this)">
+              <div class="rc-kicker">Scenario B</div>
+              <div class="rc-question">Someone typed "in review" instead of "In Review" — capitalisation off.</div>
+              <div class="rc-prompt">Click to see what happens →</div>
+              <div class="rc-answer">
+                <div class="rc-ans-label">What happens</div>
+                <div class="rc-ans-text">The trigger checks for an exact string match. The row is never detected. The workflow never starts. No error is logged — because nothing triggered at all. The task silently misses the handoff.</div>
+              </div>
+            </div>
+            <div class="reveal-card" onclick="toggleReveal(this)">
+              <div class="rc-kicker">Scenario C</div>
+              <div class="rc-question">The status field was saved twice in quick succession.</div>
+              <div class="rc-prompt">Click to see what happens →</div>
+              <div class="rc-answer">
+                <div class="rc-ans-label">What happens</div>
+                <div class="rc-ans-text">Both saves trigger the automation. The approver receives two identical notifications within seconds — and assumes two separate tasks were submitted. Duplicate triggers erode trust in the system faster than almost any other failure type.</div>
+              </div>
+            </div>
+            <div class="reveal-card" onclick="toggleReveal(this)">
+              <div class="rc-kicker">Scenario D</div>
+              <div class="rc-question">The brief link exists but points to an old version of the file.</div>
+              <div class="rc-prompt">Click to see what happens →</div>
+              <div class="rc-answer">
+                <div class="rc-ans-label">What happens</div>
+                <div class="rc-ans-text">The validation check passes — the field is not empty. The notification sends. The approver opens the link and finds the wrong version. Automation can verify that data exists; it cannot verify that data is correct.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout red" style="margin-top:4px;">
+          <div class="callout-label">The larger point about failure</div>
+          <p>A workflow that runs without errors is not the same as a workflow that works. Every failure scenario above produced a completed run with no alert — but the wrong output reached the wrong person, or no one at all. Safe design means the workflow knows when it should stop, not just when to proceed.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK 7 -->
+    <div class="detail-block" id="block7">
+      <div class="db-header" onclick="toggleBlock(this)">
+        <div class="db-num">7</div>
+        <div class="db-title-wrap">
+          <div class="db-title">Extending the workflow with branching, approvals, and failure paths</div>
+          <div class="db-time">30 min · Medium</div>
+        </div>
+        <div class="db-chevron">▾</div>
+      </div>
+      <div class="db-body">
+        <ul>
+          <li class="li-begin"><strong>The session moves into</strong> more advanced workflow control, where not every case follows the same linear path. A single trigger can lead to multiple different outcomes depending on the data and conditions it encounters.</li>
+          <li class="li-covers"><strong>The content covers</strong> conditional routing, approval steps, alternate paths, failure paths, and return-to-owner logic — as well as the audit-trail thinking that helps teams understand what the workflow did and why it did it.</li>
+          <li class="li-ends"><strong>This section ends</strong> with a more complete automation structure that can handle three distinct workflow outcomes: continue automatically, wait for approval, or return to the owner with the reason why.</li>
+        </ul>
+
+        <div style="margin-top:18px;">
+          <div class="section-label" style="margin-bottom:12px;">The three-path branching model</div>
+
+          <div class="tab-container">
+            <div class="tab-header">
+              <button class="tab-btn active" onclick="switchTab(this,'path-continue')">Continue</button>
+              <button class="tab-btn" onclick="switchTab(this,'path-approve')">Approval Gate</button>
+              <button class="tab-btn" onclick="switchTab(this,'path-return')">Return to Owner</button>
+              <button class="tab-btn" onclick="switchTab(this,'path-escalate')">Escalation</button>
+            </div>
+            <div class="tab-panel active" id="path-continue">
+              <p style="font-size:14px;color:var(--ink-2);line-height:1.65;"><strong style="color:var(--green);">Continue automatically</strong> — All required fields are present. No flags triggered. The task passes validation and moves forward to the approver without any human intervention required. Speed is the priority on this path.</p>
+              <div class="flow-diagram" style="margin-top:16px;">
+                <div class="flow-node trigger"><div class="fn-label">Trigger</div><div class="fn-text">Task submitted</div></div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-node"><div class="fn-label">Validation</div><div class="fn-text">All fields complete</div></div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-node output"><div class="fn-label">Outcome</div><div class="fn-text">Approver notified</div></div>
+              </div>
+            </div>
+            <div class="tab-panel" id="path-approve">
+              <p style="font-size:14px;color:var(--ink-2);line-height:1.65;"><strong style="color:var(--navy);">Approval gate</strong> — The task is flagged as high-visibility, high-spend, or client-facing. The workflow pauses and waits for an explicit human decision before anything moves forward. No ambiguity about whether it was reviewed.</p>
+              <div class="flow-diagram" style="margin-top:16px;">
+                <div class="flow-node trigger"><div class="fn-label">Trigger</div><div class="fn-text">High-risk flag</div></div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-node action"><div class="fn-label">Gate</div><div class="fn-text">Waiting for decision</div></div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-node output"><div class="fn-label">Approved</div><div class="fn-text">Continues forward</div></div>
+              </div>
+            </div>
+            <div class="tab-panel" id="path-return">
+              <p style="font-size:14px;color:var(--ink-2);line-height:1.65;"><strong style="color:var(--accent);">Return to owner</strong> — A required field is empty or invalid. The workflow stops before sending any notification and instead sends the owner a message listing exactly what is missing and why the task cannot proceed.</p>
+              <div class="flow-diagram" style="margin-top:16px;">
+                <div class="flow-node trigger"><div class="fn-label">Trigger</div><div class="fn-text">Field missing</div></div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-node action"><div class="fn-label">Halt</div><div class="fn-text">Validation fails</div></div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-node"><div class="fn-label">Message</div><div class="fn-text">Owner informed</div></div>
+              </div>
+            </div>
+            <div class="tab-panel" id="path-escalate">
+              <p style="font-size:14px;color:var(--ink-2);line-height:1.65;"><strong style="color:var(--amber);">Escalation path</strong> — A task has been at the approval gate beyond the defined time window, or is flagged as urgent. The workflow notifies the team lead rather than the original approver, including wait time and risk level. The workflow does not proceed until a human responds.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK 8 -->
+    <div class="detail-block" id="block8">
+      <div class="db-header" onclick="toggleBlock(this)">
+        <div class="db-num">8</div>
+        <div class="db-title-wrap">
+          <div class="db-title">Testing the workflow and estimating business impact</div>
+          <div class="db-time">20 min · Light</div>
+        </div>
+        <div class="db-chevron">▾</div>
+      </div>
+      <div class="db-body">
+        <ul>
+          <li class="li-begin"><strong>The session closes the build phase</strong> by validating the automation against the workflow map and examining the practical value it creates for the team.</li>
+          <li class="li-covers"><strong>The content covers</strong> how to produce usable test evidence, how to verify workflow outputs from the recipient's perspective, and how to make a simple, honest estimate of business impact — in terms of time saved, consistency improved, or repeated work removed.</li>
+          <li class="li-ends"><strong>This section ends</strong> with a tested, validated workflow and a first business-impact view of what the automation actually delivers in practical terms.</li>
+        </ul>
+
+        <div style="margin-top:18px;">
+          <div class="section-label" style="margin-bottom:12px;">Four test checks — click each to reveal what to verify</div>
+          <div class="reveal-grid">
+            <div class="reveal-card" onclick="toggleReveal(this)">
+              <div class="rc-kicker">Check 1</div>
+              <div class="rc-question">Did the trigger fire on the right row and at the right moment?</div>
+              <div class="rc-prompt">Click to reveal →</div>
+              <div class="rc-answer">
+                <div class="rc-ans-label">What to verify</div>
+                <div class="rc-ans-text">Confirm the trigger fired only when the status reached exactly the agreed value — not on row creation, unrelated edits, or a variant spelling. The trigger log should show one event, not multiple.</div>
+              </div>
+            </div>
+            <div class="reveal-card" onclick="toggleReveal(this)">
+              <div class="rc-kicker">Check 2</div>
+              <div class="rc-question">Are all required fields present and correctly mapped in the action step?</div>
+              <div class="rc-prompt">Click to reveal →</div>
+              <div class="rc-answer">
+                <div class="rc-ans-label">What to verify</div>
+                <div class="rc-ans-text">Inspect the action node input. Task name, approver, brief link, owner, and due date should all be present. If any field is missing here, the message will be incomplete regardless of what the output looks like.</div>
+              </div>
+            </div>
+            <div class="reveal-card" onclick="toggleReveal(this)">
+              <div class="rc-kicker">Check 3</div>
+              <div class="rc-question">Did the message reach the correct approver?</div>
+              <div class="rc-prompt">Click to reveal →</div>
+              <div class="rc-answer">
+                <div class="rc-ans-label">What to verify</div>
+                <div class="rc-ans-text">The notification should have gone to the person named in the Approver field of the triggered row — not a test address, not an empty recipient, and not the person who built the workflow.</div>
+              </div>
+            </div>
+            <div class="reveal-card" onclick="toggleReveal(this)">
+              <div class="rc-kicker">Check 4</div>
+              <div class="rc-question">Would the approver know what to do after reading the message?</div>
+              <div class="rc-prompt">Click to reveal →</div>
+              <div class="rc-answer">
+                <div class="rc-ans-label">What to verify</div>
+                <div class="rc-ans-text">Read the notification from the approver's perspective. Does it name the task, identify who submitted it, state the due date, and link to the work? If they would need to send a follow-up message before beginning the review — the handoff is still incomplete.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout green" style="margin-top:4px;">
+          <div class="callout-label">Estimating business impact honestly</div>
+          <p>A useful estimate asks three questions: How much time did the automated step previously take per occurrence? How often does this step occur? What is the risk of the step being missed or done inconsistently? The answers to these three questions define the practical value of the automation — not just its technical performance.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK 9 -->
+    <div class="detail-block" id="block9">
+      <div class="db-header" onclick="toggleBlock(this)">
+        <div class="db-num">9</div>
+        <div class="db-title-wrap">
+          <div class="db-title">Using AI to support automation design and refinement</div>
+          <div class="db-time">20 min · Light</div>
+        </div>
+        <div class="db-chevron">▾</div>
+      </div>
+      <div class="db-body">
+        <ul>
+          <li class="li-begin"><strong>The session also teaches</strong> the same workflow design work in a second way — through AI-assisted support that strengthens the manual process rather than replacing it.</li>
+          <li class="li-covers"><strong>The content covers</strong> practical prompting for workflow mapping, step naming, condition drafting, <span class="tooltip-wrap"><span class="tooltip-trigger">test-case generation</span><div class="tooltip-box">Asking an AI to generate edge cases and failure scenarios for your workflow — such as "what if the approver field is blank?" — is faster than imagining them from scratch. The team's job is to evaluate and filter the suggestions, not accept them wholesale.</div></span>, troubleshooting guidance, and workflow explanation. It also demonstrates how input quality directly determines output quality. <span class="tool-tag ai">AI-assisted</span></li>
+          <li class="li-ends"><strong>This section ends</strong> with a first AI-assisted automation support workflow and a clear understanding of the boundary between what AI can generate and what the team must still decide for themselves.</li>
+        </ul>
+
+        <div style="margin-top:18px;">
+          <div class="section-label" style="margin-bottom:12px;">Input quality determines output quality — click each to compare</div>
+
+          <div class="tab-container">
+            <div class="tab-header">
+              <button class="tab-btn active" onclick="switchTab(this,'ai-vague')">Vague input</button>
+              <button class="tab-btn" onclick="switchTab(this,'ai-tool')">Tool-based</button>
+              <button class="tab-btn" onclick="switchTab(this,'ai-structured')">Structured input</button>
+            </div>
+            <div class="tab-panel active" id="ai-vague">
+              <p style="color:var(--accent);font-weight:600;margin-bottom:8px;font-size:13px;">Input: "We need to notify people when tasks are ready."</p>
+              <p style="font-size:13.5px;color:var(--ink-2);line-height:1.65;"><strong>Result:</strong> AI returns a generic notification workflow with no connection to the team's tools, actual fields, or real process. Requires complete rewriting. The team spent more time correcting it than building from scratch.</p>
+            </div>
+            <div class="tab-panel" id="ai-tool">
+              <p style="color:var(--amber);font-weight:600;margin-bottom:8px;font-size:13px;">Input: "We use Google Sheets and Slack. When the status changes, send a message."</p>
+              <p style="font-size:13.5px;color:var(--ink-2);line-height:1.65;"><strong>Result:</strong> AI returns a basic trigger-action structure but does not include the right fields, conditions, or failure paths. Better than vague, but still requires significant adjustment before it is usable.</p>
+            </div>
+            <div class="tab-panel" id="ai-structured">
+              <p style="color:var(--green);font-weight:600;margin-bottom:8px;font-size:13px;">Input: "We have a Sheets tracker with status, approver, brief link, and due date. When status changes to exactly 'In Review', notify the approver via Slack with task name, owner, brief link, and due date. Approver field must not be empty. No duplicate sends for the same trigger."</p>
+              <p style="font-size:13.5px;color:var(--ink-2);line-height:1.65;"><strong>Result:</strong> AI returns a workflow draft that includes the trigger condition, required fields, deduplication logic, and a suggested message format. The team spent four minutes reviewing — not rebuilding from scratch.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout blue" style="margin-top:14px;">
+          <div class="callout-label">Strong vs weak AI usage in automation</div>
+          <p>The difference is not the tool — it is what the team keeps for themselves. A team that maps the workflow carefully before using AI gets better suggestions, evaluates them more confidently, and knows which ones to accept, modify, or reject. A team that asks AI to design the workflow from scratch cannot evaluate what they receive, because they never did the thinking themselves.</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</div>
+
+
+<!-- ════════════════ SECTION 3: OBJECTIVES ════════════════ -->
+<div class="section-divider" id="objectives">
+  <div class="inner">
+    <div class="eyebrow">Section 3</div>
+    <h2>Learning Objectives</h2>
+    <p>Fourteen measurable outcomes that define what a trainee should be able to do after completing this session.</p>
+  </div>
+</div>
+
+<div class="page-wrap">
+  <section class="content-section">
+
+    <div class="objectives-wrap">
+      <div class="obj-header">
+        <div class="obj-header-text">After this session, the trainee should be able to:</div>
+      </div>
+      <ul class="obj-list">
+        <li class="obj-item">
+          <span class="obj-verb">Identify</span>
+          <div class="obj-text">repeated workplace tasks that are suitable for automation across multiple tools — and distinguish them from steps that require human judgment.</div>
+        </li>
+        <li class="obj-item">
+          <span class="obj-verb">Distinguish</span>
+          <div class="obj-text">between manual workflow steps and automation-ready steps based on whether the step is rule-based, repeated, and judgment-free.</div>
+        </li>
+        <li class="obj-item">
+          <span class="obj-verb">Map</span>
+          <div class="obj-text">a workflow clearly in terms of trigger, incoming data, transformation steps, destination action, and expected output — before opening any automation tool.</div>
+        </li>
+        <li class="obj-item">
+          <span class="obj-verb">Explain</span>
+          <div class="obj-text">API concepts practically as part of how tools exchange information inside a connected workflow — without needing technical depth.</div>
+        </li>
+        <li class="obj-item">
+          <span class="obj-verb green">Build</span>
+          <div class="obj-text">a basic cross-tool automation in Zapier using trigger setup, field mapping, transformation, and action configuration — connected to the team's actual tools and data.</div>
+        </li>
+        <li class="obj-item">
+          <span class="obj-verb green">Build</span>
+          <div class="obj-text">the same workflow logic inside n8n and recognise the structural and experiential differences between the two tools when building an identical automation.</div>
+        </li>
+        <li class="obj-item">
+          <span class="obj-verb amber">Apply</span>
+          <div class="obj-text">input validation, retries, logging, and simple failure handling to reduce fragile automation behaviour and prevent silent failures in a real workflow.</div>
+        </li>
+        <li class="obj-item">
+          <span class="obj-verb">Recognise</span>
+          <div class="obj-text">where rate-limit awareness and controlled workflow design matter in practical automation — and why these considerations affect reliability in production.</div>
+        </li>
+        <li class="obj-item">
+          <span class="obj-verb amber">Extend</span>
+          <div class="obj-text">a workflow with branching logic, approval gates, return paths, escalation paths, and failure handling so that it can handle more than one outcome from the same trigger.</div>
+        </li>
+        <li class="obj-item">
+          <span class="obj-verb">Analyse</span>
+          <div class="obj-text">a workflow using test evidence, expected output checking, and basic audit-trail thinking — and identify whether the automation is working at the human layer, not just the technical layer.</div>
+        </li>
+        <li class="obj-item">
+          <span class="obj-verb">Estimate</span>
+          <div class="obj-text">the practical business impact of an automation in terms of time saved, consistency improved, or manual work removed — as a first grounded assessment of the workflow's value.</div>
+        </li>
+        <li class="obj-item">
+          <span class="obj-verb red">Apply</span>
+          <div class="obj-text">prompt engineering to support workflow design, condition drafting, test-case generation, troubleshooting, and workflow documentation using AI as a design partner.</div>
+        </li>
+        <li class="obj-item">
+          <span class="obj-verb">Compare</span>
+          <div class="obj-text">manual workflow design and AI-assisted workflow design as two approaches to building the same automation logic — and articulate what each approach contributes.</div>
+        </li>
+        <li class="obj-item">
+          <span class="obj-verb green">Produce</span>
+          <div class="obj-text">a usable automation workflow that connects tools safely and clearly, with defined failure paths, tested outputs, and an identifiable owner responsible for its ongoing reliability.</div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="callout blue">
+      <div class="callout-label">How to use these objectives</div>
+      <p>Each objective maps to a specific teaching stage in this session. If a concept or skill listed above feels unclear after the session, refer back to the corresponding detailed outline block above to revisit the delivery flow and key framing for that stage. These objectives also serve as a self-assessment checklist when reviewing your own automation work after the session.</p>
+    </div>
+
+    <div class="sep"></div>
+
+    <div style="text-align:center;padding:20px 0 10px;">
+      <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;">Day 3 · Student Handout · Automation Pipelines · Zapier &amp; n8n</div>
+    </div>
+
+  </section>
+</div>
+
+
+<script>
+// Toggle detail block
+function toggleBlock(headerEl) {
+  const block = headerEl.closest('.detail-block');
+  block.classList.toggle('open');
+}
+
+// Toggle reveal card
+function toggleReveal(card) {
+  card.classList.toggle('open');
+}
+
+// Tab switcher (works for any tab container)
+function switchTab(btn, panelId) {
+  const container = btn.closest('.tab-container');
+  container.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  container.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(panelId).classList.add('active');
+}
+
+// Smooth scroll to section
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// Progress dots + topbar link highlighting
+const sections = ['hero','overview','detailed','objectives'];
+const dots = document.querySelectorAll('.pn-dot');
+const topLinks = document.querySelectorAll('.topbar-link');
+
+function updateNav() {
+  let current = 0;
+  sections.forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY + 100 >= el.offsetTop) current = i;
+  });
+  dots.forEach((d, i) => d.classList.toggle('active', i === current));
+  topLinks.forEach((l, i) => {
+    const map = {0:0,1:1,2:2,3:3};
+    const target = l.getAttribute('onclick').match(/'([^']+)'/)[1];
+    const idx = sections.indexOf(target);
+    l.classList.toggle('active', idx === current);
+  });
+}
+
+window.addEventListener('scroll', updateNav, {passive:true});
+updateNav();
+
+// Open first block on load
+document.querySelector('.detail-block .db-header').click();
+</script>
+
+</body>
+</html>
