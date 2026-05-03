@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Day 6 — Student Handout · Capstone Delivery + Portfolio Readiness</title>
+
+<style>
+:root{
+  --bg:#F5F3EE;
+  --surface:#FFFFFF;
+  --surface-2:#EDEAE3;
+  --ink:#1A1824;
+  --ink-2:#4A4760;
+  --muted:#8E8C9A;
+  --navy:#1D3557;
+  --navy-light:#2A4A73;
+  --accent:#C74B2C;
+  --green:#2A7251;
+  --blue:#1A56A0;
+  --blue-bg:#EEF4FB;
+  --border:#DDD9D0;
+  --bad:#8B2635;
+  --bad-bg:#FFF5F5;
+  --bad-border:#EAABAB;
+  --good-bg:#F1FAF5;
+  --good-border:#8EC9A8;
+  --amber:#8A5C00;
+  --amber-bg:#FFF8EA;
+  --amber-border:#DDBE6A;
+  --sh:0 1px 3px rgba(0,0,0,.05),0 4px 16px rgba(0,0,0,.04);
+  --sh-md:0 2px 8px rgba(0,0,0,.07),0 10px 32px rgba(0,0,0,.06);
+  --r:10px;
+  --rl:16px;
+  --t:all .2s ease;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:"Helvetica Neue",Arial,sans-serif;
+  font-size:15px;
+  line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.progress{position:fixed;top:0;left:0;right:0;height:3px;background:var(--surface-2);z-index:400}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--navy));transition:width .15s ease}
+.topnav{
+  position:fixed;top:3px;left:0;right:0;height:50px;background:rgba(26,24,36,.95);
+  backdrop-filter:blur(12px);z-index:300;display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;border-bottom:1px solid rgba(255,255,255,.06)
+}
+.brand{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.45);white-space:nowrap}
+.brand strong{color:rgba(255,255,255,.78)}
+.nav-pill{
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:rgba(255,255,255,.45);
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:100px;padding:4px 12px
+}
+.hero{
+  min-height:100vh;background:var(--navy);padding:105px 28px 78px;display:flex;align-items:center;
+  position:relative;overflow:hidden
+}
+.hero:before{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 70% at 8% 65%,rgba(199,75,44,.18) 0%,transparent 65%),
+    radial-gradient(ellipse 50% 55% at 92% 18%,rgba(26,86,160,.16) 0%,transparent 55%),
+    radial-gradient(ellipse 80% 40% at 50% 100%,rgba(0,0,0,.25) 0%,transparent 60%)
+}
+.wrap{max-width:980px;margin:0 auto;width:100%}
+.hero-inner{position:relative;z-index:1}
+.eyebrow{
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:rgba(255,255,255,.36);
+  margin-bottom:18px;display:flex;align-items:center;gap:10px
+}
+.eyebrow:after{content:"";width:34px;height:1px;background:rgba(255,255,255,.22)}
+.hero-title{
+  font-family:Georgia,"Times New Roman",serif;font-size:clamp(30px,5vw,56px);font-weight:400;color:#fff;
+  line-height:1.12;letter-spacing:-.02em;max-width:780px;margin-bottom:18px
+}
+.hero-title em{color:rgba(255,255,255,.65);font-style:italic}
+.hero-sub{font-size:clamp(14px,2vw,18px);color:rgba(255,255,255,.56);max-width:700px;line-height:1.7;margin-bottom:34px}
+.carry{
+  background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.1);border-left:4px solid rgba(199,75,44,.7);
+  border-radius:var(--r);padding:20px 24px;max-width:760px;margin-bottom:34px
+}
+.carry-label{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.34);font-weight:700;margin-bottom:8px}
+.carry p{color:rgba(255,255,255,.72);margin:0}
+.hero-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;max-width:900px}
+.hero-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--r);padding:13px 12px}
+.hc-label{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.32);font-weight:700;margin-bottom:5px}
+.hc-name{font-size:13px;color:rgba(255,255,255,.86);font-weight:700;line-height:1.3}
+
+section{scroll-margin-top:55px;padding:78px 28px 82px}
+.white{background:var(--surface)}
+.warm{background:var(--bg)}
+.label{font-size:10px;letter-spacing:.17em;text-transform:uppercase;font-weight:700;color:var(--accent);margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.label:after{content:"";height:1px;flex:1;background:var(--border)}
+.title{font-family:Georgia,"Times New Roman",serif;font-size:clamp(23px,3.5vw,38px);font-weight:400;line-height:1.22;color:var(--ink);letter-spacing:-.015em;margin-bottom:12px}
+.sub{font-size:clamp(14px,1.8vw,16.5px);color:var(--ink-2);max-width:760px;line-height:1.7;margin-bottom:30px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:22px 0}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh)}
+.warm .card{background:#fff}
+.card.top-navy{border-top:3px solid var(--navy)}
+.card.top-accent{border-top:3px solid var(--accent)}
+.card.top-green{border-top:3px solid var(--green)}
+.card.top-blue{border-top:3px solid var(--blue)}
+.card.top-bad{border-top:3px solid var(--bad)}
+.card h3{font-size:14px;color:var(--ink);margin-bottom:7px;line-height:1.35}
+.card p,.card li{font-size:13.5px;color:var(--ink-2);line-height:1.55}
+.tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border-radius:5px;padding:3px 9px;margin-bottom:8px}
+.tag.navy{background:rgba(29,53,87,.09);color:var(--navy);border:1px solid rgba(29,53,87,.16)}
+.tag.green{background:rgba(42,114,81,.09);color:var(--green);border:1px solid var(--good-border)}
+.tag.blue{background:var(--blue-bg);color:var(--blue);border:1px solid rgba(26,86,160,.18)}
+.tag.accent{background:rgba(199,75,44,.08);color:var(--accent);border:1px solid rgba(199,75,44,.2)}
+.tag.bad{background:var(--bad-bg);color:var(--bad);border:1px solid var(--bad-border)}
+.tag.amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.callout{border-radius:var(--r);padding:16px 20px;margin:22px 0;font-size:14px;line-height:1.6}
+.callout.navy{background:var(--navy);color:#fff}
+.callout.navy p{color:rgba(255,255,255,.76)}
+.callout.blue{background:var(--blue-bg);border:1px solid rgba(26,86,160,.22);border-left:4px solid var(--blue);color:var(--navy)}
+.callout.green{background:var(--good-bg);border:1px solid var(--good-border);border-left:4px solid var(--green)}
+.callout.amber{background:var(--amber-bg);border:1px solid var(--amber-border);border-left:4px solid var(--amber)}
+.callout.red{background:var(--bad-bg);border:1px solid var(--bad-border);border-left:4px solid var(--bad);color:var(--bad)}
+
+.journey{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);box-shadow:var(--sh-md);overflow:hidden;margin:26px 0}
+.journey-row{display:grid;grid-template-columns:96px 1fr 1.3fr;border-bottom:1px solid var(--border);align-items:center}
+.journey-row:last-child{border-bottom:none}
+.jr-time{font-family:"Courier New",monospace;font-size:12px;color:var(--muted);padding:14px 18px;background:var(--surface-2);height:100%;display:flex;align-items:center}
+.jr-title{font-size:14px;font-weight:700;color:var(--ink);padding:14px 16px}
+.jr-desc{font-size:13px;color:var(--ink-2);padding:14px 18px;border-left:1px solid var(--border);line-height:1.45}
+
+.compare{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh-md);margin:22px 0}
+.comp-col:first-child{border-right:1px solid var(--border)}
+.comp-head{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:10px 16px;border-bottom:1px solid var(--border)}
+.weak .comp-head{background:var(--bad-bg);color:var(--bad);border-color:var(--bad-border)}
+.strong .comp-head{background:var(--good-bg);color:var(--green);border-color:var(--good-border)}
+.comp-item{padding:9px 16px;font-size:13px;color:var(--ink-2);border-bottom:1px solid var(--border);line-height:1.45}
+.comp-item:last-child{border-bottom:none}
+.weak .comp-item{color:var(--bad);font-style:italic}
+.strong .comp-item{color:var(--ink-2)}
+
+.flow{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh-md);margin:22px 0}
+.flow-head{background:var(--navy);color:#fff;padding:12px 20px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+.flow-row{display:grid;grid-template-columns:180px 1fr;border-bottom:1px solid var(--border)}
+.flow-row:last-child{border-bottom:none}
+.flow-key{background:var(--surface-2);border-right:1px solid var(--border);padding:12px 15px;font-size:11px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+.flow-val{padding:12px 16px;font-size:13.5px;color:var(--ink-2);line-height:1.55}
+
+.collapse{margin:18px 0;border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;background:var(--surface);box-shadow:var(--sh)}
+.coll-head{display:flex;align-items:center;gap:12px;padding:16px 20px;background:var(--surface-2);cursor:pointer;user-select:none}
+.coll-num{width:28px;height:28px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.coll-title{font-size:15px;font-weight:700;color:var(--ink);line-height:1.35;flex:1}
+.coll-toggle{font-size:18px;color:var(--muted);transition:var(--t)}
+.coll-head.open .coll-toggle{transform:rotate(45deg);color:var(--accent)}
+.coll-body{display:none;padding:22px}
+.coll-body.open{display:block}
+.mini-list{list-style:none;margin:10px 0}
+.mini-list li{position:relative;padding:8px 0 8px 18px;border-bottom:1px solid var(--border);font-size:13.5px;color:var(--ink-2);line-height:1.5}
+.mini-list li:last-child{border-bottom:none}
+.mini-list li:before{content:"";position:absolute;left:3px;top:17px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.checkgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:20px 0}
+.check{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--navy);border-radius:var(--r);padding:12px 15px;font-size:13.2px;color:var(--ink-2);line-height:1.5}
+.gloss{margin:20px 0}
+.gloss-item{border-bottom:1px solid var(--border)}
+.gloss-item:first-child{border-top:1px solid var(--border)}
+.gloss-q{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:12px 4px;font-size:14px;font-weight:700;color:var(--ink)}
+.gloss-q span{color:var(--muted);font-size:18px;transition:var(--t)}
+.gloss-item.open .gloss-q span{transform:rotate(45deg);color:var(--accent)}
+.gloss-a{display:none;padding:0 4px 13px;font-size:13.5px;color:var(--ink-2);line-height:1.6}
+.gloss-item.open .gloss-a{display:block}
+.final{background:var(--navy);border-radius:var(--rl);padding:30px 34px;color:#fff;position:relative;overflow:hidden;box-shadow:var(--sh-md);margin:26px 0}
+.final:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 55% 60% at 92% 8%,rgba(42,114,81,.2) 0%,transparent 55%),radial-gradient(ellipse 50% 55% at 8% 90%,rgba(199,75,44,.16) 0%,transparent 55%)}
+.final > *{position:relative;z-index:1}
+.final h2{font-family:Georgia,serif;font-weight:400;line-height:1.25;font-size:clamp(20px,3vw,30px);margin-bottom:16px}
+.final p{color:rgba(255,255,255,.74)}
+.footer{padding:26px 24px 42px;text-align:center;background:#14121E;color:rgba(255,255,255,.45);font-size:12px;letter-spacing:.05em;text-transform:uppercase}
+
+@media(max-width:900px){.hero-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:800px){
+  .grid-4{grid-template-columns:repeat(2,1fr)}.grid-3,.grid-2,.checkgrid{grid-template-columns:1fr}
+  .journey-row{grid-template-columns:1fr}.jr-time{height:auto}.jr-desc{border-left:none;border-top:1px solid var(--border)}
+  .flow-row{grid-template-columns:1fr}.flow-key{border-right:none;border-bottom:1px solid var(--border)}
+  .compare{grid-template-columns:1fr}.comp-col:first-child{border-right:none;border-bottom:1px solid var(--border)}
+}
+@media(max-width:560px){
+  .topnav{padding:0 14px}.nav-pill{display:none}.hero{padding:92px 20px 60px}section{padding:64px 20px}
+  .hero-grid{grid-template-columns:1fr}.coll-body{padding:18px}.final{padding:24px 22px}
+}
+@media print{
+  .progress,.topnav{display:none}body{background:#fff}
+  section,.hero{min-height:auto;padding:36px 20px}.collapse .coll-body,.gloss-a{display:block}.hero{background:var(--navy)}
+}
+</style>
+</head>
+
+<body>
+<div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+
+<nav class="topnav">
+  <div class="brand"><strong>Day 6</strong> · Student Handout</div>
+  <div class="nav-pill">Capstone Delivery + Portfolio Readiness</div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap hero-inner">
+    <div class="eyebrow">Day 6 · Capstone Delivery</div>
+    <h1 class="hero-title">You built the work.<br><em>Now defend the story.</em></h1>
+    <p class="hero-sub">Day 6 is the final capstone day. The goal is not to learn a new tool. The goal is to package, demonstrate, explain, and defend the project you built across the program.</p>
+
+    <div class="carry">
+      <div class="carry-label">Carried forward from Days 1-5</div>
+      <p>Your capstone should connect the full journey: requirement framing, delivery planning, workflow structure, AI-assisted engineering, collaboration artifacts, debugging evidence, deliverable quality, and final demo readiness.</p>
+    </div>
+
+    <div class="hero-grid">
+      <div class="hero-card"><div class="hc-label">01</div><div class="hc-name">Package</div></div>
+      <div class="hero-card"><div class="hc-label">02</div><div class="hc-name">Demo</div></div>
+      <div class="hero-card"><div class="hc-label">03</div><div class="hc-name">Defend</div></div>
+      <div class="hero-card"><div class="hc-label">04</div><div class="hc-name">Feedback</div></div>
+      <div class="hero-card"><div class="hc-label">05</div><div class="hc-name">Portfolio</div></div>
+      <div class="hero-card"><div class="hc-label">06</div><div class="hc-name">Next Steps</div></div>
+    </div>
+  </div>
+</header>
+
+<section class="white" id="about">
+  <div class="wrap">
+    <div class="label">1 · What this day is about</div>
+    <h2 class="title">Day 6 is not a loose presentation day.</h2>
+    <p class="sub">This day is about proving that the project can be understood by someone who was not sitting beside you while you built it. A strong capstone is clear, evidence-backed, honest about limitations, and easy to review after the live session ends.</p>
+
+    <div class="callout navy">
+      <p><strong>Core idea:</strong> A project is not complete because work was done. It is complete when the team can explain, demonstrate, defend, package, and carry the work forward.</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="card top-navy">
+        <span class="tag navy">Before Day 6</span>
+        <h3>Artifacts exist</h3>
+        <p>You have outputs from earlier days: plans, boards, code, tests, AI notes, reviews, fixes, and documentation.</p>
+      </div>
+      <div class="card top-accent">
+        <span class="tag accent">During Day 6</span>
+        <h3>Artifacts become a story</h3>
+        <p>You connect the work into one delivery narrative: problem, decisions, implementation, evidence, limits, and next steps.</p>
+      </div>
+      <div class="card top-green">
+        <span class="tag green">After Day 6</span>
+        <h3>Project becomes reviewable</h3>
+        <p>The package should be understandable, accessible, and useful for portfolio, interview, or evaluator review.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="warm" id="journey">
+  <div class="wrap">
+    <div class="label">2 · Day journey</div>
+    <h2 class="title">The capstone flow.</h2>
+    <p class="sub">Day 6 is intentionally lighter on new content and heavier on demonstration, review, feedback, and final packaging.</p>
+
+    <div class="journey">
+      <div class="journey-row">
+        <div class="jr-time">Step 1</div>
+        <div class="jr-title">Final package check</div>
+        <div class="jr-desc">Make sure repo, board, docs, tests, links, recordings, and evidence are organized and accessible.</div>
+      </div>
+      <div class="journey-row">
+        <div class="jr-time">Step 2</div>
+        <div class="jr-title">Demo protocol</div>
+        <div class="jr-desc">Present the project as a delivery story, not a tool tour. Start with the problem and end with evidence and next steps.</div>
+      </div>
+      <div class="journey-row">
+        <div class="jr-time">Step 3</div>
+        <div class="jr-title">Team presentations</div>
+        <div class="jr-desc">Run live demos or recorded walkthroughs with clear timing and visible explanation of what was built.</div>
+      </div>
+      <div class="journey-row">
+        <div class="jr-time">Step 4</div>
+        <div class="jr-title">Review and Q&A</div>
+        <div class="jr-desc">Answer questions using artifacts and evidence, not vague confidence or defensive explanations.</div>
+      </div>
+      <div class="journey-row">
+        <div class="jr-time">Step 5</div>
+        <div class="jr-title">Portfolio bridge</div>
+        <div class="jr-desc">Turn the project into a short professional story for portfolio, interview, or final evaluator review.</div>
+      </div>
+      <div class="journey-row">
+        <div class="jr-time">Step 6</div>
+        <div class="jr-title">Staying current</div>
+        <div class="jr-desc">Choose habits for keeping tools, workflow assumptions, and project evidence up to date after the program.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="white" id="rules">
+  <div class="wrap">
+    <div class="label">3 · Core rules</div>
+    <h2 class="title">Rules to remember before presenting.</h2>
+    <p class="sub">These protect the demo from becoming only screen sharing or slide reading.</p>
+
+    <div class="grid-4">
+      <div class="card top-navy">
+        <span class="tag navy">Story</span>
+        <h3>Demo the delivery path</h3>
+        <p>Show how the project moved from requirement to plan to implementation to evidence.</p>
+      </div>
+      <div class="card top-blue">
+        <span class="tag blue">Evidence</span>
+        <h3>Prove, do not only claim</h3>
+        <p>Use tests, logs, screenshots, board state, PRs, docs, or workflow evidence.</p>
+      </div>
+      <div class="card top-accent">
+        <span class="tag accent">Limits</span>
+        <h3>Name limitations honestly</h3>
+        <p>Incomplete work is not automatically failure if the limit, risk, and next action are clear.</p>
+      </div>
+      <div class="card top-green">
+        <span class="tag green">Package</span>
+        <h3>Make it reviewable later</h3>
+        <p>Someone should understand the project after the session without needing you beside them.</p>
+      </div>
+    </div>
+
+    <div class="compare">
+      <div class="comp-col weak">
+        <div class="comp-head">Weak final demo</div>
+        <div class="comp-item">Starts with tool screens before explaining the problem.</div>
+        <div class="comp-item">Shows many pages but no decision trail.</div>
+        <div class="comp-item">Says “it works” without showing evidence.</div>
+        <div class="comp-item">Hides blockers, tradeoffs, or unfinished parts.</div>
+        <div class="comp-item">Leaves links private or files scattered.</div>
+      </div>
+      <div class="comp-col strong">
+        <div class="comp-head">Stronger final demo</div>
+        <div class="comp-item">Starts with the problem and project goal.</div>
+        <div class="comp-item">Shows the decisions that shaped the output.</div>
+        <div class="comp-item">Uses artifacts to prove correctness and readiness.</div>
+        <div class="comp-item">Names limits and next improvements professionally.</div>
+        <div class="comp-item">Submits a clean package a reviewer can open later.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="warm" id="reference">
+  <div class="wrap">
+    <div class="label">4 · Section reference</div>
+    <h2 class="title">Use this as your Day 6 checklist.</h2>
+    <p class="sub">Open each block to review the capstone expectation, decision rule, and what to avoid.</p>
+
+    <div class="collapse">
+      <div class="coll-head open" onclick="toggleCollapse(this)">
+        <div class="coll-num">1</div><div class="coll-title">Final capstone package</div><div class="coll-toggle">+</div>
+      </div>
+      <div class="coll-body open">
+        <p>Your package is the reviewer’s path through your work after the live demo ends. It should not feel like a messy folder of unrelated outputs.</p>
+
+        <div class="flow">
+          <div class="flow-head">Minimum package contents</div>
+          <div class="flow-row"><div class="flow-key">Project repo</div><div class="flow-val">Working code or implementation files, with clear structure and a readable README.</div></div>
+          <div class="flow-row"><div class="flow-key">Docs</div><div class="flow-val">Setup steps, usage notes, project decisions, assumptions, limitations, and next actions.</div></div>
+          <div class="flow-row"><div class="flow-key">Tests / evidence</div><div class="flow-val">Proof that the project was checked: tests, logs, screenshots, recording, manual verification, or review notes.</div></div>
+          <div class="flow-row"><div class="flow-key">Board / plan</div><div class="flow-val">The planning layer that shows backlog, workflow, priorities, blockers, and delivery reasoning.</div></div>
+          <div class="flow-row"><div class="flow-key">AI / debug appendix</div><div class="flow-val">Where relevant: prompt logs, AI verification, debugging notes, RCA, or rollback thinking.</div></div>
+        </div>
+
+        <div class="callout blue"><strong>Rule:</strong> the reviewer should not need to guess where the important evidence lives.</div>
+      </div>
+    </div>
+
+    <div class="collapse">
+      <div class="coll-head" onclick="toggleCollapse(this)">
+        <div class="coll-num">2</div><div class="coll-title">Demo protocol</div><div class="coll-toggle">+</div>
+      </div>
+      <div class="coll-body">
+        <p>A demo is not a tour of every file or screen. It is a short argument that your work is understandable, usable, and evidence-backed.</p>
+
+        <div class="flow">
+          <div class="flow-head">Recommended demo order</div>
+          <div class="flow-row"><div class="flow-key">1 · Problem</div><div class="flow-val">What problem did the project solve or improve?</div></div>
+          <div class="flow-row"><div class="flow-key">2 · Scope</div><div class="flow-val">What did you build, and what did you deliberately leave out?</div></div>
+          <div class="flow-row"><div class="flow-key">3 · Decisions</div><div class="flow-val">Which technical, workflow, or product decisions shaped the project?</div></div>
+          <div class="flow-row"><div class="flow-key">4 · Evidence</div><div class="flow-val">What proves the output is correct, usable, or honestly bounded?</div></div>
+          <div class="flow-row"><div class="flow-key">5 · Next</div><div class="flow-val">What would you improve in the next sprint or next version?</div></div>
+        </div>
+
+        <div class="callout amber"><strong>Memory line:</strong> a strong demo has a beginning, a decision trail, evidence, and a next step.</div>
+      </div>
+    </div>
+
+    <div class="collapse">
+      <div class="coll-head" onclick="toggleCollapse(this)">
+        <div class="coll-num">3</div><div class="coll-title">Evidence map</div><div class="coll-toggle">+</div>
+      </div>
+      <div class="coll-body">
+        <p>Evidence is what makes the project easier to trust. Use evidence to support your claims instead of relying on confidence.</p>
+
+        <div class="grid-3">
+          <div class="card top-navy"><span class="tag navy">Planning evidence</span><p>Requirement framing, scope boundaries, non-goals, backlog, sprint plan, blockers, and workflow rules.</p></div>
+          <div class="card top-blue"><span class="tag blue">Build evidence</span><p>Repo structure, commits, PRs, code review notes, implemented features, and release notes.</p></div>
+          <div class="card top-green"><span class="tag green">Quality evidence</span><p>Tests, logs, screenshots, debugging notes, RCA, validation results, and known limitations.</p></div>
+        </div>
+
+        <div class="compare">
+          <div class="comp-col weak">
+            <div class="comp-head">Weak evidence</div>
+            <div class="comp-item">“We tested it.”</div>
+            <div class="comp-item">“The AI helped us.”</div>
+            <div class="comp-item">“The dashboard looks done.”</div>
+            <div class="comp-item">“The bug is fixed now.”</div>
+          </div>
+          <div class="comp-col strong">
+            <div class="comp-head">Stronger evidence</div>
+            <div class="comp-item">Test results or a reproducible check are shown.</div>
+            <div class="comp-item">AI output is paired with diff, review, or verification notes.</div>
+            <div class="comp-item">The dashboard answers a clear follow-up question.</div>
+            <div class="comp-item">The bug has repro steps, root cause, fix, and regression test.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="collapse">
+      <div class="coll-head" onclick="toggleCollapse(this)">
+        <div class="coll-num">4</div><div class="coll-title">Q&A and defense</div><div class="coll-toggle">+</div>
+      </div>
+      <div class="coll-body">
+        <p>Q&A is not an attack. It is a professional review moment. Answer by connecting your decision to evidence.</p>
+
+        <ul class="mini-list">
+          <li>Start with the answer, not a long explanation.</li>
+          <li>Point to the artifact that proves or supports the answer.</li>
+          <li>Name uncertainty clearly when something is not fully solved.</li>
+          <li>Explain the next action if the reviewer finds a real gap.</li>
+        </ul>
+
+        <div class="flow">
+          <div class="flow-head">Strong answer pattern</div>
+          <div class="flow-row"><div class="flow-key">Claim</div><div class="flow-val">State the answer clearly.</div></div>
+          <div class="flow-row"><div class="flow-key">Evidence</div><div class="flow-val">Show where the artifact, test, board, or note supports the answer.</div></div>
+          <div class="flow-row"><div class="flow-key">Limit</div><div class="flow-val">Name what is still incomplete or risky, if relevant.</div></div>
+          <div class="flow-row"><div class="flow-key">Next move</div><div class="flow-val">Explain what you would improve next.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="collapse">
+      <div class="coll-head" onclick="toggleCollapse(this)">
+        <div class="coll-num">5</div><div class="coll-title">Feedback and review</div><div class="coll-toggle">+</div>
+      </div>
+      <div class="coll-body">
+        <p>Feedback should make the next action clearer. Vague praise and vague criticism are both weak.</p>
+
+        <div class="compare">
+          <div class="comp-col weak">
+            <div class="comp-head">Weak feedback</div>
+            <div class="comp-item">“Good job.”</div>
+            <div class="comp-item">“The demo was confusing.”</div>
+            <div class="comp-item">“You need more details.”</div>
+          </div>
+          <div class="comp-col strong">
+            <div class="comp-head">Stronger feedback</div>
+            <div class="comp-item">“The repo setup is clear, but the README needs test commands.”</div>
+            <div class="comp-item">“The demo showed the feature, but not the validation evidence.”</div>
+            <div class="comp-item">“The board is useful, but blocked items need named reasons.”</div>
+          </div>
+        </div>
+
+        <div class="callout green"><strong>Rule:</strong> useful feedback names the artifact, the issue, and the improvement.</div>
+      </div>
+    </div>
+
+    <div class="collapse">
+      <div class="coll-head" onclick="toggleCollapse(this)">
+        <div class="coll-num">6</div><div class="coll-title">Portfolio and interview story</div><div class="coll-toggle">+</div>
+      </div>
+      <div class="coll-body">
+        <p>Your capstone becomes more useful when you can explain it in 3-4 clear sentences without exaggerating.</p>
+
+        <div class="flow">
+          <div class="flow-head">Project story template</div>
+          <div class="flow-row"><div class="flow-key">Problem</div><div class="flow-val">What workflow, product, or engineering problem did the project address?</div></div>
+          <div class="flow-row"><div class="flow-key">Action</div><div class="flow-val">What did you build, organize, automate, test, or document?</div></div>
+          <div class="flow-row"><div class="flow-key">Evidence</div><div class="flow-val">What proof shows the project is reviewable or usable?</div></div>
+          <div class="flow-row"><div class="flow-key">Learning</div><div class="flow-val">What tradeoff, limitation, or next improvement can you explain professionally?</div></div>
+        </div>
+
+        <div class="callout amber"><strong>Avoid:</strong> “I used many tools.” Say what problem those tools helped you solve and what evidence shows the work is real.</div>
+      </div>
+    </div>
+
+    <div class="collapse">
+      <div class="coll-head" onclick="toggleCollapse(this)">
+        <div class="coll-num">7</div><div class="coll-title">Staying current after the program</div><div class="coll-toggle">+</div>
+      </div>
+      <div class="coll-body">
+        <p>Staying current does not mean chasing every new tool. It means knowing how to update your assumptions when tools, workflows, and best practices change.</p>
+
+        <ul class="mini-list">
+          <li>Follow official docs, release notes, changelogs, and trusted product updates.</li>
+          <li>Re-test old tool workflows before teaching them, using them, or building work around them.</li>
+          <li>Keep a small learning log: what changed, why it matters, and what you will try next.</li>
+          <li>Update your portfolio package when the project improves or the evidence becomes stronger.</li>
+        </ul>
+
+        <div class="callout blue"><strong>Memory line:</strong> professional growth is not only learning new tools; it is keeping your judgment current.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="white" id="cheatsheet">
+  <div class="wrap">
+    <div class="label">5 · Quick reference</div>
+    <h2 class="title">Capstone cheat sheet.</h2>
+    <p class="sub">Use this before submitting or presenting.</p>
+
+    <div class="checkgrid">
+      <div class="check"><strong>Problem:</strong> The audience understands what pain or workflow issue the project addresses.</div>
+      <div class="check"><strong>Scope:</strong> The audience can tell what was included, excluded, delayed, or still unresolved.</div>
+      <div class="check"><strong>Delivery path:</strong> The project connects back to requirement, plan, execution, build, review, and quality evidence.</div>
+      <div class="check"><strong>Artifacts:</strong> Links, files, docs, screenshots, repo, board, and recordings are accessible and organized.</div>
+      <div class="check"><strong>Evidence:</strong> Claims are supported by tests, checks, screenshots, logs, review notes, or demo behavior.</div>
+      <div class="check"><strong>Limitations:</strong> Gaps and risks are named professionally with next actions.</div>
+      <div class="check"><strong>Q&A:</strong> Answers connect claim → evidence → limitation → next move.</div>
+      <div class="check"><strong>Portfolio:</strong> The project can be explained in a short professional story.</div>
+    </div>
+
+    <div class="final">
+      <h2>The final Day 6 move.</h2>
+      <p>Do not only show that work exists. Show that the work can be understood, trusted, reviewed, and improved. That is what turns a class project into a professional delivery artifact.</p>
+    </div>
+  </div>
+</section>
+
+<section class="warm" id="glossary">
+  <div class="wrap">
+    <div class="label">6 · Glossary</div>
+    <h2 class="title">Key terms — click to expand.</h2>
+    <div class="gloss" id="glossaryList"></div>
+  </div>
+</section>
+
+<section class="white" id="selfcheck">
+  <div class="wrap">
+    <div class="label">7 · Self-check</div>
+    <h2 class="title">Can you say yes to each of these?</h2>
+    <p class="sub">Click each item when you can answer it confidently.</p>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:8px;"><span id="checkCount">0</span> / <span id="checkTotal">0</span> checked — <span id="checkMsg">keep going</span></div>
+    <div class="checkgrid" id="selfCheckList"></div>
+  </div>
+</section>
+
+<footer class="footer">Day 6 · Capstone Delivery + Portfolio Readiness · Student Handout</footer>
+
+<script>
+function toggleCollapse(head){
+  head.classList.toggle('open');
+  const body = head.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+const glossary = [
+  ["Capstone","The final project demonstration that shows the full learning journey through one connected delivery story."],
+  ["Delivery story","The explanation of how the work moved from problem to decision, implementation, evidence, and next step."],
+  ["Artifact","Any concrete output that supports the project: repo, board, document, screenshot, recording, test result, or review note."],
+  ["Evidence","Proof that supports a claim about the project: tests, logs, screenshots, demo behavior, PRs, board state, or validation notes."],
+  ["Demo protocol","The expected order and style for presenting the project clearly and professionally."],
+  ["Q&A defense","Answering reviewer questions using evidence and clear reasoning rather than vague confidence."],
+  ["Limitation","Something incomplete, risky, or intentionally out of scope that the team can name honestly."],
+  ["Portfolio story","A short professional explanation of the project: problem, action, evidence, and learning."],
+  ["Reviewer-ready","A state where someone can open the submitted package and understand the work without needing extra explanation."],
+  ["Next action","The specific improvement, fix, investigation, or decision that should happen after the current version."]
+];
+
+const glossContainer = document.getElementById('glossaryList');
+glossary.forEach(([term,def])=>{
+  const div=document.createElement('div');
+  div.className='gloss-item';
+  div.innerHTML=`<div class="gloss-q" onclick="this.parentElement.classList.toggle('open')">${term}<span>+</span></div><div class="gloss-a">${def}</div>`;
+  glossContainer.appendChild(div);
+});
+
+const checks = [
+  "I can explain the project problem before showing any screens.",
+  "I can connect the final output back to the work from earlier days.",
+  "I can show which artifacts prove the project is reviewable.",
+  "I can explain what decisions shaped the project.",
+  "I can show evidence instead of only saying the work is done.",
+  "I can name what is incomplete, risky, or out of scope.",
+  "I can answer a reviewer question using claim, evidence, limitation, and next move.",
+  "I can explain the project as a portfolio or interview story.",
+  "My submitted links and files are organized and accessible.",
+  "I know what the next improvement would be after this version."
+];
+
+const selfList = document.getElementById('selfCheckList');
+const count = document.getElementById('checkCount');
+const total = document.getElementById('checkTotal');
+const msg = document.getElementById('checkMsg');
+total.textContent = checks.length;
+
+checks.forEach(text=>{
+  const div=document.createElement('div');
+  div.className='check';
+  div.style.cursor='pointer';
+  div.innerHTML=text;
+  div.addEventListener('click',()=>{
+    div.classList.toggle('selected');
+    div.style.borderLeftColor = div.classList.contains('selected') ? 'var(--green)' : 'var(--navy)';
+    div.style.background = div.classList.contains('selected') ? 'var(--good-bg)' : 'var(--surface)';
+    const n=document.querySelectorAll('#selfCheckList .selected').length;
+    count.textContent=n;
+    msg.textContent = n===checks.length ? 'ready' : n>=Math.ceil(checks.length*.7) ? 'almost there' : 'keep going';
+  });
+  selfList.appendChild(div);
+});
+
+const fill=document.getElementById('progressFill');
+window.addEventListener('scroll',()=>{
+  const max=document.documentElement.scrollHeight-window.innerHeight;
+  const pct=max>0 ? (window.scrollY/max)*100 : 0;
+  fill.style.width=pct+'%';
+});
+</script>
+</body>
+</html>
