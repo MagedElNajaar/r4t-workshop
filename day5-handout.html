@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 5 · AI-Assisted Marketing Production · Student Handout</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg: #F7F4EF;
+  --surface: #FFFFFF;
+  --surface-2: #EFECE5;
+  --ink: #1A1616;
+  --ink-2: #423D3D;
+  --muted: #877E7E;
+  --wine: #7B1D1D;
+  --wine-mid: #A02828;
+  --accent: #C8401E;
+  --teal: #1A6B5A;
+  --gold: #9A6B00;
+  --blue: #1A4A8A;
+  --border: #DDD8CF;
+  --border-2: #C9C3B8;
+  --r: 10px;
+  --rl: 16px;
+  --sh: 0 1px 3px rgba(0,0,0,0.05), 0 4px 14px rgba(0,0,0,0.04);
+  --sh-md: 0 2px 8px rgba(0,0,0,0.07), 0 12px 36px rgba(0,0,0,0.06);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+  height: 54px;
+  background: rgba(28, 22, 22, 0.97);
+  backdrop-filter: blur(14px);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.tb-brand { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.38); }
+.tb-brand strong { color: rgba(255,255,255,.72); font-weight: 600; }
+.tb-nav { display: flex; gap: 4px; }
+.tb-link {
+  font-size: 11px; letter-spacing: .06em; text-transform: uppercase;
+  color: rgba(255,255,255,.35); padding: 5px 10px; border-radius: 6px;
+  text-decoration: none; transition: all .18s; font-weight: 500;
+}
+.tb-link:hover { color: rgba(255,255,255,.75); background: rgba(255,255,255,.07); }
+.tb-link.active { color: #fff; background: rgba(255,255,255,.1); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  background: var(--wine);
+  display: flex; align-items: center;
+  padding: 100px 28px 80px;
+  position: relative; overflow: hidden;
+  scroll-margin-top: 54px;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 65% 70% at 5% 75%, rgba(200,64,30,.28) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 55% at 92% 12%, rgba(26,107,90,.16) 0%, transparent 55%),
+    radial-gradient(ellipse 90% 45% at 50% 108%, rgba(0,0,0,.4) 0%, transparent 60%);
+}
+.hero::after {
+  content: 'DAY 5';
+  position: absolute; right: -20px; bottom: -20px;
+  font-family: 'Playfair Display', serif;
+  font-size: 260px; font-weight: 700; line-height: 1;
+  color: rgba(255,255,255,.025);
+  pointer-events: none; user-select: none;
+}
+.hero-inner { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; width: 100%; }
+
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12);
+  border-radius: 100px; padding: 6px 16px; margin-bottom: 30px;
+}
+.hero-tag span {
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+  color: rgba(255,255,255,.55); font-weight: 600;
+}
+.pulse-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #FF8C6B; animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.4;transform:scale(.75);} }
+
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 5.5vw, 62px);
+  color: #fff; line-height: 1.08;
+  letter-spacing: -.02em;
+  margin-bottom: 20px; max-width: 760px;
+}
+.hero h1 em { font-style: italic; color: rgba(255,255,255,.62); }
+.hero-sub {
+  font-size: clamp(15px, 2vw, 18px);
+  color: rgba(255,255,255,.48); max-width: 520px;
+  line-height: 1.65; margin-bottom: 44px;
+}
+
+.hero-deliverables {
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: var(--rl); padding: 22px 26px;
+  max-width: 660px;
+}
+.hd-label {
+  font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+  color: rgba(255,255,255,.32); font-weight: 700; margin-bottom: 14px;
+}
+.hd-items { display: flex; flex-direction: column; gap: 10px; }
+.hd-item { display: flex; align-items: flex-start; gap: 14px; }
+.hd-num {
+  width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+  background: var(--accent); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; margin-top: 2px;
+}
+.hd-text { font-size: 14px; color: rgba(255,255,255,.72); line-height: 1.5; }
+.hd-text strong { color: #fff; }
+
+/* ── META CARDS ── */
+.hero-meta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.meta-card {
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1);
+  border-radius: var(--r); padding: 14px 18px;
+}
+.mc-label { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.3); font-weight: 700; margin-bottom: 6px; }
+.mc-val { font-size: 14px; font-weight: 600; color: rgba(255,255,255,.78); }
+.mc-val span { color: #FF8C6B; }
+
+/* ── LAYOUT ── */
+section { scroll-margin-top: 54px; padding: 80px 28px; }
+.sec-warm { background: var(--bg); }
+.sec-white { background: var(--surface); }
+.wrap { max-width: 960px; margin: 0 auto; }
+
+/* ── DIVIDER STRIP ── */
+.divider-strip {
+  background: var(--wine); padding: 72px 28px;
+  position: relative; overflow: hidden; scroll-margin-top: 54px;
+}
+.divider-strip::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 65% 75% at 90% 15%, rgba(26,107,90,.14) 0%, transparent 60%),
+              radial-gradient(ellipse 55% 60% at 5% 85%, rgba(200,64,30,.18) 0%, transparent 55%);
+}
+.divider-strip .wrap { position: relative; z-index: 1; }
+.strip-eyebrow {
+  font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
+  color: rgba(255,255,255,.35); font-weight: 700; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.strip-eyebrow::before { content:''; display:block; width:24px; height:1px; background:rgba(255,255,255,.22); }
+.divider-strip h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(26px, 4vw, 44px);
+  color: #fff; line-height: 1.12; letter-spacing: -.018em;
+  margin-bottom: 12px; max-width: 620px;
+}
+.divider-strip p { font-size: 16px; color: rgba(255,255,255,.46); max-width: 500px; line-height: 1.65; }
+.strip-pills { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
+.strip-pill {
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1);
+  border-radius: 100px; padding: 5px 14px;
+  font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+  color: rgba(255,255,255,.45); font-weight: 600;
+}
+
+/* ── TYPOGRAPHY ── */
+.sec-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(24px, 3.5vw, 40px);
+  line-height: 1.15; letter-spacing: -.015em;
+  margin-bottom: 14px; color: var(--wine);
+}
+.sec-sub { font-size: 16px; color: var(--muted); max-width: 640px; line-height: 1.65; margin-bottom: 32px; }
+.blk-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); font-weight: 600; margin-bottom: 18px;
+}
+.blk-num {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--wine); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; flex-shrink: 0;
+}
+
+/* ── OUTLINE LIST ── */
+.outline-list { display: flex; flex-direction: column; gap: 6px; margin: 24px 0; }
+.outline-item {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 14px 18px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); box-shadow: var(--sh);
+  transition: all .2s;
+}
+.outline-item:hover { border-color: var(--wine); transform: translateX(3px); }
+.ol-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--wine); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+}
+.ol-title { font-size: 15px; font-weight: 600; color: var(--ink); line-height: 1.35; }
+.ol-time {
+  display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .08em;
+  color: var(--muted); margin-top: 4px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ── SECTION BLOCKS ── */
+.section-block {
+  background: var(--surface); border: 1px solid var(--border);
+  border-left: 4px solid var(--wine);
+  border-radius: var(--r); padding: 26px 28px;
+  box-shadow: var(--sh); margin-bottom: 18px;
+}
+.section-block.teal { border-left-color: var(--teal); }
+.section-block.gold { border-left-color: var(--gold); }
+.section-block.blue { border-left-color: var(--blue); }
+
+.sb-head {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 16px; cursor: pointer; user-select: none;
+}
+.sb-icon {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--wine); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 15px; flex-shrink: 0; font-weight: 700;
+}
+.section-block.teal .sb-icon { background: var(--teal); }
+.section-block.gold .sb-icon { background: var(--gold); }
+.section-block.blue .sb-icon { background: var(--blue); }
+.sb-title-wrap { flex: 1; }
+.sb-title { font-size: 17px; font-weight: 700; color: var(--ink); line-height: 1.3; }
+.sb-time { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-family: 'JetBrains Mono', monospace; margin-top: 3px; }
+.sb-toggle {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--surface-2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: var(--muted); transition: all .2s; flex-shrink: 0;
+}
+.section-block.open .sb-toggle { transform: rotate(45deg); background: var(--wine); color: #fff; border-color: var(--wine); }
+.section-block.teal.open .sb-toggle { background: var(--teal); border-color: var(--teal); }
+.section-block.gold.open .sb-toggle { background: var(--gold); border-color: var(--gold); }
+.section-block.blue.open .sb-toggle { background: var(--blue); border-color: var(--blue); }
+
+.sb-body { display: none; border-top: 1px solid var(--border); padding-top: 18px; }
+.section-block.open .sb-body { display: block; }
+
+.sb-flow { display: flex; flex-direction: column; gap: 10px; }
+.sb-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 14.5px; line-height: 1.55; color: var(--ink-2);
+}
+.sb-row::before { content: '→'; color: var(--muted); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+.sb-row.end-row::before { content: '✓'; color: var(--teal); }
+.sb-row strong { color: var(--ink); font-weight: 600; }
+
+.sb-note {
+  margin-top: 16px; padding: 14px 16px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; font-size: 13px; color: var(--muted);
+  line-height: 1.55; font-style: italic;
+}
+
+/* ── TOOLTIPS ── */
+[data-tip] {
+  position: relative; cursor: help;
+  border-bottom: 1.5px dashed var(--muted); display: inline;
+}
+[data-tip]:hover::after {
+  content: attr(data-tip);
+  position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+  white-space: pre-wrap; max-width: 260px; width: max-content;
+  background: var(--wine); color: #fff;
+  font-size: 12.5px; line-height: 1.5;
+  padding: 8px 12px; border-radius: 8px;
+  box-shadow: 0 6px 24px rgba(0,0,0,.2);
+  z-index: 50; pointer-events: none; margin-bottom: 6px;
+  font-style: normal;
+}
+[data-tip]:hover::before {
+  content: ''; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+  border: 5px solid transparent; border-top-color: var(--wine);
+  z-index: 50; pointer-events: none;
+}
+
+/* ── REVEAL CARDS ── */
+.reveal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin: 20px 0; }
+.reveal-card {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: var(--r); padding: 18px;
+  cursor: pointer; box-shadow: var(--sh); transition: all .2s;
+}
+.reveal-card:hover { border-color: var(--wine); box-shadow: var(--sh-md); transform: translateY(-2px); }
+.reveal-card.open { border-color: var(--accent); cursor: default; transform: none; }
+.rc-head { font-size: 14.5px; font-weight: 600; color: var(--ink); line-height: 1.4; margin-bottom: 8px; }
+.rc-hint { font-size: 12px; color: var(--muted); font-style: italic; }
+.reveal-card.open .rc-hint { display: none; }
+.rc-body { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 13.5px; color: var(--ink-2); line-height: 1.6; }
+.reveal-card.open .rc-body { display: block; }
+
+/* ── MESSAGE FRAMEWORK VISUAL ── */
+.msg-framework {
+  margin: 24px 0;
+  display: flex; flex-direction: column; gap: 0;
+  border-radius: var(--rl); overflow: hidden;
+  border: 1px solid var(--border); box-shadow: var(--sh-md);
+}
+.mf-row {
+  display: flex; align-items: stretch;
+  border-bottom: 1px solid var(--border);
+}
+.mf-row:last-child { border-bottom: none; }
+.mf-label {
+  width: 160px; flex-shrink: 0;
+  background: var(--wine); color: #fff;
+  padding: 16px 18px;
+  font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  display: flex; align-items: center;
+}
+.mf-row:nth-child(even) .mf-label { background: var(--wine-mid); }
+.mf-body {
+  flex: 1; background: var(--surface);
+  padding: 16px 20px;
+  font-size: 14px; color: var(--ink-2); line-height: 1.55;
+}
+.mf-body strong { color: var(--ink); font-weight: 600; }
+
+/* ── TABS ── */
+.tab-wrap { margin: 24px 0; }
+.tab-buttons { display: flex; gap: 4px; border-bottom: 2px solid var(--border); }
+.tab-btn {
+  padding: 9px 16px; font-size: 13px; font-weight: 600;
+  color: var(--muted); border: none; background: transparent;
+  cursor: pointer; border-bottom: 2px solid transparent;
+  margin-bottom: -2px; transition: all .2s; border-radius: 6px 6px 0 0;
+}
+.tab-btn:hover { color: var(--wine); background: var(--surface-2); }
+.tab-btn.active { color: var(--wine); border-bottom-color: var(--wine); background: var(--surface); }
+.tab-panel { display: none; padding: 22px; background: var(--surface); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--r) var(--r); }
+.tab-panel.active { display: block; }
+.tab-panel h4 { font-size: 15px; font-weight: 700; color: var(--wine); margin-bottom: 10px; }
+.tab-panel p { font-size: 14px; color: var(--ink-2); line-height: 1.6; margin-bottom: 10px; }
+.tab-panel ul { margin-left: 18px; }
+.tab-panel li { font-size: 14px; color: var(--ink-2); line-height: 1.6; margin-bottom: 5px; }
+
+/* ── DELIVERABLE SYSTEM DIAGRAM ── */
+.deliverable-diagram {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+  margin: 24px 0;
+}
+@media(max-width: 600px){ .deliverable-diagram { grid-template-columns: 1fr; } }
+.dd-card {
+  border: 2px solid var(--border); border-radius: var(--r);
+  overflow: hidden; box-shadow: var(--sh);
+}
+.dd-head {
+  padding: 12px 16px; font-size: 13px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .07em;
+  color: #fff;
+}
+.dd-head.linkedin { background: var(--blue); }
+.dd-head.instagram { background: var(--accent); }
+.dd-head.rationale { background: var(--teal); }
+.dd-body { background: var(--surface); padding: 14px 16px; }
+.dd-item { font-size: 13px; color: var(--ink-2); margin-bottom: 6px; display: flex; gap: 8px; }
+.dd-item::before { content: '·'; color: var(--muted); font-weight: 700; flex-shrink: 0; }
+
+/* ── COMPARE BLOCK ── */
+.compare-block {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0; border-radius: var(--rl); overflow: hidden;
+  border: 1px solid var(--border); box-shadow: var(--sh-md); margin: 20px 0;
+}
+.cb-col { display: flex; flex-direction: column; }
+.cb-head {
+  padding: 12px 20px; font-size: 11px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  display: flex; align-items: center; gap: 8px;
+}
+.cb-head.weak { background: var(--wine); color: #fff; }
+.cb-head.weak::before { content: '✕'; font-size: 13px; }
+.cb-head.strong { background: var(--teal); color: #fff; }
+.cb-head.strong::before { content: '✓'; font-size: 13px; }
+.cb-body { background: var(--surface); padding: 18px 20px; flex: 1; }
+.cb-item { font-size: 13.5px; color: var(--ink-2); line-height: 1.55; margin-bottom: 10px; display: flex; gap: 8px; }
+.cb-item::before { content:'—'; color: var(--muted); flex-shrink: 0; }
+
+/* ── REVIEW TABLE ── */
+.review-table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+.review-table th {
+  background: var(--wine); color: #fff;
+  padding: 11px 16px; text-align: left;
+  font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+}
+.review-table th:first-child { border-radius: 8px 0 0 0; }
+.review-table th:last-child { border-radius: 0 8px 0 0; }
+.review-table td { padding: 11px 16px; font-size: 13.5px; color: var(--ink-2); border-bottom: 1px solid var(--border); line-height: 1.5; }
+.review-table tr:last-child td { border-bottom: none; }
+.review-table tr:nth-child(even) td { background: var(--bg); }
+.rv-pill {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 100px;
+}
+.rv-pill.pass { background: rgba(26,107,90,.1); color: var(--teal); }
+.rv-pill.check { background: rgba(154,107,0,.1); color: var(--gold); }
+.rv-pill.lock { background: rgba(123,29,29,.1); color: var(--wine); }
+
+/* ── PROMPT ANATOMY ── */
+.prompt-block {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px; line-height: 1.75;
+  background: var(--wine); color: rgba(255,255,255,.82);
+  border-radius: var(--rl); padding: 24px 26px; margin: 20px 0;
+}
+.pb-label {
+  font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+  color: rgba(255,255,255,.3); font-weight: 700; margin-bottom: 14px;
+  font-family: 'DM Sans', sans-serif;
+}
+.pb-line { margin-bottom: 5px; }
+.pb-line .pb-tag { color: #FFB3A0; font-weight: 500; }
+.pb-line .pb-val { color: rgba(255,255,255,.75); }
+
+/* ── CALLOUT ── */
+.callout {
+  background: var(--wine); border-radius: var(--rl);
+  padding: 22px 28px; margin: 28px 0;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(15px, 2vw, 19px);
+  color: rgba(255,255,255,.85); line-height: 1.5;
+  font-style: italic; text-align: center;
+}
+.callout em { color: rgba(255,255,255,.52); }
+
+.info-strip {
+  background: rgba(123,29,29,.06); border: 1px solid rgba(123,29,29,.14);
+  border-left: 4px solid var(--wine);
+  border-radius: var(--r); padding: 16px 20px; margin: 18px 0;
+  font-size: 14px; color: var(--wine); line-height: 1.55;
+}
+
+.try-it {
+  background: rgba(26,107,90,.06); border: 1.5px solid rgba(26,107,90,.2);
+  border-radius: var(--r); padding: 18px 20px; margin: 18px 0;
+}
+.try-it-label {
+  font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--teal); margin-bottom: 8px;
+  display: flex; align-items: center; gap: 6px;
+}
+.try-it-label::before { content: '⚡'; }
+.try-it p { font-size: 14px; color: var(--ink-2); line-height: 1.55; }
+.try-it strong { color: var(--ink); }
+
+/* ── OBJECTIVES ── */
+.obj-progress {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 16px 20px;
+  display: flex; align-items: center; gap: 16px; margin-top: 16px;
+}
+.progress-bar { flex: 1; height: 6px; background: var(--surface-2); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--teal); border-radius: 3px; transition: width .35s ease; width: 0%; }
+.progress-label { font-size: 13px; font-weight: 600; color: var(--muted); white-space: nowrap; font-family: 'JetBrains Mono', monospace; }
+
+.obj-list { display: flex; flex-direction: column; gap: 8px; margin: 24px 0; }
+.obj-item {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 14px 18px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); box-shadow: var(--sh);
+  transition: all .2s; cursor: default;
+}
+.obj-item:hover { border-color: var(--teal); background: rgba(26,107,90,.02); }
+.obj-verb {
+  font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 100px;
+  background: rgba(123,29,29,.08); color: var(--wine);
+  white-space: nowrap; flex-shrink: 0; margin-top: 2px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.obj-text { font-size: 14.5px; color: var(--ink-2); line-height: 1.5; flex: 1; }
+.obj-check {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid var(--border); flex-shrink: 0; margin-top: 2px;
+  cursor: pointer; transition: all .2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.obj-item.checked .obj-check { background: var(--teal); border-color: var(--teal); }
+.obj-item.checked .obj-check::after { content:'✓'; font-size:10px; color:#fff; font-weight:700; }
+.obj-item.checked { border-color: var(--teal); background: rgba(26,107,90,.03); }
+.obj-item.checked .obj-text { color: var(--teal); }
+
+/* ── FOOTER ── */
+.footer { background: var(--wine); padding: 48px 28px; text-align: center; }
+.footer-title { font-family: 'Playfair Display', serif; font-size: 22px; color: rgba(255,255,255,.8); margin-bottom: 10px; }
+.footer-sub { font-size: 14px; color: rgba(255,255,255,.3); }
+
+/* ── RESPONSIVE ── */
+@media(max-width:700px){
+  .topbar .tb-nav { display: none; }
+  .hero { padding: 90px 20px 60px; }
+  section { padding: 60px 20px; }
+  .msg-framework { font-size: 13px; }
+  .mf-label { width: 120px; font-size: 11px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topbar">
+  <div class="tb-brand"><strong>Day 5</strong> · AI-Assisted Marketing Production</div>
+  <div class="tb-nav">
+    <a href="#overview" class="tb-link active">Overview</a>
+    <a href="#sections" class="tb-link">Sections</a>
+    <a href="#objectives" class="tb-link">Objectives</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="overview">
+  <div class="hero-inner">
+    <div class="hero-tag">
+      <div class="pulse-dot"></div>
+      <span>Student Handout · Session 5 of 5</span>
+    </div>
+    <h1>AI-Assisted Marketing<br><em>Production</em></h1>
+    <p class="hero-sub">This session teaches how to build a structured, audience-aligned marketing deliverable set — combining manual communication discipline with AI-assisted production inside Canva.</p>
+
+    <div class="hero-deliverables">
+      <div class="hd-label">What the team produces today</div>
+      <div class="hd-items">
+        <div class="hd-item">
+          <div class="hd-num">1</div>
+          <div class="hd-text"><strong>LinkedIn post</strong> — structured, brand-aligned, audience-specific copy with visual asset</div>
+        </div>
+        <div class="hd-item">
+          <div class="hd-num">2</div>
+          <div class="hd-text"><strong>Instagram adaptation</strong> — same campaign, different format, different visual register</div>
+        </div>
+        <div class="hd-item">
+          <div class="hd-num">3</div>
+          <div class="hd-text"><strong>Campaign rationale sheet</strong> — decision language that explains every production choice</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-meta">
+      <div class="meta-card">
+        <div class="mc-label">Total Sections</div>
+        <div class="mc-val"><span>9</span> teaching stages</div>
+      </div>
+      <div class="meta-card">
+        <div class="mc-label">Total Time</div>
+        <div class="mc-val"><span>~4 hours</span> incl. activities</div>
+      </div>
+      <div class="meta-card">
+        <div class="mc-label">Core Tool</div>
+        <div class="mc-val">Canva AI + structured prompts</div>
+      </div>
+      <div class="meta-card">
+        <div class="mc-label">Output Standard</div>
+        <div class="mc-val">Portfolio-ready deliverables</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SESSION OVERVIEW -->
+<section class="sec-white" id="outline-section">
+  <div class="wrap">
+    <div class="blk-label"><span class="blk-num">1</span> Session Overview</div>
+    <h2 class="sec-title">How this session is taught</h2>
+    <p class="sec-sub">Every section builds on the previous one — from defining why the content exists, through building the message, into production, review, and finally AI-assisted refinement. No section can be skipped without weakening what follows it.</p>
+
+    <div class="outline-list">
+      <div class="outline-item">
+        <div class="ol-num">1</div>
+        <div class="ol-content">
+          <div class="ol-title">Defining the communication objective and target audience</div>
+          <div class="ol-time">25 min</div>
+        </div>
+      </div>
+      <div class="outline-item">
+        <div class="ol-num">2</div>
+        <div class="ol-content">
+          <div class="ol-title">Structuring the message, evidence, and CTA</div>
+          <div class="ol-time">30 min</div>
+        </div>
+      </div>
+      <div class="outline-item">
+        <div class="ol-num">3</div>
+        <div class="ol-content">
+          <div class="ol-title">Selecting the deliverable set and building the first draft manually</div>
+          <div class="ol-time">55 min</div>
+        </div>
+      </div>
+      <div class="outline-item">
+        <div class="ol-num">4</div>
+        <div class="ol-content">
+          <div class="ol-title">Using Canva AI and structured prompts for production</div>
+          <div class="ol-time">40 min</div>
+        </div>
+      </div>
+      <div class="outline-item">
+        <div class="ol-num">5</div>
+        <div class="ol-content">
+          <div class="ol-title">Applying brand constraints and visual consistency</div>
+          <div class="ol-time">30 min</div>
+        </div>
+      </div>
+      <div class="outline-item">
+        <div class="ol-num">6</div>
+        <div class="ol-content">
+          <div class="ol-title">Reviewing deliverables for usefulness, not decoration</div>
+          <div class="ol-time">25 min</div>
+        </div>
+      </div>
+      <div class="outline-item">
+        <div class="ol-num">7</div>
+        <div class="ol-content">
+          <div class="ol-title">Managing versions, variants, and audience adaptation</div>
+          <div class="ol-time">25 min</div>
+        </div>
+      </div>
+      <div class="outline-item">
+        <div class="ol-num">8</div>
+        <div class="ol-content">
+          <div class="ol-title">Using AI to refine communication quality and output range</div>
+          <div class="ol-time">20 min</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      "A social post is not a campaign.<br><em>A system of three aligned deliverables — that is a campaign."</em>
+    </div>
+  </div>
+</section>
+
+<!-- DELIVERABLE SYSTEM DIVIDER -->
+<div class="divider-strip">
+  <div class="wrap">
+    <div class="strip-eyebrow">The Deliverable System</div>
+    <h2>Three pieces that belong together — and only work because they share one communication strategy.</h2>
+    <p>Each deliverable serves a different channel and format. All three serve the same objective, the same audience, and the same message hierarchy.</p>
+
+    <div class="deliverable-diagram" style="margin-top:32px;">
+      <div class="dd-card">
+        <div class="dd-head linkedin">LinkedIn Post</div>
+        <div class="dd-body">
+          <div class="dd-item">Professional tone, credible hook</div>
+          <div class="dd-item">Four-part message structure</div>
+          <div class="dd-item">Evidence-backed CTA</div>
+          <div class="dd-item">Visual asset + caption</div>
+        </div>
+      </div>
+      <div class="dd-card">
+        <div class="dd-head instagram">Instagram</div>
+        <div class="dd-body">
+          <div class="dd-item">Adapted from LinkedIn source</div>
+          <div class="dd-item">Different format, same message</div>
+          <div class="dd-item">Hook-first visual register</div>
+          <div class="dd-item">Shorter, more direct CTA</div>
+        </div>
+      </div>
+      <div class="dd-card">
+        <div class="dd-head rationale">Rationale Sheet</div>
+        <div class="dd-body">
+          <div class="dd-item">Decision language, not preference</div>
+          <div class="dd-item">Audience choice explained</div>
+          <div class="dd-item">Message hierarchy documented</div>
+          <div class="dd-item">Brand constraint evidence</div>
+        </div>
+      </div>
+    </div>
+    <div class="strip-pills">
+      <div class="strip-pill">Canva AI</div>
+      <div class="strip-pill">Structured prompts</div>
+      <div class="strip-pill">Brand constraints</div>
+      <div class="strip-pill">Portfolio-ready</div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAILED SECTIONS -->
+<section class="sec-warm" id="sections">
+  <div class="wrap">
+    <div class="blk-label"><span class="blk-num">2</span> Detailed Outlines</div>
+    <h2 class="sec-title">What happens in each section</h2>
+    <p class="sec-sub">Expand each section to see the teaching flow, the key concepts, and what the section produces. Every section ends with a locked output that the next section depends on.</p>
+
+    <!-- SECTION 1 -->
+    <div class="section-block" id="sb1">
+      <div class="sb-head" onclick="toggleBlock('sb1')">
+        <div class="sb-icon">1</div>
+        <div class="sb-title-wrap">
+          <div class="sb-title">Defining the Communication Objective and Target Audience</div>
+          <div class="sb-time">25 min · Light concepts</div>
+        </div>
+        <div class="sb-toggle">+</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-flow">
+          <div class="sb-row">The session begins with the business objective, the target audience, and the action or shift in understanding the deliverable is expected to create — before any visual or copy work begins.</div>
+          <div class="sb-row">The content covers how a vague goal like "promote the product" produces unfocused content, and how a specific <span data-tip="A communication objective names the reader, the action required, and the measurable outcome the deliverable supports.">communication objective</span> shapes every production decision that follows.</div>
+          <div class="sb-row">Trainees compare two different audience definitions for the same product and explore how each one produces a completely different opening line, tone, message, and CTA — even though the product has not changed.</div>
+          <div class="sb-row end-row">This section ends with a locked communication objective and a named target audience — the foundation everything else is built on.</div>
+        </div>
+
+        <div class="compare-block">
+          <div class="cb-col">
+            <div class="cb-head weak">Weak Objective</div>
+            <div class="cb-body">
+              <div class="cb-item">No reader named</div>
+              <div class="cb-item">No action defined</div>
+              <div class="cb-item">No outcome to measure</div>
+              <div class="cb-item">"Promote LaunchPad Pro" — could mean anything</div>
+            </div>
+          </div>
+          <div class="cb-col">
+            <div class="cb-head strong">Strong Objective</div>
+            <div class="cb-body">
+              <div class="cb-item">Names a specific reader</div>
+              <div class="cb-item">States the required action</div>
+              <div class="cb-item">Links to a measurable outcome</div>
+              <div class="cb-item">Constrains every production decision</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2 -->
+    <div class="section-block teal" id="sb2">
+      <div class="sb-head" onclick="toggleBlock('sb2')">
+        <div class="sb-icon">2</div>
+        <div class="sb-title-wrap">
+          <div class="sb-title">Structuring the Message, Evidence, and CTA</div>
+          <div class="sb-time">30 min · Medium complexity</div>
+        </div>
+        <div class="sb-toggle">+</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-flow">
+          <div class="sb-row">The session moves into the communication logic that must be in place before design or copy production begins — establishing the message hierarchy that will guide the entire deliverable set.</div>
+          <div class="sb-row">The content covers four components: <span data-tip="The first thing the reader sees — it must reflect something they already feel or recognize, not the product name.">the opening hook</span>, the message flow and supporting points, <span data-tip="Evidence that makes the message feel credible — statistics, specific outcomes, or named results rather than general claims.">evidence and KPI-linked claims</span>, and the <span data-tip="Call to Action — the specific next step the reader is asked to take. It should feel like a natural continuation of the message, not a pivot into selling.">CTA</span> that closes the content with direction.</div>
+          <div class="sb-row">The content also focuses on message sequence: good sentences in the wrong order still produce weak content. The order matters as much as the content itself.</div>
+          <div class="sb-row end-row">This section ends with a complete message framework — ready to guide copy construction in the next section.</div>
+        </div>
+
+        <div class="msg-framework">
+          <div class="mf-row">
+            <div class="mf-label">Opening</div>
+            <div class="mf-body"><strong>Hook the right reader</strong> — leads with something they already feel, not the product name. The reader must recognise the problem before the solution is introduced.</div>
+          </div>
+          <div class="mf-row">
+            <div class="mf-label">Message</div>
+            <div class="mf-body"><strong>Unfold the case</strong> — supporting points in sequence. Each line earns the right to the next one. No jump to the conclusion before the problem is fully established.</div>
+          </div>
+          <div class="mf-row">
+            <div class="mf-label">Evidence</div>
+            <div class="mf-body"><strong>Make it believable</strong> — a specific claim ("teams save 4.2 hours a week") is more persuasive than an impressive one. Evidence must connect to the reader's real experience.</div>
+          </div>
+          <div class="mf-row">
+            <div class="mf-label">CTA</div>
+            <div class="mf-body"><strong>Close with direction</strong> — the closing line continues the message, it does not pivot into selling mode. The reader should feel invited, not pressured.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3 -->
+    <div class="section-block gold" id="sb3">
+      <div class="sb-head" onclick="toggleBlock('sb3')">
+        <div class="sb-icon">3</div>
+        <div class="sb-title-wrap">
+          <div class="sb-title">Selecting the Deliverable Set and Building the First Draft Manually</div>
+          <div class="sb-time">55 min · Medium-heavy</div>
+        </div>
+        <div class="sb-toggle">+</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-flow">
+          <div class="sb-row">The session focuses first on choosing the right anchor deliverable — not every output is an equally good starting point, and picking the wrong one compounds ambiguity across the whole set.</div>
+          <div class="sb-row">The content covers the relationship between the visual asset and the caption: they have different jobs and putting everything in one place weakens both. Asset carries the visual hook; caption carries the argument.</div>
+          <div class="sb-row">Trainees map the message hierarchy before writing any copy, then compare two first drafts — one that follows the structure and one that does not — to identify which is the stronger starting point and why.</div>
+          <div class="sb-row end-row">This section ends with a first structured draft of the LinkedIn post — organised, message-led, and ready for AI-assisted refinement.</div>
+        </div>
+
+        <div class="try-it">
+          <div class="try-it-label">Try It Yourself</div>
+          <p>Before writing any copy: <strong>map the message hierarchy on paper first.</strong> What is the opening problem? What is the supporting point? What is the evidence? What is the closing action? Writing the sequence before writing the sentences produces a stronger first draft every time.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 4 -->
+    <div class="section-block blue" id="sb4">
+      <div class="sb-head" onclick="toggleBlock('sb4')">
+        <div class="sb-icon">4</div>
+        <div class="sb-title-wrap">
+          <div class="sb-title">Using Canva AI and Structured Prompts for Production</div>
+          <div class="sb-time">40 min · Tool-heavy</div>
+        </div>
+        <div class="sb-toggle">+</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-flow">
+          <div class="sb-row">The session shifts into AI-assisted production — but begins by identifying what parts of the draft AI is allowed to touch and what must stay fixed before a single prompt is written.</div>
+          <div class="sb-row">The content covers the anatomy of a <span data-tip="A production prompt is not a request — it is a set of constraints that protects the brief while giving AI room to improve expression. It locks the audience, message, tone, and structure.">production prompt</span>: locked elements (audience, message, structure), improvable elements (phrasing, flow, CTA wording), and dangerous elements (audience definition, factual claims) that AI must not redefine.</div>
+          <div class="sb-row">Three AI-refined versions of the draft are compared — all look polished, but only one protects the brief. Trainees identify which one and trace every improvement back to a specific prompt decision.</div>
+          <div class="sb-row end-row">This section ends with an AI-assisted LinkedIn working version that is stronger than the manual draft — and a clear record of what changed and why.</div>
+        </div>
+
+        <div class="prompt-block">
+          <div class="pb-label">Anatomy of a production prompt for Canva AI</div>
+          <div class="pb-line"><span class="pb-tag">Audience: </span><span class="pb-val">Operations managers at mid-size companies. Systems-minded. Not salesy.</span></div>
+          <div class="pb-line"><span class="pb-tag">Message:  </span><span class="pb-val">Coordination overhead is the real problem. LaunchPad Pro removes it.</span></div>
+          <div class="pb-line"><span class="pb-tag">Tone:     </span><span class="pb-val">Calm, credible, professional. Never excited. Never corporate-jargon.</span></div>
+          <div class="pb-line"><span class="pb-tag">Locked:   </span><span class="pb-val">4-part structure, specific evidence stat, audience language.</span></div>
+          <div class="pb-line"><span class="pb-tag">Improve:  </span><span class="pb-val">Opening sharpness, sentence flow, CTA specificity.</span></div>
+          <div class="pb-line"><span class="pb-tag">Do NOT:  </span><span class="pb-val">Change the audience definition or rewrite the evidence claim.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 5 -->
+    <div class="section-block" id="sb5">
+      <div class="sb-head" onclick="toggleBlock('sb5')">
+        <div class="sb-icon">5</div>
+        <div class="sb-title-wrap">
+          <div class="sb-title">Applying Brand Constraints and Visual Consistency</div>
+          <div class="sb-time">30 min · Medium complexity</div>
+        </div>
+        <div class="sb-toggle">+</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-flow">
+          <div class="sb-row">The session focuses on adapting the LinkedIn working version for Instagram — making it clear that this is a format adaptation, not a campaign rewrite. The message strategy stays fixed; the format decisions change.</div>
+          <div class="sb-row">The content covers eight specific adaptation decisions — what changes between platforms (format, length, visual register, caption style) and what must stay fixed (audience, message hierarchy, evidence, CTA direction).</div>
+          <div class="sb-row">The content also covers <span data-tip="A brand kit in Canva contains the approved colors, fonts, and logo files that keep all assets visually consistent. Using it prevents brand drift across multiple deliverables.">brand kits</span>, logo use, typography rules, color discipline, and the role of templates in keeping multiple assets visually aligned without starting from scratch each time.</div>
+          <div class="sb-row end-row">This section ends with a locked Instagram working version — adapted correctly from the LinkedIn source, visually consistent, and ready to accompany the rationale sheet.</div>
+        </div>
+
+        <div class="tab-wrap">
+          <div class="tab-buttons">
+            <button class="tab-btn active" onclick="switchTab(this,'tab-stays')">What Stays Fixed</button>
+            <button class="tab-btn" onclick="switchTab(this,'tab-changes')">What Changes</button>
+            <button class="tab-btn" onclick="switchTab(this,'tab-brand')">Brand Controls</button>
+          </div>
+          <div class="tab-panel active" id="tab-stays">
+            <h4>What stays fixed across both platforms</h4>
+            <p>The communication strategy does not change when the format does. These elements are locked in both LinkedIn and Instagram versions:</p>
+            <ul>
+              <li>Target audience definition and pain point</li>
+              <li>Four-part message hierarchy (hook → case → evidence → CTA)</li>
+              <li>Specific evidence claim (the number, not just a vague claim)</li>
+              <li>CTA direction and brand voice</li>
+            </ul>
+          </div>
+          <div class="tab-panel" id="tab-changes">
+            <h4>What changes for Instagram</h4>
+            <p>Format adaptation means changing the delivery — not the message. These decisions are different on Instagram:</p>
+            <ul>
+              <li>Visual asset format (square or portrait, not landscape)</li>
+              <li>Caption length (shorter, hook-first)</li>
+              <li>Sentence rhythm (punchier, less discursive)</li>
+              <li>Opening line construction (visual hook leads, not a problem statement)</li>
+            </ul>
+          </div>
+          <div class="tab-panel" id="tab-brand">
+            <h4>Brand controls that keep the set consistent</h4>
+            <p>Multiple deliverables only feel like a campaign if they are visually aligned. Brand controls that matter:</p>
+            <ul>
+              <li>Canva brand kit — approved fonts, colors, logo files in one place</li>
+              <li>Templates — set the layout once, apply across formats</li>
+              <li>Typography rules — one display font, one body font, consistent sizing</li>
+              <li>Color discipline — brand palette only, no ad hoc color choices</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 6 -->
+    <div class="section-block teal" id="sb6">
+      <div class="sb-head" onclick="toggleBlock('sb6')">
+        <div class="sb-icon">6</div>
+        <div class="sb-title-wrap">
+          <div class="sb-title">Reviewing Deliverables for Usefulness, Not Decoration</div>
+          <div class="sb-time">25 min · Medium complexity</div>
+        </div>
+        <div class="sb-toggle">+</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-flow">
+          <div class="sb-row">The session emphasises that an attractive deliverable is not the same as an effective one — and that portfolio-ready means communication-ready, not just visually polished.</div>
+          <div class="sb-row">The content covers building a <span data-tip="A rationale sheet explains every production decision in decision language — not preference language. It answers: why this audience, why this structure, why this CTA. It is part of the deliverable, not an afterthought.">campaign rationale sheet</span> — the document that explains every decision in decision language: why this audience, why this structure, why this message, why this CTA.</div>
+          <div class="sb-row">Trainees classify what belongs in a rationale sheet, compare preference language versus decision language for each section, and lock a final version that can sit alongside the assets in a portfolio or brand review submission.</div>
+          <div class="sb-row end-row">This section ends with a complete, portfolio-ready rationale sheet — the third deliverable in the campaign set, and the one that demonstrates strategic control over the other two.</div>
+        </div>
+
+        <table class="review-table">
+          <thead>
+            <tr>
+              <th>Review Criterion</th>
+              <th>What It Tests</th>
+              <th>Standard</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Objective alignment</strong></td>
+              <td>Does the deliverable serve the stated communication objective?</td>
+              <td><span class="rv-pill lock">Must pass</span></td>
+            </tr>
+            <tr>
+              <td><strong>Message hierarchy</strong></td>
+              <td>Is the four-part structure visible and in the right order?</td>
+              <td><span class="rv-pill lock">Must pass</span></td>
+            </tr>
+            <tr>
+              <td><strong>Evidence</strong></td>
+              <td>Is the supporting claim specific, credible, and audience-relevant?</td>
+              <td><span class="rv-pill lock">Must pass</span></td>
+            </tr>
+            <tr>
+              <td><strong>CTA</strong></td>
+              <td>Does it continue the message naturally — without pivoting to ad language?</td>
+              <td><span class="rv-pill check">Required</span></td>
+            </tr>
+            <tr>
+              <td><strong>Visual consistency</strong></td>
+              <td>Do both assets feel like they belong to the same campaign?</td>
+              <td><span class="rv-pill pass">Check</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="info-strip">
+          <strong>Rationale language test:</strong> If a sentence in your rationale says "we chose this because it looks good" — rewrite it. Decision language says "we chose this because the target reader responds to credibility signals, not visual excitement."
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 7 -->
+    <div class="section-block gold" id="sb7">
+      <div class="sb-head" onclick="toggleBlock('sb7')">
+        <div class="sb-icon">7</div>
+        <div class="sb-title-wrap">
+          <div class="sb-title">Managing Versions, Variants, and Audience Adaptation</div>
+          <div class="sb-time">25 min · Medium complexity</div>
+        </div>
+        <div class="sb-toggle">+</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-flow">
+          <div class="sb-row">The session moves into the production discipline required when a campaign needs more than one version of an asset — and explains why this is harder than it looks once a second audience or channel is introduced.</div>
+          <div class="sb-row">The content covers how to adjust the <span data-tip="The entry point is the specific hook or opening that a particular reader will respond to. The campaign core — message, evidence, CTA direction — stays stable. Only the entry point shifts for each audience variant.">entry point</span> for different audience variants while keeping the campaign core stable: same message, same evidence, same CTA direction — different opening, different tone register, different visual lead.</div>
+          <div class="sb-row">The content also covers <span data-tip="Versioning means keeping a clear record of which draft is which, what changed between versions, and who approved each stage. Without it, teams lose control of what is 'the current version'.">versioning discipline</span> and review cycles — tracking what changed between drafts, what was approved, and what was rejected — so the team is never working from an outdated or unapproved asset.</div>
+          <div class="sb-row end-row">This section ends with a clearer approach to controlled iteration: producing multiple audience variants without losing the original communication objective.</div>
+        </div>
+
+        <h4 style="font-size:14px;font-weight:700;color:var(--wine);margin:16px 0 10px;">The Adaptation Rule — click to explore</h4>
+        <div class="reveal-grid">
+          <div class="reveal-card" onclick="this.classList.toggle('open')">
+            <div class="rc-head">What the campaign core must protect</div>
+            <div class="rc-hint">Tap to reveal</div>
+            <div class="rc-body">The message, the evidence claim, the CTA direction, and the brand voice. These do not change between variants. If they do, you are not adapting — you are starting a different campaign.</div>
+          </div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')">
+            <div class="rc-head">What the entry point is allowed to shift</div>
+            <div class="rc-hint">Tap to reveal</div>
+            <div class="rc-body">The opening hook, the pain point framing, the specific language register, and the visual lead. These adapt to the reader — but the argument underneath them stays unchanged.</div>
+          </div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')">
+            <div class="rc-head">When a variant becomes a different campaign</div>
+            <div class="rc-hint">Tap to reveal</div>
+            <div class="rc-body">When the audience definition changes fundamentally. When the message hierarchy is reordered. When the evidence claim is replaced. When the CTA asks for a different action. At that point, it is a new brief — not a variant.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 8 -->
+    <div class="section-block" id="sb8">
+      <div class="sb-head" onclick="toggleBlock('sb8')">
+        <div class="sb-icon">8</div>
+        <div class="sb-title-wrap">
+          <div class="sb-title">Using AI to Refine Communication Quality and Output Range</div>
+          <div class="sb-time">20 min · Tool-heavy</div>
+        </div>
+        <div class="sb-toggle">+</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-flow">
+          <div class="sb-row">The session closes by applying structured AI prompting to a second, harder task — using what was learned in Sections 4 and 5 to produce audience-specific variants more efficiently, with sharper prompt control.</div>
+          <div class="sb-row">The content covers practical prompting for <span data-tip="Message tightening means removing words that add length without adding meaning. AI can compress copy that is structurally correct but unnecessarily wordy.">message tightening</span>, alternative CTA generation, audience-specific variant production, and final communication polishing across the deliverable set.</div>
+          <div class="sb-row">Three AI-drafted LinkedIn variants are compared — all plausible, only one genuinely follows the brief. Trainees apply the review criteria from Section 6 to identify which draft passes and which ones fail at the message level despite looking polished.</div>
+          <div class="sb-row end-row">The session closes with a complete, reviewable AI-assisted marketing workflow — brief, message framework, two assets, rationale sheet, and a production log — ready for portfolio submission or brand review.</div>
+        </div>
+
+        <div class="try-it">
+          <div class="try-it-label">Try It Yourself</div>
+          <p>Before asking AI to generate a variant: <strong>write the locked elements first.</strong> List what AI cannot change. Then specify what it should improve. A constrained prompt produces a usable result. An open prompt produces a different campaign.</p>
+        </div>
+
+        <div class="info-strip">
+          <strong>The final question of Day 5:</strong> "Did we produce something portfolio-worthy?" — not "Did we use AI?" A portfolio-worthy deliverable demonstrates that every decision was made deliberately: audience, message, evidence, CTA, format, visual register, and rationale.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OBJECTIVES DIVIDER -->
+<div class="divider-strip" id="objectives">
+  <div class="wrap">
+    <div class="strip-eyebrow">Learning Outcomes</div>
+    <h2>After this session, the trainee should be able to:</h2>
+    <p>Tick each objective as you build confidence with it. Use this as a self-assessment throughout the day — not just at the end.</p>
+    <div class="strip-pills">
+      <div class="strip-pill">13 objectives</div>
+      <div class="strip-pill">Strategy · Production · Review</div>
+    </div>
+  </div>
+</div>
+
+<!-- OBJECTIVES LIST -->
+<section class="sec-white" id="objectives-list">
+  <div class="wrap">
+    <div class="blk-label"><span class="blk-num">3</span> Learning Objectives</div>
+    <h2 class="sec-title">Competencies you are building today</h2>
+    <p class="sec-sub">Each objective maps to one or more sections of the session. The progression moves from strategic thinking into production discipline and ends with AI-assisted refinement.</p>
+
+    <div class="obj-progress">
+      <div class="progress-bar"><div class="progress-fill" id="prog-fill"></div></div>
+      <div class="progress-label" id="prog-label">0 / 13</div>
+    </div>
+
+    <div class="obj-list" id="obj-list">
+
+      <div class="obj-item" id="o1" onclick="toggleObj('o1')">
+        <span class="obj-verb">Define</span>
+        <span class="obj-text">A communication objective and target audience for a marketing deliverable before beginning any production — naming the reader, the required action, and the measurable outcome.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o2" onclick="toggleObj('o2')">
+        <span class="obj-verb">Distinguish</span>
+        <span class="obj-text">Between message, evidence, CTA, and design execution inside a marketing output — understanding that all four are different and that confusing them weakens the deliverable.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o3" onclick="toggleObj('o3')">
+        <span class="obj-verb">Build</span>
+        <span class="obj-text">A message structure that includes a hook, supporting points in sequence, a specific evidence claim, and a CTA that closes the message without pivoting to selling mode.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o4" onclick="toggleObj('o4')">
+        <span class="obj-verb">Select</span>
+        <span class="obj-text">The appropriate deliverable set for a communication need — including the anchor piece that grounds the others and the formats that best serve the objective and audience.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o5" onclick="toggleObj('o5')">
+        <span class="obj-verb">Construct</span>
+        <span class="obj-text">An initial manual draft that organises content using the message hierarchy before any AI-assisted production begins — ensuring the structure is correct before the expression is optimised.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o6" onclick="toggleObj('o6')">
+        <span class="obj-verb">Use</span>
+        <span class="obj-text">Canva AI and structured production prompts to support copy refinement, variant generation, and layout development — without allowing AI to redefine the audience, message, or evidence.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o7" onclick="toggleObj('o7')">
+        <span class="obj-verb">Apply</span>
+        <span class="obj-text">Brand constraints, templates, and visual consistency rules across multiple deliverables — so that all assets feel like they belong to the same campaign rather than separate pieces.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o8" onclick="toggleObj('o8')">
+        <span class="obj-verb">Evaluate</span>
+        <span class="obj-text">Deliverables based on objective alignment, message hierarchy, evidence quality, and CTA effectiveness — rather than surface appearance or "looks good" judgments.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o9" onclick="toggleObj('o9')">
+        <span class="obj-verb">Manage</span>
+        <span class="obj-text">Versioning and review cycles when refining or adapting communication outputs — keeping a clear record of what changed, what was approved, and what is the current working version.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o10" onclick="toggleObj('o10')">
+        <span class="obj-verb">Produce</span>
+        <span class="obj-text">Audience-specific variants while keeping the campaign core — message, evidence, CTA direction, brand voice — stable across all versions.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o11" onclick="toggleObj('o11')">
+        <span class="obj-verb">Apply</span>
+        <span class="obj-text">Prompt engineering to improve copy clarity, audience fit, CTA strength, and message tightness — using locked and improvable elements to constrain AI output effectively.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o12" onclick="toggleObj('o12')">
+        <span class="obj-verb">Compare</span>
+        <span class="obj-text">Manual production and AI-assisted production as two complementary approaches to the same communication output — understanding what each requires and where the real control lies.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o13" onclick="toggleObj('o13')">
+        <span class="obj-verb">Produce</span>
+        <span class="obj-text">A structured marketing deliverable set — LinkedIn post, Instagram adaptation, and rationale sheet — that is aligned with audience, objective, message hierarchy, and measurable outcomes.</span>
+        <div class="obj-check"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-title">Day 5 — AI-Assisted Marketing Production</div>
+  <p class="footer-sub">Portfolio-ready means every decision was made deliberately — and every decision can be explained.</p>
+</footer>
+
+<script>
+// Block toggle
+function toggleBlock(id){
+  document.getElementById(id).classList.toggle('open');
+}
+
+// Tab switch
+function switchTab(btn, panelId){
+  btn.closest('.tab-wrap').querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  btn.closest('.tab-wrap').querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(panelId).classList.add('active');
+}
+
+// Objectives + progress
+let objCount = 0;
+const objTotal = 13;
+
+function toggleObj(id){
+  const el = document.getElementById(id);
+  const wasChecked = el.classList.contains('checked');
+  el.classList.toggle('checked');
+  objCount += wasChecked ? -1 : 1;
+  document.getElementById('prog-fill').style.width = (objCount / objTotal * 100) + '%';
+  document.getElementById('prog-label').textContent = objCount + ' / ' + objTotal;
+}
+
+// Nav active on scroll
+const navLinks = document.querySelectorAll('.tb-link');
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY + 80;
+  let current = '';
+  document.querySelectorAll('[id]').forEach(el => {
+    if(el.offsetTop <= scrollY) current = el.id;
+  });
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if(link.getAttribute('href') === '#' + current) link.classList.add('active');
+  });
+});
+
+// Open first block on load
+toggleBlock('sb1');
+</script>
+</body>
+</html>
