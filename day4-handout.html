@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 4 · Applied LLM Workflows · Student Handout</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg: #F4F1EB;
+  --surface: #FFFFFF;
+  --surface-2: #EDEAE2;
+  --ink: #1A1820;
+  --ink-2: #3D3A4E;
+  --muted: #7A7890;
+  --navy: #1C2E4A;
+  --navy-mid: #2A4470;
+  --accent: #C0392B;
+  --green: #1E7145;
+  --amber: #B05C0A;
+  --border: #DDD8CC;
+  --border-2: #C8C3B5;
+  --r: 10px;
+  --rl: 16px;
+  --sh: 0 1px 3px rgba(0,0,0,0.05), 0 4px 14px rgba(0,0,0,0.04);
+  --sh-md: 0 2px 8px rgba(0,0,0,0.07), 0 12px 36px rgba(0,0,0,0.06);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ── */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+  height: 54px;
+  background: rgba(28, 46, 74, 0.97);
+  backdrop-filter: blur(12px);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.tb-brand { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.4); }
+.tb-brand strong { color: rgba(255,255,255,.75); font-weight: 600; }
+.tb-nav { display: flex; gap: 4px; }
+.tb-link {
+  font-size: 11px; letter-spacing: .06em; text-transform: uppercase;
+  color: rgba(255,255,255,.35); padding: 5px 10px; border-radius: 6px;
+  text-decoration: none; transition: all .18s;
+  font-weight: 500;
+}
+.tb-link:hover { color: rgba(255,255,255,.75); background: rgba(255,255,255,.07); }
+.tb-link.active { color: #fff; background: rgba(255,255,255,.1); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  background: var(--navy);
+  display: flex; align-items: center;
+  padding: 100px 28px 80px;
+  position: relative; overflow: hidden;
+  scroll-margin-top: 54px;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 70% at 5% 70%, rgba(192,57,43,.16) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 55% at 90% 15%, rgba(30,113,69,.12) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 40% at 50% 105%, rgba(0,0,0,.35) 0%, transparent 60%);
+}
+.hero-inner { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; width: 100%; }
+
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1);
+  border-radius: 100px; padding: 6px 16px; margin-bottom: 32px;
+}
+.hero-tag span {
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+  color: rgba(255,255,255,.5); font-weight: 600;
+}
+.pulse-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent); animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.45;transform:scale(.8);} }
+
+.hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(32px, 5.5vw, 64px);
+  color: #fff; line-height: 1.08;
+  letter-spacing: -.025em;
+  margin-bottom: 22px; max-width: 760px;
+}
+.hero h1 em { font-style: italic; color: rgba(255,255,255,.65); }
+.hero-sub {
+  font-size: clamp(15px, 2vw, 18px);
+  color: rgba(255,255,255,.5); max-width: 520px;
+  line-height: 1.65; margin-bottom: 48px;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px; max-width: 720px;
+}
+.hero-card {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: var(--r); padding: 18px 20px;
+}
+.hc-label {
+  font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+  color: rgba(255,255,255,.35); font-weight: 700; margin-bottom: 8px;
+}
+.hc-val { font-size: 14px; font-weight: 600; color: rgba(255,255,255,.8); line-height: 1.4; }
+.hc-val span { color: var(--accent); }
+
+/* ── SECTION WRAPPER ── */
+section { scroll-margin-top: 54px; padding: 80px 28px; }
+.sec-warm { background: var(--bg); }
+.sec-white { background: var(--surface); }
+.wrap { max-width: 960px; margin: 0 auto; }
+.wrap-sm { max-width: 720px; margin: 0 auto; }
+
+/* ── DIVIDER STRIPS ── */
+.divider-strip {
+  background: var(--navy);
+  padding: 72px 28px;
+  position: relative; overflow: hidden;
+  scroll-margin-top: 54px;
+}
+.divider-strip::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 90% 20%, rgba(30,113,69,.13) 0%, transparent 60%),
+              radial-gradient(ellipse 55% 60% at 5% 80%, rgba(192,57,43,.11) 0%, transparent 55%);
+}
+.divider-strip .wrap { position: relative; z-index: 1; }
+.strip-eyebrow {
+  font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
+  color: rgba(255,255,255,.35); font-weight: 700; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.strip-eyebrow::before { content:''; display:block; width:24px; height:1px; background:rgba(255,255,255,.2); }
+.divider-strip h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(26px, 4vw, 46px);
+  color: #fff; line-height: 1.12; letter-spacing: -.02em;
+  margin-bottom: 12px; max-width: 620px;
+}
+.divider-strip p { font-size: 16px; color: rgba(255,255,255,.48); max-width: 500px; line-height: 1.65; }
+.strip-meta { display: flex; gap: 10px; margin-top: 24px; flex-wrap: wrap; }
+.strip-pill {
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.09);
+  border-radius: 100px; padding: 5px 14px;
+  font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+  color: rgba(255,255,255,.45); font-weight: 600;
+}
+
+/* ── TYPOGRAPHY ── */
+.sec-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(24px, 3.5vw, 40px);
+  line-height: 1.15; letter-spacing: -.018em;
+  margin-bottom: 14px; color: var(--navy);
+}
+.sec-sub {
+  font-size: 16px; color: var(--muted); max-width: 640px;
+  line-height: 1.65; margin-bottom: 32px;
+}
+.blk-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); font-weight: 600; margin-bottom: 18px;
+}
+.blk-num {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--navy); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; flex-shrink: 0;
+}
+
+/* ── OUTLINE LIST ── */
+.outline-list {
+  display: flex; flex-direction: column; gap: 6px;
+  margin: 24px 0;
+}
+.outline-item {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 14px 18px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r);
+  box-shadow: var(--sh);
+  transition: all .2s;
+}
+.outline-item:hover { border-color: var(--navy-mid); transform: translateX(3px); }
+.ol-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--navy); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+}
+.ol-content { flex: 1; }
+.ol-title { font-size: 15px; font-weight: 600; color: var(--ink); line-height: 1.35; }
+.ol-time {
+  display: inline-block; font-size: 11px; letter-spacing: .08em;
+  font-weight: 700; color: var(--muted);
+  margin-top: 4px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ── SECTION BLOCKS ── */
+.section-block {
+  background: var(--surface); border: 1px solid var(--border);
+  border-left: 4px solid var(--navy);
+  border-radius: var(--r); padding: 26px 28px;
+  box-shadow: var(--sh);
+  margin-bottom: 18px;
+}
+.section-block.green { border-left-color: var(--green); }
+.section-block.amber { border-left-color: var(--amber); }
+.section-block.accent { border-left-color: var(--accent); }
+
+.sb-head {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 16px; cursor: pointer;
+  user-select: none;
+}
+.sb-icon {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--navy); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Serif Display', serif;
+  font-size: 15px; flex-shrink: 0;
+}
+.section-block.green .sb-icon { background: var(--green); }
+.section-block.amber .sb-icon { background: var(--amber); }
+.section-block.accent .sb-icon { background: var(--accent); }
+.sb-title-wrap { flex: 1; }
+.sb-title { font-size: 17px; font-weight: 700; color: var(--ink); line-height: 1.3; }
+.sb-time {
+  font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--muted); font-family: 'JetBrains Mono', monospace; margin-top: 3px;
+}
+.sb-toggle {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--surface-2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: var(--muted); transition: all .2s;
+  flex-shrink: 0;
+}
+.section-block.open .sb-toggle { transform: rotate(45deg); background: var(--navy); color: #fff; border-color: var(--navy); }
+.section-block.green.open .sb-toggle { background: var(--green); border-color: var(--green); }
+.section-block.amber.open .sb-toggle { background: var(--amber); border-color: var(--amber); }
+.section-block.accent.open .sb-toggle { background: var(--accent); border-color: var(--accent); }
+
+.sb-body { display: none; border-top: 1px solid var(--border); padding-top: 18px; }
+.section-block.open .sb-body { display: block; }
+
+.sb-flow { display: flex; flex-direction: column; gap: 10px; }
+.sb-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 14.5px; line-height: 1.55; color: var(--ink-2);
+}
+.sb-row::before {
+  content: '→'; color: var(--muted); font-weight: 700;
+  flex-shrink: 0; margin-top: 1px;
+}
+.sb-row.end-row::before { content: '✓'; color: var(--green); }
+.sb-row strong { color: var(--ink); font-weight: 600; }
+
+.sb-note {
+  margin-top: 16px; padding: 14px 16px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px; color: var(--muted); line-height: 1.55;
+  font-style: italic;
+}
+
+/* ── TOOLTIPS ── */
+[data-tip] {
+  position: relative; cursor: help;
+  border-bottom: 1.5px dashed var(--muted);
+  display: inline;
+}
+[data-tip]:hover::after {
+  content: attr(data-tip);
+  position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+  white-space: pre-wrap; max-width: 260px; width: max-content;
+  background: var(--navy); color: #fff;
+  font-size: 12.5px; line-height: 1.5;
+  padding: 8px 12px; border-radius: 8px;
+  box-shadow: 0 6px 24px rgba(0,0,0,.2);
+  z-index: 50; pointer-events: none;
+  margin-bottom: 6px;
+  font-style: normal;
+}
+[data-tip]:hover::before {
+  content: '';
+  position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+  border: 5px solid transparent; border-top-color: var(--navy);
+  z-index: 50; pointer-events: none;
+}
+
+/* ── WORKFLOW DIAGRAM ── */
+.workflow-diagram {
+  display: flex; align-items: center; gap: 0;
+  overflow-x: auto; margin: 28px 0;
+  padding-bottom: 8px;
+}
+.wf-node {
+  display: flex; flex-direction: column; align-items: center;
+  flex-shrink: 0; min-width: 100px;
+}
+.wf-bubble {
+  width: 72px; height: 72px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  text-align: center; line-height: 1.3;
+  border: 2px solid;
+  transition: all .2s;
+}
+.wf-bubble.gen { background: rgba(28,46,74,.07); border-color: var(--navy); color: var(--navy); }
+.wf-bubble.crit { background: rgba(192,57,43,.07); border-color: var(--accent); color: var(--accent); }
+.wf-bubble.rev { background: rgba(176,92,10,.07); border-color: var(--amber); color: var(--amber); }
+.wf-bubble.ver { background: rgba(30,113,69,.07); border-color: var(--green); color: var(--green); }
+.wf-label { font-size: 11px; color: var(--muted); margin-top: 8px; text-align: center; font-weight: 500; }
+.wf-arrow {
+  flex-shrink: 0; width: 32px; height: 2px;
+  background: var(--border-2); position: relative; margin-bottom: 22px;
+}
+.wf-arrow::after {
+  content: ''; position: absolute; right: -5px; top: -4px;
+  border: 5px solid transparent; border-left-color: var(--border-2);
+}
+
+/* ── TABS ── */
+.tab-wrap { margin: 28px 0; }
+.tab-buttons { display: flex; gap: 4px; border-bottom: 2px solid var(--border); margin-bottom: 0; }
+.tab-btn {
+  padding: 10px 18px; font-size: 13px; font-weight: 600;
+  color: var(--muted); border: none; background: transparent;
+  cursor: pointer; border-bottom: 2px solid transparent;
+  margin-bottom: -2px; transition: all .2s; border-radius: 6px 6px 0 0;
+}
+.tab-btn:hover { color: var(--navy); background: var(--surface-2); }
+.tab-btn.active { color: var(--navy); border-bottom-color: var(--navy); background: var(--surface); }
+.tab-panel {
+  display: none; padding: 24px; background: var(--surface);
+  border: 1px solid var(--border); border-top: none;
+  border-radius: 0 0 var(--r) var(--r);
+}
+.tab-panel.active { display: block; }
+
+.tab-panel h4 { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
+.tab-panel p { font-size: 14px; color: var(--ink-2); line-height: 1.6; margin-bottom: 10px; }
+.tab-panel ul { margin-left: 18px; }
+.tab-panel li { font-size: 14px; color: var(--ink-2); line-height: 1.6; margin-bottom: 5px; }
+
+/* ── OBJECTIVES LIST ── */
+.obj-list { display: flex; flex-direction: column; gap: 8px; margin: 24px 0; }
+.obj-item {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 14px 18px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); box-shadow: var(--sh);
+  transition: all .2s; cursor: default;
+}
+.obj-item:hover { border-color: var(--green); background: rgba(30,113,69,.02); }
+.obj-verb {
+  font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 100px;
+  background: rgba(28,46,74,.08); color: var(--navy);
+  white-space: nowrap; flex-shrink: 0; margin-top: 2px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.obj-text { font-size: 14.5px; color: var(--ink-2); line-height: 1.5; flex: 1; }
+.obj-check {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid var(--border); flex-shrink: 0; margin-top: 2px;
+  cursor: pointer; transition: all .2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.obj-item.checked .obj-check {
+  background: var(--green); border-color: var(--green);
+}
+.obj-item.checked .obj-check::after { content:'✓'; font-size:10px; color:#fff; font-weight:700; }
+.obj-item.checked { border-color: var(--green); background: rgba(30,113,69,.03); }
+.obj-item.checked .obj-text { color: var(--green); }
+.obj-progress {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 16px 20px;
+  display: flex; align-items: center; gap: 16px;
+  margin-top: 16px;
+}
+.progress-bar {
+  flex: 1; height: 6px; background: var(--surface-2); border-radius: 3px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; background: var(--green); border-radius: 3px;
+  transition: width .35s ease; width: 0%;
+}
+.progress-label { font-size: 13px; font-weight: 600; color: var(--muted); white-space: nowrap; font-family: 'JetBrains Mono', monospace; }
+
+/* ── REVEAL CARDS ── */
+.reveal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 24px 0; }
+.reveal-card {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: var(--r); padding: 20px;
+  cursor: pointer; box-shadow: var(--sh); transition: all .2s;
+}
+.reveal-card:hover { border-color: var(--navy); box-shadow: var(--sh-md); transform: translateY(-2px); }
+.reveal-card.open { border-color: var(--accent); cursor: default; transform: none; }
+.rc-head { font-size: 14.5px; font-weight: 600; color: var(--ink); line-height: 1.4; margin-bottom: 8px; }
+.rc-hint { font-size: 12px; color: var(--muted); font-style: italic; }
+.reveal-card.open .rc-hint { display: none; }
+.rc-body {
+  display: none; margin-top: 14px; padding-top: 14px;
+  border-top: 1px solid var(--border);
+  font-size: 13.5px; color: var(--ink-2); line-height: 1.6;
+}
+.reveal-card.open .rc-body { display: block; }
+
+/* ── SAFE USE TABLE ── */
+.safe-table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+.safe-table th {
+  background: var(--navy); color: #fff;
+  padding: 11px 16px; text-align: left;
+  font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+}
+.safe-table th:first-child { border-radius: 8px 0 0 0; }
+.safe-table th:last-child { border-radius: 0 8px 0 0; }
+.safe-table td {
+  padding: 11px 16px; font-size: 13.5px; color: var(--ink-2);
+  border-bottom: 1px solid var(--border); line-height: 1.5;
+}
+.safe-table tr:last-child td { border-bottom: none; }
+.safe-table tr:nth-child(even) td { background: var(--bg); }
+.safe-pill {
+  display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; padding: 3px 9px; border-radius: 100px;
+}
+.safe-pill.check { background: rgba(30,113,69,.1); color: var(--green); }
+.safe-pill.flag { background: rgba(192,57,43,.08); color: var(--accent); }
+.safe-pill.human { background: rgba(176,92,10,.1); color: var(--amber); }
+
+/* ── TOOL COMPARISON ── */
+.tool-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 24px 0; }
+@media(max-width: 600px){ .tool-compare { grid-template-columns: 1fr; } }
+.tool-col {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); overflow: hidden; box-shadow: var(--sh);
+}
+.tool-head {
+  padding: 14px 18px;
+  font-size: 13px; font-weight: 700;
+  border-bottom: 1px solid var(--border);
+}
+.tool-head.free { background: rgba(28,46,74,.06); color: var(--navy); }
+.tool-head.paid { background: rgba(192,57,43,.07); color: var(--accent); }
+.tool-rows { padding: 14px 18px; display: flex; flex-direction: column; gap: 8px; }
+.tool-row {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 13.5px; color: var(--ink-2); line-height: 1.45;
+}
+.tool-row::before { content:'·'; font-weight:700; flex-shrink:0; color: var(--muted); }
+
+/* ── CALLOUT / STRIPE ── */
+.callout {
+  background: var(--navy); border-radius: var(--rl);
+  padding: 22px 26px; margin: 28px 0;
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(15px, 2vw, 19px);
+  color: rgba(255,255,255,.85); line-height: 1.5;
+  font-style: italic; text-align: center;
+}
+.callout em { color: rgba(255,255,255,.55); }
+
+.info-strip {
+  background: rgba(28,46,74,.06); border: 1px solid rgba(28,46,74,.12);
+  border-left: 4px solid var(--navy);
+  border-radius: var(--r); padding: 16px 20px;
+  margin: 20px 0;
+  font-size: 14px; color: var(--navy); line-height: 1.55;
+}
+
+/* ── PROMPT ANATOMY ── */
+.prompt-anatomy {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px; line-height: 1.7;
+  background: var(--navy); color: rgba(255,255,255,.82);
+  border-radius: var(--rl); padding: 24px 26px;
+  margin: 24px 0; position: relative;
+}
+.pa-label {
+  font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+  color: rgba(255,255,255,.3); font-weight: 700; margin-bottom: 14px;
+  font-family: 'DM Sans', sans-serif;
+}
+.pa-line { margin-bottom: 6px; }
+.pa-line .pa-tag { color: var(--accent); font-weight: 500; }
+.pa-line .pa-content { color: rgba(255,255,255,.75); }
+
+/* ── TRY IT ── */
+.try-it {
+  background: rgba(30,113,69,.06); border: 1.5px solid rgba(30,113,69,.2);
+  border-radius: var(--r); padding: 20px 22px; margin: 20px 0;
+}
+.try-it-label {
+  font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--green); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 6px;
+}
+.try-it-label::before { content: '⚡'; }
+.try-it p { font-size: 14px; color: var(--ink-2); line-height: 1.55; }
+.try-it strong { color: var(--ink); }
+
+/* ── FOOTER ── */
+.footer {
+  background: var(--navy); padding: 48px 28px;
+  text-align: center;
+}
+.footer-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px; color: rgba(255,255,255,.8); margin-bottom: 10px;
+}
+.footer-sub { font-size: 14px; color: rgba(255,255,255,.35); }
+
+/* ── RESPONSIVE ── */
+@media(max-width:700px){
+  .topbar .tb-nav { display: none; }
+  .hero { padding: 90px 20px 60px; }
+  section { padding: 60px 20px; }
+  .tool-compare { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topbar">
+  <div class="tb-brand"><strong>Day 4</strong> · Applied LLM Workflows</div>
+  <div class="tb-nav">
+    <a href="#overview" class="tb-link active">Overview</a>
+    <a href="#sections" class="tb-link">Sections</a>
+    <a href="#objectives" class="tb-link">Objectives</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="overview">
+  <div class="hero-inner">
+    <div class="hero-tag">
+      <div class="pulse-dot"></div>
+      <span>Student Handout · Session 4 of 4</span>
+    </div>
+    <h1>Applied LLM Workflows<br><em>Putting AI to work, properly.</em></h1>
+    <p class="hero-sub">This session moves from understanding what LLMs are into applying them inside real workplace tasks — with structure, evaluation, and safe-use guardrails at every stage.</p>
+
+    <div class="hero-grid">
+      <div class="hero-card">
+        <div class="hc-label">Total Sections</div>
+        <div class="hc-val"><span>9</span> teaching stages</div>
+      </div>
+      <div class="hero-card">
+        <div class="hc-label">Total Time</div>
+        <div class="hc-val"><span>~4 hours</span> incl. activities</div>
+      </div>
+      <div class="hero-card">
+        <div class="hc-label">Core Theme</div>
+        <div class="hc-val">Prompt → Evaluate → Revise → Verify</div>
+      </div>
+      <div class="hero-card">
+        <div class="hc-label">Delivery Style</div>
+        <div class="hc-val">Scenario-based, hands-on</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OVERVIEW SECTION -->
+<section class="sec-white" id="outline-section">
+  <div class="wrap">
+    <div class="blk-label"><span class="blk-num">1</span> Session Overview</div>
+    <h2 class="sec-title">How this session is taught</h2>
+    <p class="sec-sub">The session is built around a realistic workplace scenario. Each teaching stage adds one layer of discipline — from identifying tasks, to writing prompts, to evaluating and verifying outputs before they are used.</p>
+
+    <div class="outline-list">
+      <div class="outline-item">
+        <div class="ol-num">1</div>
+        <div class="ol-content">
+          <div class="ol-title">Positioning LLMs inside real workplace tasks</div>
+          <div class="ol-time">25 min</div>
+        </div>
+      </div>
+      <div class="outline-item">
+        <div class="ol-num">2</div>
+        <div class="ol-content">
+          <div class="ol-title">Defining the manual standard before prompting</div>
+          <div class="ol-time">25 min</div>
+        </div>
+      </div>
+      <div class="outline-item">
+        <div class="ol-num">3</div>
+        <div class="ol-content">
+          <div class="ol-title">Building the first prompt workflow</div>
+          <div class="ol-time">35 min</div>
+        </div>
+      </div>
+      <div class="outline-item">
+        <div class="ol-num">4</div>
+        <div class="ol-content">
+          <div class="ol-title">Generating outputs and reviewing prompt versions</div>
+          <div class="ol-time">30 min</div>
+        </div>
+      </div>
+      <div class="outline-item">
+        <div class="ol-num">5</div>
+        <div class="ol-content">
+          <div class="ol-title">Evaluating outputs with test cases and scoring</div>
+          <div class="ol-time">35 min</div>
+        </div>
+      </div>
+      <div class="outline-item">
+        <div class="ol-num">6</div>
+        <div class="ol-content">
+          <div class="ol-title">Building a multi-step workflow: generate → critique → revise → verify</div>
+          <div class="ol-time">40 min</div>
+        </div>
+      </div>
+      <div class="outline-item">
+        <div class="ol-num">7</div>
+        <div class="ol-content">
+          <div class="ol-title">Applying privacy, hallucination, and safe-use checks</div>
+          <div class="ol-time">25 min</div>
+        </div>
+      </div>
+      <div class="outline-item">
+        <div class="ol-num">8</div>
+        <div class="ol-content">
+          <div class="ol-title">Comparing free and paid tooling in practice</div>
+          <div class="ol-time">20 min</div>
+        </div>
+      </div>
+      <div class="outline-item">
+        <div class="ol-num">9</div>
+        <div class="ol-content">
+          <div class="ol-title">Using AI to produce structured workplace outputs</div>
+          <div class="ol-time">25 min</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      "AI accelerates production. It does not define quality.<br>
+      <em>Every output earns its approval — or it earns a revision list."</em>
+    </div>
+  </div>
+</section>
+
+<!-- MULTI-STEP DIAGRAM -->
+<div class="divider-strip">
+  <div class="wrap">
+    <div class="strip-eyebrow">Core Workflow Pattern</div>
+    <h2>The four-stage discipline runs through every task today.</h2>
+    <p>Once you learn this pattern with the first output, you apply it to all subsequent ones — with sharper judgment at each stage.</p>
+
+    <div class="workflow-diagram" style="margin-top:32px;">
+      <div class="wf-node">
+        <div class="wf-bubble gen">Generate</div>
+        <div class="wf-label">Prompt → Output</div>
+      </div>
+      <div class="wf-arrow"></div>
+      <div class="wf-node">
+        <div class="wf-bubble crit">Critique</div>
+        <div class="wf-label">Score & review</div>
+      </div>
+      <div class="wf-arrow"></div>
+      <div class="wf-node">
+        <div class="wf-bubble rev">Revise</div>
+        <div class="wf-label">Fix what matters</div>
+      </div>
+      <div class="wf-arrow"></div>
+      <div class="wf-node">
+        <div class="wf-bubble ver">Verify</div>
+        <div class="wf-label">Human decision</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAILED SECTIONS -->
+<section class="sec-warm" id="sections">
+  <div class="wrap">
+    <div class="blk-label"><span class="blk-num">2</span> Detailed Outlines</div>
+    <h2 class="sec-title">What happens in each section</h2>
+    <p class="sec-sub">Expand each section to see the teaching flow, the concepts covered, and what the section produces. Click any section header to open it.</p>
+
+    <!-- SECTION 1 -->
+    <div class="section-block" id="sb1">
+      <div class="sb-head" onclick="toggleBlock('sb1')">
+        <div class="sb-icon">1</div>
+        <div class="sb-title-wrap">
+          <div class="sb-title">Positioning LLMs inside Real Workplace Tasks</div>
+          <div class="sb-time">25 min · Light concepts</div>
+        </div>
+        <div class="sb-toggle">+</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-flow">
+          <div class="sb-row">The session begins with a realistic, pressure-filled workplace situation where multiple outputs are due under tight deadlines and the input materials are incomplete and conflicting.</div>
+          <div class="sb-row">The content covers which day-to-day tasks benefit from LLM support — such as <span data-tip="Condensing longer documents or meetings into a shorter, accurate summary.">summarisation</span>, structured output generation, rewriting, and drafting short professional deliverables.</div>
+          <div class="sb-row">The content also clarifies where <strong>human judgment still remains essential</strong>, and why LLMs cannot replace the clarity that comes from deciding what a task actually requires before any drafting begins.</div>
+          <div class="sb-row end-row">This section ends with a practical view of which workplace tasks are suitable for LLM support — and which are not yet ready for it because the inputs are too ambiguous.</div>
+        </div>
+        <div class="sb-note">
+          Instructors use the campaign scenario to make this concrete: trainees read real-seeming messy documents — incomplete briefs, conflicting audience definitions, vague deadlines — and identify what needs to be resolved before any AI tool is opened.
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2 -->
+    <div class="section-block green" id="sb2">
+      <div class="sb-head" onclick="toggleBlock('sb2')">
+        <div class="sb-icon">2</div>
+        <div class="sb-title-wrap">
+          <div class="sb-title">Defining the Manual Standard Before Prompting</div>
+          <div class="sb-time">25 min · Light concepts</div>
+        </div>
+        <div class="sb-toggle">+</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-flow">
+          <div class="sb-row">The session moves into defining what a strong output looks like <em>before</em> the first prompt is written — establishing the expected structure, criteria, and reader requirements for each deliverable.</div>
+          <div class="sb-row">The content covers how to name the task, identify the reader, specify the required format, and list the criteria that will later be used to judge whether the AI-generated output is usable.</div>
+          <div class="sb-row">The content also focuses on the distinction between outputs that <em>look</em> complete and outputs that <em>are</em> complete — a distinction that only shows up when you have a clear standard to test against.</div>
+          <div class="sb-row end-row">This section ends with a manual benchmark — a documented quality standard for the first output — that makes later AI output easier to evaluate accurately.</div>
+        </div>
+
+        <h4 style="font-size:14px;font-weight:700;color:var(--navy);margin:16px 0 10px;">What makes a strong output? — Click to explore</h4>
+        <div class="reveal-grid">
+          <div class="reveal-card" onclick="this.classList.toggle('open')">
+            <div class="rc-head">The reader is clearly identified</div>
+            <div class="rc-hint">Tap to see why this matters</div>
+            <div class="rc-body">An exec update for a director and a manager summary for a team read differently. If the reader is vague, the AI will write for no one in particular — and the output will feel generic even if the content is technically correct.</div>
+          </div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')">
+            <div class="rc-head">The format is specified precisely</div>
+            <div class="rc-hint">Tap to see why this matters</div>
+            <div class="rc-body">Length, heading structure, tone, and level of detail are all format decisions. If you do not specify them in the prompt, the model will choose — and it may choose wrong. The manual standard captures these before drafting begins.</div>
+          </div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')">
+            <div class="rc-head">The facts are confirmed before prompting</div>
+            <div class="rc-hint">Tap to see why this matters</div>
+            <div class="rc-body">AI can only work with the inputs you provide. If you feed it ambiguous or unverified information, the output will reflect that ambiguity — with high confidence. Fact-checking happens before the prompt, not after.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3 -->
+    <div class="section-block" id="sb3">
+      <div class="sb-head" onclick="toggleBlock('sb3')">
+        <div class="sb-icon">3</div>
+        <div class="sb-title-wrap">
+          <div class="sb-title">Building the First Prompt Workflow</div>
+          <div class="sb-time">35 min · Medium complexity</div>
+        </div>
+        <div class="sb-toggle">+</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-flow">
+          <div class="sb-row">The session focuses on prompt construction as a structured workflow rather than a single ad-hoc message — choosing the right first task before writing any prompt.</div>
+          <div class="sb-row">The content covers the six-part anatomy of a well-constructed prompt: <strong>task framing, context, instructions, output format, constraints, and verification conditions</strong>.</div>
+          <div class="sb-row">Trainees first diagnose a weak prompt and identify what it is missing, then build the correct prompt part by part — assembling each component deliberately before running it.</div>
+          <div class="sb-row end-row">This section ends with a complete, repeatable prompt workflow — ready for live use on the first workplace task.</div>
+        </div>
+
+        <div class="prompt-anatomy">
+          <div class="pa-label">Anatomy of a well-built prompt</div>
+          <div class="pa-line"><span class="pa-tag">Task:    </span><span class="pa-content">What you are asking the model to produce</span></div>
+          <div class="pa-line"><span class="pa-tag">Context: </span><span class="pa-content">Reader, purpose, deadline, known constraints</span></div>
+          <div class="pa-line"><span class="pa-tag">Facts:   </span><span class="pa-content">Only verified information — confirmed before prompting</span></div>
+          <div class="pa-line"><span class="pa-tag">Format:  </span><span class="pa-content">Structure, length, headings, tone requirements</span></div>
+          <div class="pa-line"><span class="pa-tag">Limits:  </span><span class="pa-content">What not to include. What to mark as pending.</span></div>
+          <div class="pa-line"><span class="pa-tag">Verify:  </span><span class="pa-content">The criteria you will use to judge the output</span></div>
+        </div>
+
+        <div class="try-it">
+          <div class="try-it-label">Try It Yourself</div>
+          <p>Before the session builds the prompt together: <strong>Which task should the team tackle first?</strong> Consider — which output has the clearest reader, the most verifiable facts, and the easiest quality standard to check? That is your starting point.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 4 -->
+    <div class="section-block amber" id="sb4">
+      <div class="sb-head" onclick="toggleBlock('sb4')">
+        <div class="sb-icon">4</div>
+        <div class="sb-title-wrap">
+          <div class="sb-title">Generating Outputs and Reviewing Prompt Versions</div>
+          <div class="sb-time">30 min · Medium complexity</div>
+        </div>
+        <div class="sb-toggle">+</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-flow">
+          <div class="sb-row">The session moves into live output generation — three different AI-produced drafts of the same output appear, all plausible at first glance.</div>
+          <div class="sb-row">The content covers prompt iteration: trainees compare multiple draft versions side by side and trace each quality difference back to a specific prompt decision that produced it.</div>
+          <div class="sb-row">The content also focuses on how to read AI output critically — identifying which draft is genuinely stronger and why, rather than accepting the first result that sounds polished.</div>
+          <div class="sb-row end-row">This section ends with a chosen working draft and a clearer understanding of why some prompts produce stronger outputs than others.</div>
+        </div>
+
+        <div class="tab-wrap">
+          <div class="tab-buttons">
+            <button class="tab-btn active" onclick="switchTab(this,'tab-weak')">Weak Draft</button>
+            <button class="tab-btn" onclick="switchTab(this,'tab-mid')">Partial Draft</button>
+            <button class="tab-btn" onclick="switchTab(this,'tab-strong')">Strong Draft</button>
+          </div>
+          <div class="tab-panel active" id="tab-weak">
+            <h4>What a weak draft looks like</h4>
+            <p>Produces content that sounds fluent but contains unverified claims, missing format structure, and audience misalignment. It reads well on first pass and fails on review.</p>
+            <ul>
+              <li>No clear confirmed / pending distinction</li>
+              <li>Tone does not match the reader's seniority</li>
+              <li>Action line is vague or missing entirely</li>
+            </ul>
+          </div>
+          <div class="tab-panel" id="tab-mid">
+            <h4>What a partial draft looks like</h4>
+            <p>Has some structural strengths — sections are labelled, the format is close — but the factual base is not verified and the action line still leaves the reader interpreting rather than deciding.</p>
+            <ul>
+              <li>Structure is present but content inside it is shaky</li>
+              <li>Open items presented as facts</li>
+              <li>"No action required" without specifying under what conditions</li>
+            </ul>
+          </div>
+          <div class="tab-panel" id="tab-strong">
+            <h4>What a strong draft looks like</h4>
+            <p>Confirmed facts are separated from open items. The action line is specific. Format matches the reader's role and time pressure. Pending items are flagged — not buried or softened.</p>
+            <ul>
+              <li>Confirmed / Pending clearly separated</li>
+              <li>Honest about what is still unresolved</li>
+              <li>Reader can act without a follow-up conversation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 5 -->
+    <div class="section-block accent" id="sb5">
+      <div class="sb-head" onclick="toggleBlock('sb5')">
+        <div class="sb-icon">5</div>
+        <div class="sb-title-wrap">
+          <div class="sb-title">Evaluating Outputs with Test Cases and Scoring</div>
+          <div class="sb-time">35 min · Medium complexity</div>
+        </div>
+        <div class="sb-toggle">+</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-flow">
+          <div class="sb-row">The session focuses on evaluation — applying a structured scoring rubric to the working draft rather than accepting it because it looks complete.</div>
+          <div class="sb-row">The content covers six evaluation criteria: <span data-tip="Is the writing clear to read without effort?">clarity</span>, <span data-tip="Does it contain everything the reader needs?">completeness</span>, <span data-tip="Are all stated facts verifiable?">accuracy</span>, <span data-tip="Does the structure and length match the requirement?">format control</span>, <span data-tip="Would the reader be able to act on this without a conversation?">usefulness</span>, and overall verdict.</div>
+          <div class="sb-row">The content also covers stress-testing: placing the draft in a simulated real-world scenario (a director walking into an exec meeting) to test whether it holds up under pressure.</div>
+          <div class="sb-row end-row">This section ends with a formal review verdict — and a revision list if the draft does not pass all criteria cleanly.</div>
+        </div>
+
+        <div class="info-strip">
+          <strong>Scoring principle:</strong> "Being the best of three drafts is a low bar. The question is not which draft is best — it is whether this draft clears the actual bar for this specific reader and deadline."
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 6 -->
+    <div class="section-block" id="sb6">
+      <div class="sb-head" onclick="toggleBlock('sb6')">
+        <div class="sb-icon">6</div>
+        <div class="sb-title-wrap">
+          <div class="sb-title">Building a Multi-Step Workflow: Generate → Critique → Revise → Verify</div>
+          <div class="sb-time">40 min · Tool-heavy</div>
+        </div>
+        <div class="sb-toggle">+</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-flow">
+          <div class="sb-row">The session shifts from one-step prompting into a complete, repeatable LLM workflow — using the revision list from evaluation as the starting point.</div>
+          <div class="sb-row">The content covers each stage in sequence: generating the initial output, critiquing it against the rubric, deciding what to keep / change / remove, and producing a revised candidate that is genuinely stronger.</div>
+          <div class="sb-row">The content also covers <span data-tip="A fallback step that runs when the first AI response is weak, incomplete, or unreliable. Rather than accepting it, the team returns to the prompt and applies a targeted fix.">fallback logic</span> — what to do when the first response does not meet the standard, and how to decide whether revision is worth attempting or a new prompt is needed.</div>
+          <div class="sb-row end-row">This section ends with a revised candidate output and a clear understanding of the difference between a one-prompt result and a properly controlled workflow.</div>
+        </div>
+
+        <h4 style="font-size:14px;font-weight:700;color:var(--navy);margin:16px 0 10px;">What each stage of revision decides</h4>
+        <div class="reveal-grid">
+          <div class="reveal-card" onclick="this.classList.toggle('open')">
+            <div class="rc-head">What to Keep</div>
+            <div class="rc-hint">Tap to reveal</div>
+            <div class="rc-body">Structure that works. Sections that are factually clean and reader-appropriate. Format choices that match the standard. Revision should protect what is already right — not rewrite everything.</div>
+          </div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')">
+            <div class="rc-head">What to Change</div>
+            <div class="rc-hint">Tap to reveal</div>
+            <div class="rc-body">Lines that are technically present but still leave the reader interpreting. Vague action statements. Open items that are not clearly labelled as open. Wording that misrepresents the current status.</div>
+          </div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')">
+            <div class="rc-head">What to Remove</div>
+            <div class="rc-hint">Tap to reveal</div>
+            <div class="rc-body">Details that clutter the output for the wrong reader. Operational specifics that belong in a different document. Anything that forces the reader to interpret information that should have been resolved before prompting.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 7 -->
+    <div class="section-block green" id="sb7">
+      <div class="sb-head" onclick="toggleBlock('sb7')">
+        <div class="sb-icon">7</div>
+        <div class="sb-title-wrap">
+          <div class="sb-title">Applying Privacy, Hallucination, and Safe-Use Checks</div>
+          <div class="sb-time">25 min · Light concepts</div>
+        </div>
+        <div class="sb-toggle">+</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-flow">
+          <div class="sb-row">The session focuses on the guardrails required for responsible workplace use — establishing a verification mindset before any output leaves the team.</div>
+          <div class="sb-row">The content covers three categories of risk: <span data-tip="When AI produces confident-sounding claims that are not supported by the information it was given.">hallucination</span>, privacy exposure from including identifiable or sensitive information in prompts, and the conditions under which AI output must be reviewed by a human before it is used.</div>
+          <div class="sb-row">The content also covers the send decision: given verified and unverified items in the output, trainees practice choosing between sending as-is, holding for one fact, or sending with a cover note that adds the missing context.</div>
+          <div class="sb-row end-row">This section ends with a safer decision process for accepting, revising, or rejecting AI-generated content — and a clear picture of where the human is always responsible.</div>
+        </div>
+
+        <table class="safe-table">
+          <thead>
+            <tr>
+              <th>Check Type</th>
+              <th>What It Covers</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Hallucination</strong></td>
+              <td>Every factual claim is traceable to a confirmed source in your inputs</td>
+              <td><span class="safe-pill flag">Flag if missing</span></td>
+            </tr>
+            <tr>
+              <td><strong>Privacy</strong></td>
+              <td>No personally identifiable or sensitive information entered the prompt</td>
+              <td><span class="safe-pill flag">Flag if present</span></td>
+            </tr>
+            <tr>
+              <td><strong>Pending items</strong></td>
+              <td>Unverified items are clearly labelled — not presented as confirmed facts</td>
+              <td><span class="safe-pill check">Required</span></td>
+            </tr>
+            <tr>
+              <td><strong>Human review</strong></td>
+              <td>A person with decision-making authority has read and approved the output</td>
+              <td><span class="safe-pill human">Always last</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SECTION 8 -->
+    <div class="section-block amber" id="sb8">
+      <div class="sb-head" onclick="toggleBlock('sb8')">
+        <div class="sb-icon">8</div>
+        <div class="sb-title-wrap">
+          <div class="sb-title">Comparing Free and Paid Tooling in Practice</div>
+          <div class="sb-time">20 min · Light concepts</div>
+        </div>
+        <div class="sb-toggle">+</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-flow">
+          <div class="sb-row">The session moves into a practical side-by-side comparison of free and paid LLM environments — grounded in the outputs already produced during the session, not in general advertising claims.</div>
+          <div class="sb-row">The content covers differences in output quality, response speed, format control, multi-step workflow support, and the conditions under which a paid tool provides meaningfully better value for a specific task.</div>
+          <div class="sb-row end-row">This section ends with a grounded decision framework for choosing tools intentionally — rather than defaulting to the most familiar or cheapest option for every task.</div>
+        </div>
+
+        <div class="tool-compare">
+          <div class="tool-col">
+            <div class="tool-head free">Free Tools — When they work</div>
+            <div class="tool-rows">
+              <div class="tool-row">Single-step tasks with a clear, constrained output</div>
+              <div class="tool-row">Light drafting where the stakes of a weak response are low</div>
+              <div class="tool-row">Exploration and experimentation before committing to a workflow</div>
+            </div>
+          </div>
+          <div class="tool-col">
+            <div class="tool-head paid">Paid Tools — When they add value</div>
+            <div class="tool-rows">
+              <div class="tool-row">Multi-step workflows requiring consistent format control</div>
+              <div class="tool-row">Longer context — full campaign packs, detailed briefing documents</div>
+              <div class="tool-row">Higher-stakes outputs where revision cost exceeds tool cost</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 9 -->
+    <div class="section-block accent" id="sb9">
+      <div class="sb-head" onclick="toggleBlock('sb9')">
+        <div class="sb-icon">9</div>
+        <div class="sb-title-wrap">
+          <div class="sb-title">Using AI to Produce Structured Workplace Outputs</div>
+          <div class="sb-time">25 min · Tool-heavy</div>
+        </div>
+        <div class="sb-toggle">+</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-flow">
+          <div class="sb-row">The session closes by applying the complete workflow to a second, harder type of output — persuasive public-facing copy, where the verification criteria shift from factual accuracy to audience fit and brand safety.</div>
+          <div class="sb-row">The content covers how the same four-stage pattern (generate → critique → revise → verify) applies to summaries, action plans, structured tables, short reports, social copy, and professional drafts — with different evaluation criteria for each output type.</div>
+          <div class="sb-row">The content also focuses on what changes when the output is persuasive rather than informational: the rubric becomes less about factual checking and more about resonance, reader fit, and brand approval readiness.</div>
+          <div class="sb-row end-row">This session closes with a complete, reviewable LLM-assisted workflow — prompt versions, evaluation notes, verified output, and a human send decision — ready to apply to any future workplace task.</div>
+        </div>
+
+        <div class="info-strip">
+          <strong>Same workflow, different criteria:</strong> "Sounds good" is not a passing grade for public-facing copy. The correct bar is: "Does this resonate with the right person, and would it pass brand review on first read?"
+        </div>
+
+        <div class="try-it">
+          <div class="try-it-label">Try It Yourself</div>
+          <p>Before running the LinkedIn post prompt: <strong>What is the single most important decision to lock in before drafting?</strong> The audience choice, the message angle, or the tone register? What happens to the output if you get that decision wrong?</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEARNING OBJECTIVES -->
+<div class="divider-strip" id="objectives">
+  <div class="wrap">
+    <div class="strip-eyebrow">Learning Outcomes</div>
+    <h2>After this session, the trainee should be able to:</h2>
+    <p>Tick each objective as you feel confident with it. Track your progress through the session.</p>
+    <div class="strip-meta">
+      <div class="strip-pill">14 objectives</div>
+      <div class="strip-pill">3 capability levels</div>
+    </div>
+  </div>
+</div>
+
+<section class="sec-white" id="objectives-list">
+  <div class="wrap">
+    <div class="blk-label"><span class="blk-num">3</span> Learning Objectives</div>
+    <h2 class="sec-title">Competencies you are building today</h2>
+    <p class="sec-sub">Each objective maps directly to a section of the session. Tick each one as you reach confidence with it — not just when the section ends.</p>
+
+    <div class="obj-progress">
+      <div class="progress-bar"><div class="progress-fill" id="prog-fill"></div></div>
+      <div class="progress-label" id="prog-label">0 / 14</div>
+    </div>
+
+    <div class="obj-list" id="obj-list">
+
+      <div class="obj-item" id="o1" onclick="toggleObj('o1')">
+        <span class="obj-verb">Identify</span>
+        <span class="obj-text">Realistic workplace tasks that can be improved through structured LLM support — and those that cannot yet be delegated to AI.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o2" onclick="toggleObj('o2')">
+        <span class="obj-verb">Distinguish</span>
+        <span class="obj-text">Between the manual expectation of a task and the AI-assisted version of that same task — knowing what changes and what must stay consistent.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o3" onclick="toggleObj('o3')">
+        <span class="obj-verb">Build</span>
+        <span class="obj-text">A prompt workflow that includes task framing, context, instructions, output format, constraints, and verification criteria — before the first output is generated.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o4" onclick="toggleObj('o4')">
+        <span class="obj-verb">Generate</span>
+        <span class="obj-text">Multiple prompt versions and compare how specific wording decisions affect the quality, accuracy, and usefulness of the resulting output.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o5" onclick="toggleObj('o5')">
+        <span class="obj-verb">Evaluate</span>
+        <span class="obj-text">LLM outputs using test cases, scoring criteria, and structured review — rather than accepting them on first read because they appear polished or complete.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o6" onclick="toggleObj('o6')">
+        <span class="obj-verb">Apply</span>
+        <span class="obj-text">Evaluation criteria — clarity, completeness, accuracy, format control, and usefulness — to any AI-generated output in a real workplace context.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o7" onclick="toggleObj('o7')">
+        <span class="obj-verb">Build</span>
+        <span class="obj-text">A multi-step LLM workflow using the generate, critique, revise, and verify stages — producing a stronger output than any single-prompt approach could achieve.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o8" onclick="toggleObj('o8')">
+        <span class="obj-verb">Apply</span>
+        <span class="obj-text">Fallback logic when the first AI response is weak, incomplete, or unreliable — knowing when to revise the prompt versus when to reject the output entirely.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o9" onclick="toggleObj('o9')">
+        <span class="obj-verb">Apply</span>
+        <span class="obj-text">Privacy checks, hallucination checks, and safe-use guardrails to workplace AI usage — and identify the points at which human review is non-negotiable.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o10" onclick="toggleObj('o10')">
+        <span class="obj-verb">Compare</span>
+        <span class="obj-text">Free and paid LLM tools in terms of practical workflow value for specific task types — rather than using them randomly or defaulting to the most familiar option.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o11" onclick="toggleObj('o11')">
+        <span class="obj-verb">Produce</span>
+        <span class="obj-text">Structured workplace outputs — summaries, action plans, short reports, social copy, formatted tables — using a controlled prompt engineering process.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o12" onclick="toggleObj('o12')">
+        <span class="obj-verb">Explain</span>
+        <span class="obj-text">When AI output is ready to use, when it requires revision, and when it should be rejected — based on a clear rubric rather than a gut read.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o13" onclick="toggleObj('o13')">
+        <span class="obj-verb">Compare</span>
+        <span class="obj-text">Manual work and AI-assisted work as two approaches to the same workplace outcome — understanding what each requires and where the real effort lies in each case.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o14" onclick="toggleObj('o14')">
+        <span class="obj-verb">Produce</span>
+        <span class="obj-text">A reviewable LLM workflow that includes prompt versions, evaluation notes, a revision record, and a verified output — ready to hand off, defend, or repeat.</span>
+        <div class="obj-check"></div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-title">Day 4 — Applied LLM Workflows</div>
+  <p class="footer-sub">The workflow does not end when the draft looks ready. It ends when a human confirms it is.</p>
+</footer>
+
+<script>
+// Block toggles
+function toggleBlock(id){
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+}
+
+// Tab switching
+function switchTab(btn, panelId){
+  btn.closest('.tab-wrap').querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  btn.closest('.tab-wrap').querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(panelId).classList.add('active');
+}
+
+// Objective toggle + progress
+let objCount = 0;
+const objTotal = 14;
+
+function toggleObj(id){
+  const el = document.getElementById(id);
+  const wasChecked = el.classList.contains('checked');
+  el.classList.toggle('checked');
+  objCount += wasChecked ? -1 : 1;
+  document.getElementById('prog-fill').style.width = (objCount / objTotal * 100) + '%';
+  document.getElementById('prog-label').textContent = objCount + ' / ' + objTotal;
+}
+
+// Nav highlight on scroll
+const sections = ['overview', 'outline-section', 'sections', 'objectives'];
+const navLinks = document.querySelectorAll('.tb-link');
+
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY + 80;
+  let current = '';
+  document.querySelectorAll('[id]').forEach(el => {
+    if(el.offsetTop <= scrollY) current = el.id;
+  });
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if(link.getAttribute('href') === '#' + current) link.classList.add('active');
+  });
+});
+
+// Open first block on load for demo
+toggleBlock('sb1');
+</script>
+</body>
+</html>
