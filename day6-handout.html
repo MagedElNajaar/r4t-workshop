@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 6 · Capstone Delivery & Portfolio · Student Handout</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg: #F2F0EB;
+  --surface: #FFFFFF;
+  --surface-2: #ECEAE3;
+  --ink: #18180F;
+  --ink-2: #3C3B2E;
+  --muted: #857E6A;
+  --forest: #1B3D2A;
+  --forest-mid: #265239;
+  --gold: #7A5A0A;
+  --gold-bg: rgba(122,90,10,.07);
+  --slate: #223344;
+  --amber: #9A5C00;
+  --rust: #8B2E12;
+  --border: #D9D4C6;
+  --border-2: #C5BFB0;
+  --r: 10px;
+  --rl: 16px;
+  --sh: 0 1px 3px rgba(0,0,0,0.05), 0 4px 14px rgba(0,0,0,0.04);
+  --sh-md: 0 2px 8px rgba(0,0,0,0.07), 0 12px 36px rgba(0,0,0,0.06);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+  height: 54px;
+  background: rgba(27, 61, 42, 0.97);
+  backdrop-filter: blur(14px);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.tb-brand { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.38); }
+.tb-brand strong { color: rgba(255,255,255,.72); font-weight: 600; }
+.tb-nav { display: flex; gap: 4px; }
+.tb-link {
+  font-size: 11px; letter-spacing: .06em; text-transform: uppercase;
+  color: rgba(255,255,255,.35); padding: 5px 10px; border-radius: 6px;
+  text-decoration: none; transition: all .18s; font-weight: 500;
+}
+.tb-link:hover { color: rgba(255,255,255,.75); background: rgba(255,255,255,.07); }
+.tb-link.active { color: #fff; background: rgba(255,255,255,.1); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  background: var(--forest);
+  display: flex; align-items: center;
+  padding: 100px 28px 80px;
+  position: relative; overflow: hidden;
+  scroll-margin-top: 54px;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 70% at 4% 70%, rgba(122,90,10,.22) 0%, transparent 62%),
+    radial-gradient(ellipse 50% 55% at 90% 10%, rgba(34,51,68,.3) 0%, transparent 55%),
+    radial-gradient(ellipse 85% 45% at 50% 108%, rgba(0,0,0,.42) 0%, transparent 60%);
+}
+.hero::after {
+  content: 'VI';
+  position: absolute; right: 20px; bottom: -30px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 300px; font-weight: 700; line-height: 1;
+  color: rgba(255,255,255,.018);
+  pointer-events: none; user-select: none; letter-spacing: -.04em;
+}
+.hero-inner { position: relative; z-index: 1; max-width: 980px; margin: 0 auto; width: 100%; }
+
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12);
+  border-radius: 100px; padding: 6px 16px; margin-bottom: 30px;
+}
+.hero-tag span { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.55); font-weight: 600; }
+.pulse-dot { width: 7px; height: 7px; border-radius: 50%; background: #C8A84B; animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.4;transform:scale(.75);} }
+
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 6vw, 70px);
+  color: #fff; line-height: 1.05;
+  letter-spacing: -.025em; font-weight: 600;
+  margin-bottom: 22px; max-width: 780px;
+}
+.hero h1 em { font-style: italic; color: rgba(255,255,255,.58); font-weight: 400; }
+.hero-sub {
+  font-size: clamp(15px, 2vw, 18px);
+  color: rgba(255,255,255,.46); max-width: 540px;
+  line-height: 1.65; margin-bottom: 44px;
+}
+
+/* Stage map in hero */
+.hero-stage-map {
+  display: flex; align-items: center; gap: 0;
+  overflow-x: auto; padding-bottom: 4px; margin-bottom: 28px;
+}
+.hsm-node { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; min-width: 90px; }
+.hsm-bubble {
+  width: 56px; height: 56px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; text-align: center; line-height: 1.2;
+  letter-spacing: .04em; text-transform: uppercase;
+  border: 2px solid rgba(255,255,255,.25);
+  background: rgba(255,255,255,.08); color: rgba(255,255,255,.75);
+  transition: all .2s;
+}
+.hsm-label { font-size: 10px; color: rgba(255,255,255,.38); margin-top: 8px; text-align: center; font-weight: 500; letter-spacing: .04em; max-width: 80px; }
+.hsm-arrow {
+  flex-shrink: 0; width: 24px; height: 2px;
+  background: rgba(255,255,255,.18); position: relative; margin-bottom: 26px;
+}
+.hsm-arrow::after {
+  content: ''; position: absolute; right: -5px; top: -4px;
+  border: 5px solid transparent; border-left-color: rgba(255,255,255,.18);
+}
+
+.hero-meta { display: flex; flex-wrap: wrap; gap: 12px; }
+.meta-card {
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1);
+  border-radius: var(--r); padding: 14px 18px;
+}
+.mc-label { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.3); font-weight: 700; margin-bottom: 6px; }
+.mc-val { font-size: 14px; font-weight: 600; color: rgba(255,255,255,.78); }
+.mc-val span { color: #C8A84B; }
+
+/* ── LAYOUT ── */
+section { scroll-margin-top: 54px; padding: 80px 28px; }
+.sec-warm { background: var(--bg); }
+.sec-white { background: var(--surface); }
+.wrap { max-width: 980px; margin: 0 auto; }
+
+/* ── DIVIDER STRIP ── */
+.divider-strip {
+  background: var(--forest); padding: 72px 28px;
+  position: relative; overflow: hidden; scroll-margin-top: 54px;
+}
+.divider-strip::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 65% 75% at 88% 15%, rgba(34,51,68,.3) 0%, transparent 60%),
+              radial-gradient(ellipse 50% 60% at 5% 85%, rgba(122,90,10,.2) 0%, transparent 55%);
+}
+.divider-strip .wrap { position: relative; z-index: 1; }
+.strip-eyebrow {
+  font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
+  color: rgba(255,255,255,.32); font-weight: 700; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.strip-eyebrow::before { content:''; display:block; width:24px; height:1px; background:rgba(255,255,255,.2); }
+.divider-strip h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(26px, 4vw, 46px);
+  color: #fff; line-height: 1.1; letter-spacing: -.018em;
+  margin-bottom: 12px; max-width: 620px; font-weight: 600;
+}
+.divider-strip p { font-size: 16px; color: rgba(255,255,255,.44); max-width: 500px; line-height: 1.65; }
+.strip-pills { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
+.strip-pill {
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1);
+  border-radius: 100px; padding: 5px 14px;
+  font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+  color: rgba(255,255,255,.42); font-weight: 600;
+}
+
+/* ── TYPOGRAPHY ── */
+.sec-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(26px, 3.8vw, 42px);
+  line-height: 1.12; letter-spacing: -.015em;
+  margin-bottom: 14px; color: var(--forest); font-weight: 600;
+}
+.sec-sub { font-size: 16px; color: var(--muted); max-width: 660px; line-height: 1.65; margin-bottom: 32px; }
+.blk-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); font-weight: 600; margin-bottom: 18px;
+}
+.blk-num {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--forest); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; flex-shrink: 0;
+}
+
+/* ── OUTLINE LIST ── */
+.outline-list { display: flex; flex-direction: column; gap: 6px; margin: 24px 0; }
+.outline-item {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 14px 18px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); box-shadow: var(--sh); transition: all .2s;
+}
+.outline-item:hover { border-color: var(--forest); transform: translateX(3px); }
+.ol-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--forest); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+}
+.ol-title { font-size: 15px; font-weight: 600; color: var(--ink); line-height: 1.35; }
+.ol-time { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .08em; color: var(--muted); margin-top: 4px; font-family: 'JetBrains Mono', monospace; }
+
+/* ── STAGE FLOW (detailed map) ── */
+.stage-flow { display: flex; flex-direction: column; gap: 0; margin: 28px 0; }
+.stage-row {
+  display: flex; align-items: stretch; gap: 0;
+  border-bottom: 1px solid var(--border);
+}
+.stage-row:last-child { border-bottom: none; }
+.stage-num {
+  width: 56px; flex-shrink: 0;
+  background: var(--forest); color: rgba(255,255,255,.85);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px; font-weight: 600;
+}
+.stage-row:nth-child(even) .stage-num { background: var(--forest-mid); }
+.stage-content {
+  flex: 1; padding: 16px 20px;
+  background: var(--surface);
+}
+.stage-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+.stage-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.stage-artifact {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--gold-bg); border: 1px solid rgba(122,90,10,.18);
+  border-radius: 100px; padding: 3px 10px;
+  font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+  color: var(--gold); margin-top: 8px;
+}
+.stage-artifact::before { content: '⬡'; font-size: 10px; }
+
+/* ── SECTION BLOCKS ── */
+.section-block {
+  background: var(--surface); border: 1px solid var(--border);
+  border-left: 4px solid var(--forest);
+  border-radius: var(--r); padding: 26px 28px;
+  box-shadow: var(--sh); margin-bottom: 18px;
+}
+.section-block.gold { border-left-color: var(--gold); }
+.section-block.slate { border-left-color: var(--slate); }
+.section-block.amber { border-left-color: var(--amber); }
+.section-block.rust { border-left-color: var(--rust); }
+
+.sb-head {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 16px; cursor: pointer; user-select: none;
+}
+.sb-icon {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--forest); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px; flex-shrink: 0; font-weight: 600;
+}
+.section-block.gold .sb-icon { background: var(--gold); }
+.section-block.slate .sb-icon { background: var(--slate); }
+.section-block.amber .sb-icon { background: var(--amber); }
+.section-block.rust .sb-icon { background: var(--rust); }
+.sb-title-wrap { flex: 1; }
+.sb-title { font-size: 17px; font-weight: 700; color: var(--ink); line-height: 1.3; }
+.sb-time { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-family: 'JetBrains Mono', monospace; margin-top: 3px; }
+.sb-toggle {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--surface-2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: var(--muted); transition: all .2s; flex-shrink: 0;
+}
+.section-block.open .sb-toggle { transform: rotate(45deg); background: var(--forest); color: #fff; border-color: var(--forest); }
+.section-block.gold.open .sb-toggle { background: var(--gold); border-color: var(--gold); }
+.section-block.slate.open .sb-toggle { background: var(--slate); border-color: var(--slate); }
+.section-block.amber.open .sb-toggle { background: var(--amber); border-color: var(--amber); }
+.section-block.rust.open .sb-toggle { background: var(--rust); border-color: var(--rust); }
+
+.sb-body { display: none; border-top: 1px solid var(--border); padding-top: 18px; }
+.section-block.open .sb-body { display: block; }
+
+.sb-flow { display: flex; flex-direction: column; gap: 10px; }
+.sb-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 14.5px; line-height: 1.55; color: var(--ink-2);
+}
+.sb-row::before { content: '→'; color: var(--muted); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+.sb-row.end-row::before { content: '✓'; color: var(--forest); }
+.sb-row strong { color: var(--ink); font-weight: 600; }
+.sb-note {
+  margin-top: 16px; padding: 14px 16px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; font-size: 13px; color: var(--muted);
+  line-height: 1.55; font-style: italic;
+}
+
+/* ── TOOLTIPS ── */
+[data-tip] {
+  position: relative; cursor: help;
+  border-bottom: 1.5px dashed var(--muted); display: inline;
+}
+[data-tip]:hover::after {
+  content: attr(data-tip);
+  position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+  white-space: pre-wrap; max-width: 260px; width: max-content;
+  background: var(--forest); color: #fff;
+  font-size: 12.5px; line-height: 1.5;
+  padding: 8px 12px; border-radius: 8px;
+  box-shadow: 0 6px 24px rgba(0,0,0,.2);
+  z-index: 50; pointer-events: none; margin-bottom: 6px; font-style: normal;
+}
+[data-tip]:hover::before {
+  content: ''; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+  border: 5px solid transparent; border-top-color: var(--forest);
+  z-index: 50; pointer-events: none;
+}
+
+/* ── REVEAL CARDS ── */
+.reveal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: 20px 0; }
+.reveal-card {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: var(--r); padding: 18px;
+  cursor: pointer; box-shadow: var(--sh); transition: all .2s;
+}
+.reveal-card:hover { border-color: var(--forest); box-shadow: var(--sh-md); transform: translateY(-2px); }
+.reveal-card.open { border-color: var(--gold); cursor: default; transform: none; }
+.rc-head { font-size: 14.5px; font-weight: 600; color: var(--ink); line-height: 1.4; margin-bottom: 8px; }
+.rc-hint { font-size: 12px; color: var(--muted); font-style: italic; }
+.reveal-card.open .rc-hint { display: none; }
+.rc-body { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 13.5px; color: var(--ink-2); line-height: 1.6; }
+.reveal-card.open .rc-body { display: block; }
+
+/* ── AI TIMING MATRIX ── */
+.ai-matrix {
+  width: 100%; border-collapse: collapse; margin: 24px 0;
+}
+.ai-matrix th {
+  background: var(--forest); color: #fff;
+  padding: 11px 16px; text-align: left;
+  font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+}
+.ai-matrix th:first-child { border-radius: 8px 0 0 0; }
+.ai-matrix th:last-child { border-radius: 0 8px 0 0; }
+.ai-matrix td { padding: 12px 16px; font-size: 13.5px; color: var(--ink-2); border-bottom: 1px solid var(--border); line-height: 1.5; vertical-align: top; }
+.ai-matrix tr:last-child td { border-bottom: none; }
+.ai-matrix tr:nth-child(even) td { background: var(--bg); }
+.stage-pill {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 100px;
+}
+.stage-pill.manual { background: rgba(34,51,68,.1); color: var(--slate); }
+.stage-pill.ai { background: rgba(27,61,42,.08); color: var(--forest); }
+.stage-pill.both { background: var(--gold-bg); color: var(--gold); }
+
+/* ── PRESENTATION FRAMEWORK ── */
+.pf-list { display: flex; flex-direction: column; gap: 0; margin: 24px 0; border: 1px solid var(--border); border-radius: var(--rl); overflow: hidden; box-shadow: var(--sh-md); }
+.pf-item {
+  display: flex; align-items: stretch; gap: 0;
+  border-bottom: 1px solid var(--border);
+}
+.pf-item:last-child { border-bottom: none; }
+.pf-step {
+  width: 52px; flex-shrink: 0;
+  background: var(--forest); color: rgba(255,255,255,.8);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px; font-weight: 600;
+}
+.pf-item:nth-child(even) .pf-step { background: var(--forest-mid); }
+.pf-body { flex: 1; padding: 14px 20px; background: var(--surface); }
+.pf-label { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+.pf-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+/* ── TABS ── */
+.tab-wrap { margin: 24px 0; }
+.tab-buttons { display: flex; gap: 4px; border-bottom: 2px solid var(--border); }
+.tab-btn {
+  padding: 9px 16px; font-size: 13px; font-weight: 600;
+  color: var(--muted); border: none; background: transparent;
+  cursor: pointer; border-bottom: 2px solid transparent;
+  margin-bottom: -2px; transition: all .2s; border-radius: 6px 6px 0 0;
+}
+.tab-btn:hover { color: var(--forest); background: var(--surface-2); }
+.tab-btn.active { color: var(--forest); border-bottom-color: var(--forest); background: var(--surface); }
+.tab-panel { display: none; padding: 22px; background: var(--surface); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--r) var(--r); }
+.tab-panel.active { display: block; }
+.tab-panel h4 { font-size: 15px; font-weight: 700; color: var(--forest); margin-bottom: 10px; }
+.tab-panel p { font-size: 14px; color: var(--ink-2); line-height: 1.6; margin-bottom: 10px; }
+.tab-panel ul { margin-left: 18px; }
+.tab-panel li { font-size: 14px; color: var(--ink-2); line-height: 1.6; margin-bottom: 5px; }
+
+/* ── LINKEDIN CARD ── */
+.linkedin-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--rl); padding: 24px 26px;
+  box-shadow: var(--sh-md); margin: 20px 0;
+  font-family: 'DM Sans', sans-serif;
+}
+.lc-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 18px; }
+.lc-avatar {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--forest); color: rgba(255,255,255,.85);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; flex-shrink: 0;
+}
+.lc-meta { flex: 1; }
+.lc-name { font-size: 15px; font-weight: 700; color: var(--ink); }
+.lc-role { font-size: 13px; color: var(--muted); line-height: 1.45; margin-top: 2px; }
+.lc-body { font-size: 14px; color: var(--ink-2); line-height: 1.7; }
+.lc-body p { margin-bottom: 10px; }
+.lc-body p:last-child { margin-bottom: 0; }
+.lc-body strong { color: var(--ink); }
+.lc-tag { display: inline-block; color: #0A7EC2; font-weight: 500; margin-right: 4px; }
+.lc-label {
+  font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 12px;
+}
+
+/* ── COMPARE BLOCK ── */
+.compare-wrap {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0; border-radius: var(--rl); overflow: hidden;
+  border: 1px solid var(--border); box-shadow: var(--sh-md); margin: 20px 0;
+}
+.cw-col { display: flex; flex-direction: column; }
+.cw-head {
+  padding: 12px 20px; font-size: 11px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  display: flex; align-items: center; gap: 8px;
+}
+.cw-head.unstructured { background: var(--rust); color: #fff; }
+.cw-head.unstructured::before { content: '✕'; font-size: 13px; }
+.cw-head.structured { background: var(--forest); color: #fff; }
+.cw-head.structured::before { content: '✓'; font-size: 13px; }
+.cw-body { background: var(--surface); padding: 18px 20px; flex: 1; }
+.cw-item { font-size: 13.5px; color: var(--ink-2); line-height: 1.55; margin-bottom: 8px; display: flex; gap: 8px; }
+.cw-item::before { content:'—'; color: var(--muted); flex-shrink: 0; }
+
+/* ── CALLOUT ── */
+.callout {
+  background: var(--forest); border-radius: var(--rl);
+  padding: 22px 28px; margin: 28px 0;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(16px, 2.2vw, 20px);
+  color: rgba(255,255,255,.88); line-height: 1.5;
+  font-style: italic; text-align: center; font-weight: 400;
+}
+.callout em { color: rgba(255,255,255,.5); font-style: normal; }
+
+.info-strip {
+  background: rgba(27,61,42,.06); border: 1px solid rgba(27,61,42,.14);
+  border-left: 4px solid var(--forest);
+  border-radius: var(--r); padding: 16px 20px; margin: 18px 0;
+  font-size: 14px; color: var(--forest); line-height: 1.55;
+}
+
+.gold-strip {
+  background: var(--gold-bg); border: 1px solid rgba(122,90,10,.18);
+  border-left: 4px solid var(--gold);
+  border-radius: var(--r); padding: 16px 20px; margin: 18px 0;
+  font-size: 14px; color: var(--gold); line-height: 1.55;
+}
+
+.try-it {
+  background: rgba(27,61,42,.06); border: 1.5px solid rgba(27,61,42,.18);
+  border-radius: var(--r); padding: 18px 20px; margin: 18px 0;
+}
+.try-it-label {
+  font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--forest); margin-bottom: 8px;
+  display: flex; align-items: center; gap: 6px;
+}
+.try-it-label::before { content: '⚡'; }
+.try-it p { font-size: 14px; color: var(--ink-2); line-height: 1.55; }
+.try-it strong { color: var(--ink); }
+
+/* ── OBJECTIVES ── */
+.obj-progress {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 16px 20px;
+  display: flex; align-items: center; gap: 16px; margin-top: 16px;
+}
+.progress-bar { flex: 1; height: 6px; background: var(--surface-2); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--forest); border-radius: 3px; transition: width .35s ease; width: 0%; }
+.progress-label { font-size: 13px; font-weight: 600; color: var(--muted); white-space: nowrap; font-family: 'JetBrains Mono', monospace; }
+
+.obj-list { display: flex; flex-direction: column; gap: 8px; margin: 24px 0; }
+.obj-item {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 14px 18px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); box-shadow: var(--sh);
+  transition: all .2s; cursor: default;
+}
+.obj-item:hover { border-color: var(--forest); background: rgba(27,61,42,.02); }
+.obj-verb {
+  font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 100px;
+  background: rgba(27,61,42,.08); color: var(--forest);
+  white-space: nowrap; flex-shrink: 0; margin-top: 2px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.obj-text { font-size: 14.5px; color: var(--ink-2); line-height: 1.5; flex: 1; }
+.obj-check {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid var(--border); flex-shrink: 0; margin-top: 2px;
+  cursor: pointer; transition: all .2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.obj-item.checked .obj-check { background: var(--forest); border-color: var(--forest); }
+.obj-item.checked .obj-check::after { content:'✓'; font-size:10px; color:#fff; font-weight:700; }
+.obj-item.checked { border-color: var(--forest); background: rgba(27,61,42,.03); }
+.obj-item.checked .obj-text { color: var(--forest); }
+
+/* ── FOOTER ── */
+.footer { background: var(--forest); padding: 48px 28px; text-align: center; }
+.footer-title { font-family: 'Cormorant Garamond', serif; font-size: 24px; color: rgba(255,255,255,.82); margin-bottom: 10px; font-weight: 600; }
+.footer-sub { font-size: 14px; color: rgba(255,255,255,.3); }
+
+/* ── RESPONSIVE ── */
+@media(max-width:700px){
+  .topbar .tb-nav { display: none; }
+  .hero { padding: 90px 20px 60px; }
+  section { padding: 60px 20px; }
+  .ai-matrix { font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topbar">
+  <div class="tb-brand"><strong>Day 6</strong> · Capstone Delivery & Portfolio</div>
+  <div class="tb-nav">
+    <a href="#overview" class="tb-link active">Overview</a>
+    <a href="#sections" class="tb-link">Sections</a>
+    <a href="#objectives" class="tb-link">Objectives</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="overview">
+  <div class="hero-inner">
+    <div class="hero-tag">
+      <div class="pulse-dot"></div>
+      <span>Student Handout · Capstone · Session 6 of 6</span>
+    </div>
+    <h1>Capstone Delivery<br><em>& Portfolio</em></h1>
+    <p class="hero-sub">This session brings the full training together into one end-to-end workplace case — walked through stage by stage, compared against manual work, and packaged as a professional portfolio output.</p>
+
+    <div class="hero-stage-map">
+      <div class="hsm-node">
+        <div class="hsm-bubble">Setup</div>
+        <div class="hsm-label">Workspace &amp; Tracking</div>
+      </div>
+      <div class="hsm-arrow"></div>
+      <div class="hsm-node">
+        <div class="hsm-bubble">Report</div>
+        <div class="hsm-label">KPIs &amp; Dashboard</div>
+      </div>
+      <div class="hsm-arrow"></div>
+      <div class="hsm-node">
+        <div class="hsm-bubble">Auto</div>
+        <div class="hsm-label">Automation</div>
+      </div>
+      <div class="hsm-arrow"></div>
+      <div class="hsm-node">
+        <div class="hsm-bubble">AI</div>
+        <div class="hsm-label">LLM Workflows</div>
+      </div>
+      <div class="hsm-arrow"></div>
+      <div class="hsm-node">
+        <div class="hsm-bubble">Comms</div>
+        <div class="hsm-label">Deliverables</div>
+      </div>
+    </div>
+
+    <div class="hero-meta">
+      <div class="meta-card">
+        <div class="mc-label">Total Sections</div>
+        <div class="mc-val"><span>8</span> teaching stages</div>
+      </div>
+      <div class="meta-card">
+        <div class="mc-label">Total Time</div>
+        <div class="mc-val"><span>~3.5 hours</span> incl. reflection</div>
+      </div>
+      <div class="meta-card">
+        <div class="mc-label">Case Stages</div>
+        <div class="mc-val"><span>5</span> end-to-end workflow stages</div>
+      </div>
+      <div class="meta-card">
+        <div class="mc-label">Close Output</div>
+        <div class="mc-val">Portfolio &amp; LinkedIn summary</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OVERVIEW -->
+<section class="sec-white" id="outline-section">
+  <div class="wrap">
+    <div class="blk-label"><span class="blk-num">1</span> Session Overview</div>
+    <h2 class="sec-title">How this session is taught</h2>
+    <p class="sec-sub">Day 6 is not a new topic — it is a retrospective. The session uses one complete workplace case to show how everything from Days 1–5 connects inside a single, realistic workflow. The day closes with professional packaging of the skills built across the programme.</p>
+
+    <div class="outline-list">
+      <div class="outline-item">
+        <div class="ol-num">1</div>
+        <div class="ol-content">
+          <div class="ol-title">Introducing the full workplace case and its objective</div>
+          <div class="ol-time">25 min</div>
+        </div>
+      </div>
+      <div class="outline-item">
+        <div class="ol-num">2</div>
+        <div class="ol-content">
+          <div class="ol-title">Walking through Stage 1: workspace setup and structured tracking</div>
+          <div class="ol-time">25 min</div>
+        </div>
+      </div>
+      <div class="outline-item">
+        <div class="ol-num">3</div>
+        <div class="ol-content">
+          <div class="ol-title">Walking through Stage 2: reporting and dashboard production</div>
+          <div class="ol-time">30 min</div>
+        </div>
+      </div>
+      <div class="outline-item">
+        <div class="ol-num">4</div>
+        <div class="ol-content">
+          <div class="ol-title">Walking through Stage 3: automation of repeated work</div>
+          <div class="ol-time">30 min</div>
+        </div>
+      </div>
+      <div class="outline-item">
+        <div class="ol-num">4</div>
+        <div class="ol-content">
+          <div class="ol-title">Walking through Stage 4: LLM-supported workplace tasks</div>
+          <div class="ol-time">30 min</div>
+        </div>
+      </div>
+      <div class="outline-item">
+        <div class="ol-num">5</div>
+        <div class="ol-content">
+          <div class="ol-title">Walking through Stage 5: communication and deliverable production</div>
+          <div class="ol-time">30 min</div>
+        </div>
+      </div>
+      <div class="outline-item">
+        <div class="ol-num">7</div>
+        <div class="ol-content">
+          <div class="ol-title">Comparing manual work and AI-assisted work across the case</div>
+          <div class="ol-time">20 min</div>
+        </div>
+      </div>
+      <div class="outline-item">
+        <div class="ol-num">8</div>
+        <div class="ol-content">
+          <div class="ol-title">Using the article handout to connect the case to real workplace value</div>
+          <div class="ol-time">20 min</div>
+        </div>
+      </div>
+      <div class="outline-item">
+        <div class="ol-num">9</div>
+        <div class="ol-content">
+          <div class="ol-title">Closing with reflection and professional packaging</div>
+          <div class="ol-time">20 min</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      "The goal is not to memorise every tool.<br>
+      <em>It is to be able to explain one complete workflow clearly."</em>
+    </div>
+  </div>
+</section>
+
+<!-- CASE MAP STRIP -->
+<div class="divider-strip">
+  <div class="wrap">
+    <div class="strip-eyebrow">The Capstone Case</div>
+    <h2>Five stages. Each one produced something real. Together they form one end-to-end workflow.</h2>
+    <p>The case reflects a realistic workplace: a team with coordination problems, reporting gaps, repeated manual tasks, and communication outputs that needed to reach stakeholders clearly.</p>
+
+    <div class="stage-flow" style="margin-top:32px;">
+      <div class="stage-row">
+        <div class="stage-num">1</div>
+        <div class="stage-content">
+          <div class="stage-title">Workspace Setup &amp; Structured Tracking</div>
+          <div class="stage-desc">Work becomes visible. Fields are defined. Consistency is established before any reporting begins.</div>
+          <div class="stage-artifact">Tracker — operational base</div>
+        </div>
+      </div>
+      <div class="stage-row">
+        <div class="stage-num">2</div>
+        <div class="stage-content">
+          <div class="stage-title">Reporting &amp; Dashboard Production</div>
+          <div class="stage-desc">Tracked data becomes decision-ready KPIs. Leadership gets a view that requires no additional explanation.</div>
+          <div class="stage-artifact">Dashboard — leadership view</div>
+        </div>
+      </div>
+      <div class="stage-row">
+        <div class="stage-num">3</div>
+        <div class="stage-content">
+          <div class="stage-title">Automation of Repeated Work</div>
+          <div class="stage-desc">Trigger-to-action logic removes manual coordination steps. The workflow becomes more reliable without extra effort.</div>
+          <div class="stage-artifact">Automation rules — reliability layer</div>
+        </div>
+      </div>
+      <div class="stage-row">
+        <div class="stage-num">4</div>
+        <div class="stage-content">
+          <div class="stage-title">LLM-Supported Workplace Tasks</div>
+          <div class="stage-desc">AI enters only once the brief is locked and the quality bar is known. Generate → critique → revise → verify.</div>
+          <div class="stage-artifact">Prompt-review cycle — faster drafts</div>
+        </div>
+      </div>
+      <div class="stage-row">
+        <div class="stage-num">5</div>
+        <div class="stage-content">
+          <div class="stage-title">Communication &amp; Deliverable Production</div>
+          <div class="stage-desc">Case outcomes become audience-facing assets. Message hierarchy, evidence, CTA, and brand discipline applied throughout.</div>
+          <div class="stage-artifact">Deliverable pack — external-ready</div>
+        </div>
+      </div>
+    </div>
+    <div class="strip-pills">
+      <div class="strip-pill">Google Sheets / Notion / Trello</div>
+      <div class="strip-pill">KPI Dashboards</div>
+      <div class="strip-pill">Automation</div>
+      <div class="strip-pill">LLM Workflows</div>
+      <div class="strip-pill">Canva AI</div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAILED SECTIONS -->
+<section class="sec-warm" id="sections">
+  <div class="wrap">
+    <div class="blk-label"><span class="blk-num">2</span> Detailed Outlines</div>
+    <h2 class="sec-title">What happens in each section</h2>
+    <p class="sec-sub">Expand each section to see the teaching flow, the key skills revisited, and what each stage of the walkthrough demonstrates. The case moves forward — each section depends on the one before it.</p>
+
+    <!-- SECTION 1 -->
+    <div class="section-block" id="sb1">
+      <div class="sb-head" onclick="toggleBlock('sb1')">
+        <div class="sb-icon">1</div>
+        <div class="sb-title-wrap">
+          <div class="sb-title">Introducing the Full Workplace Case and Its Objective</div>
+          <div class="sb-time">25 min · Context-setting</div>
+        </div>
+        <div class="sb-toggle">+</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-flow">
+          <div class="sb-row">The session begins with one complete, realistic workplace case — a team with broken coordination, missing reporting, unmanaged repetition, and communication outputs that could not reach their audiences clearly.</div>
+          <div class="sb-row">The content establishes the business context, the problems that triggered the project, and the reasons the case required multiple tools and methods rather than one isolated fix.</div>
+          <div class="sb-row">Trainees interact with the problem set — identifying what type of operational failure each issue represents — before seeing the full five-stage solution map that the rest of the day walks through.</div>
+          <div class="sb-row end-row">This section ends with a shared understanding of the case and a clear view of what the walkthrough will demonstrate at each stage.</div>
+        </div>
+
+        <h4 style="font-size:14px;font-weight:700;color:var(--forest);margin:16px 0 10px;">What kind of problem was it? — Click to explore</h4>
+        <div class="reveal-grid">
+          <div class="reveal-card" onclick="this.classList.toggle('open')">
+            <div class="rc-head">Work that was invisible to leadership</div>
+            <div class="rc-hint">Tap to classify</div>
+            <div class="rc-body">A <strong>visibility problem</strong>. Work was being done but it was not trackable, reviewable, or reportable. Leadership had no reliable view — which meant decisions were made on approximations.</div>
+          </div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')">
+            <div class="rc-head">Repeated coordination done manually every day</div>
+            <div class="rc-hint">Tap to classify</div>
+            <div class="rc-body">A <strong>repetition problem</strong>. Tasks with clear triggers and predictable outcomes were being handled by a person when they could have been handled by a rule. The manual cost was real and cumulative.</div>
+          </div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')">
+            <div class="rc-head">Deliverables that did not communicate the work clearly</div>
+            <div class="rc-hint">Tap to classify</div>
+            <div class="rc-body">A <strong>communication problem</strong>. The outputs existed but they were not built around an audience, a message hierarchy, or an action requirement. They showed the work without explaining its value.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2 -->
+    <div class="section-block gold" id="sb2">
+      <div class="sb-head" onclick="toggleBlock('sb2')">
+        <div class="sb-icon">2</div>
+        <div class="sb-title-wrap">
+          <div class="sb-title">Stage 1 Walkthrough: Workspace Setup and Structured Tracking</div>
+          <div class="sb-time">25 min · Days 1–2 revisited</div>
+        </div>
+        <div class="sb-toggle">+</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-flow">
+          <div class="sb-row">The session moves into the first stage of the case — showing how structured tracking made the work visible before reporting, automation, or AI support could be introduced reliably.</div>
+          <div class="sb-row">The content revisits how <span data-tip="Google Sheets for formula-driven tracking, Notion for context-rich documentation, Trello/ClickUp for task and workflow visibility. Each tool has a different strength at this stage.">Google Sheets, Notion, and Trello/ClickUp</span> were used to define trackable fields, organize information consistently, and establish a shared operational view the team could actually use.</div>
+          <div class="sb-row">The content also covers why structure had to come before AI — without a clear, consistent record of what the work was, any AI-generated output at Stage 4 would have been built on guesswork.</div>
+          <div class="sb-row end-row">This section ends with a clear view of the operational tracker as the foundation artifact — and why everything in Stages 2–5 depends on it being done correctly.</div>
+        </div>
+        <div class="info-strip">
+          <strong>Stage 1 principle:</strong> Good tracking is not writing everything down. It is choosing the fields that make work controllable — and keeping them consistent enough to report from later.
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3 -->
+    <div class="section-block slate" id="sb3">
+      <div class="sb-head" onclick="toggleBlock('sb3')">
+        <div class="sb-icon">3</div>
+        <div class="sb-title-wrap">
+          <div class="sb-title">Stage 2 Walkthrough: Reporting and Dashboard Production</div>
+          <div class="sb-time">30 min · Days 1–2 revisited</div>
+        </div>
+        <div class="sb-toggle">+</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-flow">
+          <div class="sb-row">The session continues into how operational data from the tracker was transformed into a decision-facing leadership view — closing the gap between the team's working view and what leadership actually needed to see.</div>
+          <div class="sb-row">The content covers how <span data-tip="A KPI (Key Performance Indicator) is a metric that directly reflects progress toward a business goal — not every number is a KPI. The dashboard shows only those metrics that help someone act.">KPIs</span> were defined, how dashboard views were shaped around a specific decision need, and how interpretation was added to make the output useful rather than just data-complete.</div>
+          <div class="sb-row">The content also covers the gap between having a tracker and having a reporting layer — they serve different audiences and require different design thinking.</div>
+          <div class="sb-row end-row">This section ends with a clear view of how operational data became a decision-ready dashboard — and why the tracker in Stage 1 had to be right before the dashboard in Stage 2 could be trusted.</div>
+        </div>
+
+        <div class="info-strip">
+          <strong>Stage 2 principle:</strong> A useful dashboard does not show everything. It shows what helps someone act — and it removes the need for the team lead to answer questions that a well-designed view could answer automatically.
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 4 -->
+    <div class="section-block amber" id="sb4">
+      <div class="sb-head" onclick="toggleBlock('sb4')">
+        <div class="sb-icon">4</div>
+        <div class="sb-title-wrap">
+          <div class="sb-title">Stage 3 Walkthrough: Automation of Repeated Work</div>
+          <div class="sb-time">30 min · Days 2–3 revisited</div>
+        </div>
+        <div class="sb-toggle">+</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-flow">
+          <div class="sb-row">The session shifts into the automation stage — showing how repeated coordination work that was still being done manually after Stages 1 and 2 was identified, mapped, and removed from the team's daily load.</div>
+          <div class="sb-row">The content covers the <span data-tip="Trigger-to-action logic: when X happens (trigger), under condition Y, do Z (action). A task becomes automatable when all three are predictable enough to express as a rule.">trigger → condition → action</span> model for designing automation rules, how cross-tool movement was handled between Sheets, Notion, and task tools, and the reliability considerations that governed which tasks were suitable candidates.</div>
+          <div class="sb-row">The content also clarifies what automation did not do: it did not make the workflow smarter or replace human judgment — it made the workflow more reliable and gave time back.</div>
+          <div class="sb-row end-row">This section ends with a clear understanding of where automation reduced manual repetition inside the case — and what the team was able to do with the time recovered.</div>
+        </div>
+
+        <div class="tab-wrap">
+          <div class="tab-buttons">
+            <button class="tab-btn active" onclick="switchTab(this,'tab-auto-yes')">Automatable Tasks</button>
+            <button class="tab-btn" onclick="switchTab(this,'tab-auto-no')">Not Automatable</button>
+            <button class="tab-btn" onclick="switchTab(this,'tab-auto-when')">When to Automate</button>
+          </div>
+          <div class="tab-panel active" id="tab-auto-yes">
+            <h4>Tasks that became automation candidates</h4>
+            <p>A task is automatable when the trigger is clear, the condition is defined, and the action is predictable every time it runs:</p>
+            <ul>
+              <li>Status change notifications sent when a field updates</li>
+              <li>Task assignment triggered when a new row is added</li>
+              <li>Weekly summary emails generated from tracker data</li>
+              <li>Cross-tool record creation when a form is submitted</li>
+            </ul>
+          </div>
+          <div class="tab-panel" id="tab-auto-no">
+            <h4>Tasks that remained manual</h4>
+            <p>Automation cannot replace judgment, contextual reading, or decisions that vary based on information the trigger cannot capture:</p>
+            <ul>
+              <li>Deciding whether a status change represents a real problem or expected variance</li>
+              <li>Reviewing AI-generated output before it is used</li>
+              <li>Interpreting dashboard anomalies for leadership</li>
+              <li>Writing the rationale behind a communication decision</li>
+            </ul>
+          </div>
+          <div class="tab-panel" id="tab-auto-when">
+            <h4>The right moment to automate</h4>
+            <p>Automation only works reliably when three conditions are in place first:</p>
+            <ul>
+              <li>The process is already working manually — automation of a broken process produces faster chaos</li>
+              <li>The trigger is consistent and detectable — the tool must know reliably when to act</li>
+              <li>The action is predictable — the same trigger should always produce the same response</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 5 -->
+    <div class="section-block" id="sb5">
+      <div class="sb-head" onclick="toggleBlock('sb5')">
+        <div class="sb-icon">5</div>
+        <div class="sb-title-wrap">
+          <div class="sb-title">Stage 4 Walkthrough: LLM-Supported Workplace Tasks</div>
+          <div class="sb-time">30 min · Day 4 revisited</div>
+        </div>
+        <div class="sb-toggle">+</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-flow">
+          <div class="sb-row">The session moves into the AI stage — demonstrating why LLMs entered the workflow at Stage 4 rather than Stage 1, and what made them useful only once the brief was locked and the quality bar was already known.</div>
+          <div class="sb-row">The content covers the <span data-tip="A usable prompt is not a sentence. It is a brief in prompt form: audience, objective, constraints, output format, and verification criteria all named explicitly.">structured prompt workflow</span> applied inside the case: task framing, context, format specification, constraints, and the review loop that ran before any AI output was accepted as a working draft.</div>
+          <div class="sb-row">The content also covers the <span data-tip="Generate → Compare → Check → Revise. AI output is a starting point, not a final answer. The loop runs until the output meets the defined standard — or until it is rejected and the prompt is rebuilt.">generate-compare-check-revise cycle</span> and the conditions under which an output was accepted, revised, or sent back for re-prompting.</div>
+          <div class="sb-row end-row">This section ends with a practical view of how LLMs supported faster, more consistent first drafts inside the case — without removing the team's judgment at the review and revision stages.</div>
+        </div>
+
+        <div class="info-strip">
+          <strong>Stage 4 principle:</strong> AI would have been weak at Stage 1 — there was nothing structured enough to work with. It became useful at Stage 4 because the brief was locked, the audience was known, and the team already understood what a good output looked like.
+        </div>
+
+        <div class="try-it">
+          <div class="try-it-label">Try It Yourself</div>
+          <p>Before describing how you used AI in an interview or portfolio: <strong>explain what you had in place before the AI ran.</strong> The setup — the locked brief, the clear audience, the defined quality bar — is the skill. The AI is just faster execution of a process you already knew how to run.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 6 -->
+    <div class="section-block gold" id="sb6">
+      <div class="sb-head" onclick="toggleBlock('sb6')">
+        <div class="sb-icon">6</div>
+        <div class="sb-title-wrap">
+          <div class="sb-title">Stage 5 Walkthrough: Communication and Deliverable Production</div>
+          <div class="sb-time">30 min · Day 5 revisited</div>
+        </div>
+        <div class="sb-toggle">+</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-flow">
+          <div class="sb-row">The session continues into the final stage — showing how the case outcomes were turned into audience-facing deliverables that communicated the work clearly to people outside the team.</div>
+          <div class="sb-row">The content covers how <span data-tip="Message hierarchy: the sequence of hook → supporting case → evidence → CTA. Every deliverable in the pack follows the same logic, adapted for each format and channel.">message hierarchy, evidence, CTA, and brand consistency</span> were applied across slide decks, one-pagers, and social assets — and how Canva AI supported production without overriding the communication strategy.</div>
+          <div class="sb-row">The content also covers the pre-review check that ran before the pack left the team — verifying that each deliverable served its communication purpose, not just its visual appearance.</div>
+          <div class="sb-row end-row">This section ends with the complete five-stage workflow visible from end to end — and with a full picture of how each stage's output became the input for the next.</div>
+        </div>
+
+        <div class="info-strip">
+          <strong>Stage 5 principle:</strong> Three deliverables only become a system when the same decisions run through all of them — same audience, same message logic, same tone, same CTA direction. Different format. Same strategy.
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 7 -->
+    <div class="section-block rust" id="sb7">
+      <div class="sb-head" onclick="toggleBlock('sb7')">
+        <div class="sb-icon">7</div>
+        <div class="sb-title-wrap">
+          <div class="sb-title">Comparing Manual Work and AI-Assisted Work Across the Case</div>
+          <div class="sb-time">20 min · Integration</div>
+        </div>
+        <div class="sb-toggle">+</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-flow">
+          <div class="sb-row">The session focuses on an honest comparison between doing the case manually and doing it with structured AI support — covering where manual work remained necessary, where AI accelerated production, and how judgment was applied throughout both approaches.</div>
+          <div class="sb-row">The content covers the conditions under which AI adds genuine value (locked brief, clear audience, known quality bar) versus the conditions where manual control remains essential (ambiguous inputs, judgment-dependent decisions, safe-use checks).</div>
+          <div class="sb-row end-row">This section ends with a clear mental model for choosing between manual and AI-assisted approaches — based on what the task actually requires, not on tool preference.</div>
+        </div>
+
+        <table class="ai-matrix">
+          <thead>
+            <tr>
+              <th>Stage</th>
+              <th>Manual Work Required</th>
+              <th>Where AI Added Value</th>
+              <th>Mode</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Stage 1</strong><br><small>Tracking</small></td>
+              <td>Field design, schema decisions, consistency rules</td>
+              <td>Minimal — structure must be decided by a human</td>
+              <td><span class="stage-pill manual">Manual</span></td>
+            </tr>
+            <tr>
+              <td><strong>Stage 2</strong><br><small>Reporting</small></td>
+              <td>KPI selection, interpretation, decision framing</td>
+              <td>Formula logic, layout suggestions</td>
+              <td><span class="stage-pill manual">Manual-led</span></td>
+            </tr>
+            <tr>
+              <td><strong>Stage 3</strong><br><small>Automation</small></td>
+              <td>Trigger logic design, reliability checks</td>
+              <td>Rule configuration, cross-tool setup</td>
+              <td><span class="stage-pill both">Mixed</span></td>
+            </tr>
+            <tr>
+              <td><strong>Stage 4</strong><br><small>LLM Workflows</small></td>
+              <td>Prompt framing, review, revision, final approval</td>
+              <td>First draft generation, variation production, tightening</td>
+              <td><span class="stage-pill ai">AI-accelerated</span></td>
+            </tr>
+            <tr>
+              <td><strong>Stage 5</strong><br><small>Communication</small></td>
+              <td>Message strategy, audience definition, review</td>
+              <td>Copy refinement, asset generation, variant production</td>
+              <td><span class="stage-pill ai">AI-accelerated</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SECTION 8 -->
+    <div class="section-block slate" id="sb8">
+      <div class="sb-head" onclick="toggleBlock('sb8')">
+        <div class="sb-icon">8</div>
+        <div class="sb-title-wrap">
+          <div class="sb-title">Using the Article Handout to Connect the Case to Real Workplace Value</div>
+          <div class="sb-time">20 min · Context &amp; relevance</div>
+        </div>
+        <div class="sb-toggle">+</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-flow">
+          <div class="sb-row">The session includes a curated set of articles showing why the types of workflows and deliverables covered in the programme matter in actual work environments — not just in training contexts.</div>
+          <div class="sb-row">The content connects the five-stage case walkthrough to broader workplace reality: how similar tracking, reporting, automation, AI-assisted drafting, and communication workflows are being applied by real teams across industries and roles.</div>
+          <div class="sb-row end-row">This section ends with a stronger understanding of why these skills transfer — and with language that helps trainees connect what they practised to what employers are actually looking for.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 9 -->
+    <div class="section-block" id="sb9">
+      <div class="sb-head" onclick="toggleBlock('sb9')">
+        <div class="sb-icon">9</div>
+        <div class="sb-title-wrap">
+          <div class="sb-title">Closing with Reflection and Professional Packaging</div>
+          <div class="sb-time">20 min · Portfolio &amp; close</div>
+        </div>
+        <div class="sb-toggle">+</div>
+      </div>
+      <div class="sb-body">
+        <div class="sb-flow">
+          <div class="sb-row">The session closes by helping trainees articulate the skills, tools, and workflow patterns built across the programme — in language that is usable in a portfolio, LinkedIn profile, or professional conversation.</div>
+          <div class="sb-row">The content covers a seven-part presentation framework for explaining the capstone case clearly: business context, problem identified, approach chosen, tools used, output produced, what changed, and what would be done differently.</div>
+          <div class="sb-row">The content also covers the difference between two types of self-description — one that lists tools, and one that describes structured workplace outcomes — and why the second one is consistently more compelling.</div>
+          <div class="sb-row end-row">The programme closes with a professional, articulate summary of what each trainee can now do — framed as workflow capability, not tool familiarity.</div>
+        </div>
+
+        <h4 style="font-size:14px;font-weight:700;color:var(--forest);margin:16px 0 10px;">The seven-part case presentation framework</h4>
+        <div class="pf-list">
+          <div class="pf-item">
+            <div class="pf-step">1</div>
+            <div class="pf-body">
+              <div class="pf-label">Business Context</div>
+              <div class="pf-desc">What the team was doing and what the overall work objective was — one or two sentences, no jargon.</div>
+            </div>
+          </div>
+          <div class="pf-item">
+            <div class="pf-step">2</div>
+            <div class="pf-body">
+              <div class="pf-label">Problem Identified</div>
+              <div class="pf-desc">The specific operational gap that prompted the project — framed as a real problem, not a list of missing tools.</div>
+            </div>
+          </div>
+          <div class="pf-item">
+            <div class="pf-step">3</div>
+            <div class="pf-body">
+              <div class="pf-label">Approach Chosen</div>
+              <div class="pf-desc">Why this approach — why tracking before reporting, why structure before AI — and what that sequence produced.</div>
+            </div>
+          </div>
+          <div class="pf-item">
+            <div class="pf-step">4</div>
+            <div class="pf-body">
+              <div class="pf-label">Tools Used</div>
+              <div class="pf-desc">Named specifically, with one sentence on what each tool was used for in this case — not a general list of capabilities.</div>
+            </div>
+          </div>
+          <div class="pf-item">
+            <div class="pf-step">5</div>
+            <div class="pf-body">
+              <div class="pf-label">Output Produced</div>
+              <div class="pf-desc">The real deliverables: tracker, dashboard, automation rules, AI-reviewed drafts, communication pack. Concrete and nameable.</div>
+            </div>
+          </div>
+          <div class="pf-item">
+            <div class="pf-step">6</div>
+            <div class="pf-body">
+              <div class="pf-label">What Changed</div>
+              <div class="pf-desc">What became faster, more visible, or more reliable as a result — framed in operational terms, not in "I learned" terms.</div>
+            </div>
+          </div>
+          <div class="pf-item">
+            <div class="pf-step">7</div>
+            <div class="pf-body">
+              <div class="pf-label">What Would Be Done Differently</div>
+              <div class="pf-desc">One honest observation — this shows professional judgment, not just execution. It is the detail that makes an explanation credible.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lc-label" style="margin-top:28px;">Example LinkedIn-ready framing</div>
+        <div class="linkedin-card">
+          <div class="lc-header">
+            <div class="lc-avatar">Y</div>
+            <div class="lc-meta">
+              <div class="lc-name">Your Name</div>
+              <div class="lc-role">Operations · Project Coordination · AI-Assisted Workflows</div>
+            </div>
+          </div>
+          <div class="lc-body">
+            <p>Over the past six days I built a complete end-to-end workplace workflow from scratch — structured tracking, KPI dashboards, automation rules, LLM-supported drafting, and a full communication deliverable pack.</p>
+            <p>The core skill was not the tools. It was knowing <strong>what to set up first, why the sequence matters</strong>, and how to review AI-generated output before it is used — rather than accepting it because it looks finished.</p>
+            <p>What I can now do in a real role: set up a working tracker that reporting can read from, build a decision-facing dashboard that doesn't require explanation, automate repeated coordination work, prompt and review AI-generated content responsibly, and produce communication assets that are aligned with an actual audience and objective.</p>
+            <p><span class="lc-tag">#WorkplaceAI</span><span class="lc-tag">#Operations</span><span class="lc-tag">#DigitalSkills</span><span class="lc-tag">#PromptEngineering</span></p>
+          </div>
+        </div>
+
+        <div class="compare-wrap">
+          <div class="cw-col">
+            <div class="cw-head unstructured">Tool-list description</div>
+            <div class="cw-body">
+              <div class="cw-item">I used Notion, Google Sheets, Make, and Canva AI</div>
+              <div class="cw-item">I learned how to build dashboards</div>
+              <div class="cw-item">I worked with automation and AI tools</div>
+              <div class="cw-item">I completed a six-day training programme</div>
+            </div>
+          </div>
+          <div class="cw-col">
+            <div class="cw-head structured">Workflow-outcome description</div>
+            <div class="cw-body">
+              <div class="cw-item">I designed a tracking system that leadership could report from without extra work</div>
+              <div class="cw-item">I built automation rules that removed daily coordination steps from the team lead's workload</div>
+              <div class="cw-item">I applied a generate-review-revise workflow to AI-drafted content before it was approved for use</div>
+              <div class="cw-item">I produced a three-part communication pack with documented rationale for every decision</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="gold-strip">
+          <strong>The standard that matters:</strong> "The case is complete. The work is explainable." — Being able to walk someone through what you built, why you made the choices you made, and what it produced is the professional outcome of this programme.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OBJECTIVES DIVIDER -->
+<div class="divider-strip" id="objectives">
+  <div class="wrap">
+    <div class="strip-eyebrow">Programme Outcomes</div>
+    <h2>After this session, the trainee should be able to:</h2>
+    <p>These are not just Day 6 objectives — they reflect the full six-day programme. Each one requires the capstone case to be walkable, explainable, and portfolio-ready.</p>
+    <div class="strip-pills">
+      <div class="strip-pill">13 objectives</div>
+      <div class="strip-pill">Days 1–6 integrated</div>
+    </div>
+  </div>
+</div>
+
+<!-- OBJECTIVES -->
+<section class="sec-white" id="objectives-list">
+  <div class="wrap">
+    <div class="blk-label"><span class="blk-num">3</span> Learning Objectives</div>
+    <h2 class="sec-title">Competencies consolidated today</h2>
+    <p class="sec-sub">These objectives summarise what the programme as a whole has built. Tick each one as you feel you could explain it clearly to someone who was not in the room — without notes.</p>
+
+    <div class="obj-progress">
+      <div class="progress-bar"><div class="progress-fill" id="prog-fill"></div></div>
+      <div class="progress-label" id="prog-label">0 / 13</div>
+    </div>
+
+    <div class="obj-list" id="obj-list">
+
+      <div class="obj-item" id="o1" onclick="toggleObj('o1')">
+        <span class="obj-verb">Explain</span>
+        <span class="obj-text">One full workplace case in terms of its business context, required outputs, tool choices, and the reason each stage was sequenced the way it was.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o2" onclick="toggleObj('o2')">
+        <span class="obj-verb">Trace</span>
+        <span class="obj-text">How the skills from Days 1–5 connect inside one realistic end-to-end workflow — showing how each stage's output became the input for the next.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o3" onclick="toggleObj('o3')">
+        <span class="obj-verb">Describe</span>
+        <span class="obj-text">How structured workspace setup and tracked fields support the reporting, automation, and AI-assisted work that follow — and why structure must come first.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o4" onclick="toggleObj('o4')">
+        <span class="obj-verb">Explain</span>
+        <span class="obj-text">How tracked operational data becomes KPI-based reporting and a decision-ready dashboard — and what distinguishes a useful dashboard from one that just shows numbers.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o5" onclick="toggleObj('o5')">
+        <span class="obj-verb">Identify</span>
+        <span class="obj-text">Where automation adds value inside a repeated workplace workflow — distinguishing tasks that are automatable from those that require ongoing human judgment.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o6" onclick="toggleObj('o6')">
+        <span class="obj-verb">Explain</span>
+        <span class="obj-text">How LLM workflows supported summarisation, structuring, review, and output improvement in practical workplace tasks — and why AI entered the workflow at Stage 4 rather than Stage 1.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o7" onclick="toggleObj('o7')">
+        <span class="obj-verb">Distinguish</span>
+        <span class="obj-text">Between AI-assisted output that is ready to use and output that still requires revision or rejection — based on a defined evaluation standard, not on appearance.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o8" onclick="toggleObj('o8')">
+        <span class="obj-verb">Explain</span>
+        <span class="obj-text">How communication deliverables are built from message hierarchy, evidence, CTA, and audience needs — and why visual production is the last step, not the first.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o9" onclick="toggleObj('o9')">
+        <span class="obj-verb">Compare</span>
+        <span class="obj-text">Manual work and AI-assisted work across multiple stages of the same case — identifying where each approach is more appropriate and what conditions make AI support reliable rather than risky.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o10" onclick="toggleObj('o10')">
+        <span class="obj-verb">Connect</span>
+        <span class="obj-text">The case-study work to real workplace value — using external article references to explain why similar workflows and deliverables matter in actual operations, reporting, and communication roles.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o11" onclick="toggleObj('o11')">
+        <span class="obj-verb">Summarise</span>
+        <span class="obj-text">The main tools, methods, and outputs covered during the training in a clear professional way — describing workflow capability rather than tool familiarity.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o12" onclick="toggleObj('o12')">
+        <span class="obj-verb">Describe</span>
+        <span class="obj-text">Their readiness in terms of realistic workplace workflows — explaining what they can set up, produce, review, and deliver — rather than listing the tools they were exposed to.</span>
+        <div class="obj-check"></div>
+      </div>
+      <div class="obj-item" id="o13" onclick="toggleObj('o13')">
+        <span class="obj-verb">Produce</span>
+        <span class="obj-text">A LinkedIn-ready or portfolio-ready summary of the practical workflow skills covered during the programme — grounded in the capstone case and framed as professional workplace capability.</span>
+        <div class="obj-check"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-title">Day 6 · Capstone Delivery &amp; Portfolio</div>
+  <p class="footer-sub">The case is complete. The work is explainable. That is the standard that matters.</p>
+</footer>
+
+<script>
+function toggleBlock(id){
+  document.getElementById(id).classList.toggle('open');
+}
+function switchTab(btn, panelId){
+  btn.closest('.tab-wrap').querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  btn.closest('.tab-wrap').querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(panelId).classList.add('active');
+}
+
+let objCount = 0;
+const objTotal = 13;
+function toggleObj(id){
+  const el = document.getElementById(id);
+  const wasChecked = el.classList.contains('checked');
+  el.classList.toggle('checked');
+  objCount += wasChecked ? -1 : 1;
+  document.getElementById('prog-fill').style.width = (objCount / objTotal * 100) + '%';
+  document.getElementById('prog-label').textContent = objCount + ' / ' + objTotal;
+}
+
+const navLinks = document.querySelectorAll('.tb-link');
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY + 80;
+  let current = '';
+  document.querySelectorAll('[id]').forEach(el => {
+    if(el.offsetTop <= scrollY) current = el.id;
+  });
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if(link.getAttribute('href') === '#' + current) link.classList.add('active');
+  });
+});
+
+toggleBlock('sb1');
+</script>
+</body>
+</html>
