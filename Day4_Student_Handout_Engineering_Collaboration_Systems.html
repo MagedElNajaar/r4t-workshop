@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Day 4 — Student Handout · Engineering Collaboration Systems</title>
+<style>
+:root{
+  --bg:#F5F3EE;--surface:#FFFFFF;--surface-2:#EDEAE3;--ink:#1A1824;--ink-2:#4A4760;--muted:#8E8C9A;
+  --navy:#1D3557;--navy-2:#2A4A73;--accent:#C74B2C;--green:#2A7251;--blue:#1A56A0;
+  --blue-bg:#EEF4FB;--border:#DDD9D0;--bad:#8B2635;--bad-bg:#FFF5F5;--bad-border:#EAABAB;
+  --good-bg:#F1FAF5;--good-border:#8EC9A8;--amber:#8A5C00;--amber-bg:#FFF8EA;--amber-border:#DDBE6A;
+  --sh:0 1px 3px rgba(0,0,0,.05),0 4px 16px rgba(0,0,0,.04);
+  --sh-md:0 2px 8px rgba(0,0,0,.07),0 10px 32px rgba(0,0,0,.06);
+  --r:10px;--rl:16px;--t:all .2s ease;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:"Helvetica Neue",Arial,sans-serif;
+  font-size:15px;line-height:1.62;-webkit-font-smoothing:antialiased;
+}
+.progress{position:fixed;top:0;left:0;right:0;height:3px;background:var(--surface-2);z-index:400}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--navy));transition:width .15s ease}
+.topnav{
+  position:fixed;top:3px;left:0;right:0;height:50px;background:rgba(26,24,36,.95);
+  backdrop-filter:blur(12px);z-index:300;display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;border-bottom:1px solid rgba(255,255,255,.06)
+}
+.brand{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.45);white-space:nowrap}
+.brand strong{color:rgba(255,255,255,.78)}
+.nav-pill{
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:rgba(255,255,255,.45);
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:100px;padding:4px 12px
+}
+.hero{
+  min-height:100vh;background:var(--navy);padding:105px 28px 78px;display:flex;align-items:center;
+  position:relative;overflow:hidden
+}
+.hero:before{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 70% at 8% 65%,rgba(199,75,44,.18) 0%,transparent 65%),
+    radial-gradient(ellipse 50% 55% at 92% 18%,rgba(26,86,160,.16) 0%,transparent 55%),
+    radial-gradient(ellipse 80% 40% at 50% 100%,rgba(0,0,0,.25) 0%,transparent 60%)
+}
+.wrap{max-width:980px;margin:0 auto;width:100%}
+.hero-inner{position:relative;z-index:1}
+.eyebrow{
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:rgba(255,255,255,.36);
+  margin-bottom:18px;display:flex;align-items:center;gap:10px
+}
+.eyebrow:after{content:"";width:34px;height:1px;background:rgba(255,255,255,.22)}
+.hero-title{
+  font-family:Georgia,"Times New Roman",serif;font-size:clamp(30px,5vw,56px);font-weight:400;color:#fff;
+  line-height:1.12;letter-spacing:-.02em;max-width:760px;margin-bottom:18px
+}
+.hero-title em{color:rgba(255,255,255,.65);font-style:italic}
+.hero-sub{font-size:clamp(14px,2vw,18px);color:rgba(255,255,255,.56);max-width:650px;line-height:1.7;margin-bottom:34px}
+.carry{
+  background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.1);border-left:4px solid rgba(199,75,44,.7);
+  border-radius:var(--r);padding:20px 24px;max-width:720px;margin-bottom:34px
+}
+.carry-label{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.34);font-weight:700;margin-bottom:8px}
+.carry p{color:rgba(255,255,255,.72);margin:0}
+.hero-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;max-width:900px}
+.hero-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--r);padding:13px 12px}
+.hc-label{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.32);font-weight:700;margin-bottom:5px}
+.hc-name{font-size:13px;color:rgba(255,255,255,.86);font-weight:700;line-height:1.3}
+section{scroll-margin-top:55px;padding:78px 28px 82px}
+.white{background:var(--surface)}
+.warm{background:var(--bg)}
+.label{font-size:10px;letter-spacing:.17em;text-transform:uppercase;font-weight:700;color:var(--accent);margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.label:after{content:"";height:1px;flex:1;background:var(--border)}
+.title{font-family:Georgia,"Times New Roman",serif;font-size:clamp(23px,3.5vw,38px);font-weight:400;line-height:1.22;color:var(--ink);letter-spacing:-.015em;margin-bottom:12px}
+.sub{font-size:clamp(14px,1.8vw,16.5px);color:var(--ink-2);max-width:740px;line-height:1.7;margin-bottom:30px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:22px 0}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh)}
+.warm .card{background:#fff}
+.card.top-navy{border-top:3px solid var(--navy)}
+.card.top-accent{border-top:3px solid var(--accent)}
+.card.top-green{border-top:3px solid var(--green)}
+.card.top-blue{border-top:3px solid var(--blue)}
+.card.top-bad{border-top:3px solid var(--bad)}
+.card h3{font-size:14px;color:var(--ink);margin-bottom:7px;line-height:1.35}
+.card p,.card li{font-size:13.5px;color:var(--ink-2);line-height:1.55}
+.tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border-radius:5px;padding:3px 9px;margin-bottom:8px}
+.tag.navy{background:rgba(29,53,87,.09);color:var(--navy);border:1px solid rgba(29,53,87,.16)}
+.tag.green{background:rgba(42,114,81,.09);color:var(--green);border:1px solid var(--good-border)}
+.tag.blue{background:var(--blue-bg);color:var(--blue);border:1px solid rgba(26,86,160,.18)}
+.tag.accent{background:rgba(199,75,44,.08);color:var(--accent);border:1px solid rgba(199,75,44,.2)}
+.tag.bad{background:var(--bad-bg);color:var(--bad);border:1px solid var(--bad-border)}
+.tag.amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.callout{border-radius:var(--r);padding:16px 20px;margin:22px 0;font-size:14px;line-height:1.6}
+.callout.navy{background:var(--navy);color:#fff}
+.callout.navy p{color:rgba(255,255,255,.76)}
+.callout.blue{background:var(--blue-bg);border:1px solid rgba(26,86,160,.22);border-left:4px solid var(--blue);color:var(--navy)}
+.callout.green{background:var(--good-bg);border:1px solid var(--good-border);border-left:4px solid var(--green)}
+.callout.amber{background:var(--amber-bg);border:1px solid var(--amber-border);border-left:4px solid var(--amber)}
+.callout.red{background:var(--bad-bg);border:1px solid var(--bad-border);border-left:4px solid var(--bad);color:var(--bad)}
+.journey{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);box-shadow:var(--sh-md);overflow:hidden;margin:26px 0}
+.journey-row{display:grid;grid-template-columns:96px 1fr 1.3fr;border-bottom:1px solid var(--border);align-items:center}
+.journey-row:last-child{border-bottom:none}
+.jr-time{font-family:"Courier New",monospace;font-size:12px;color:var(--muted);padding:14px 18px;background:var(--surface-2);height:100%;display:flex;align-items:center}
+.jr-title{font-size:14px;font-weight:700;color:var(--ink);padding:14px 16px}
+.jr-desc{font-size:13px;color:var(--ink-2);padding:14px 18px;border-left:1px solid var(--border);line-height:1.45}
+.compare{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh-md);margin:22px 0}
+.comp-col:first-child{border-right:1px solid var(--border)}
+.comp-head{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:10px 16px;border-bottom:1px solid var(--border)}
+.weak .comp-head{background:var(--bad-bg);color:var(--bad);border-color:var(--bad-border)}
+.strong .comp-head{background:var(--good-bg);color:var(--green);border-color:var(--good-border)}
+.comp-item{padding:9px 16px;font-size:13px;color:var(--ink-2);border-bottom:1px solid var(--border);line-height:1.45}
+.comp-item:last-child{border-bottom:none}
+.weak .comp-item{color:var(--bad);font-style:italic}
+.strong .comp-item{color:var(--ink-2)}
+.flow{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh-md);margin:22px 0}
+.flow-head{background:var(--navy);color:#fff;padding:12px 20px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+.flow-row{display:grid;grid-template-columns:170px 1fr;border-bottom:1px solid var(--border)}
+.flow-row:last-child{border-bottom:none}
+.flow-key{background:var(--surface-2);border-right:1px solid var(--border);padding:12px 15px;font-size:11px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+.flow-val{padding:12px 16px;font-size:13.5px;color:var(--ink-2);line-height:1.55}
+.collapse{margin:18px 0;border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;background:var(--surface);box-shadow:var(--sh)}
+.coll-head{display:flex;align-items:center;gap:12px;padding:16px 20px;background:var(--surface-2);cursor:pointer;user-select:none}
+.coll-num{width:28px;height:28px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.coll-title{font-size:15px;font-weight:700;color:var(--ink);line-height:1.35;flex:1}
+.coll-toggle{font-size:18px;color:var(--muted);transition:var(--t)}
+.coll-head.open .coll-toggle{transform:rotate(45deg);color:var(--accent)}
+.coll-body{display:none;padding:22px}
+.coll-body.open{display:block}
+.mini-list{list-style:none;margin:10px 0}
+.mini-list li{position:relative;padding:8px 0 8px 18px;border-bottom:1px solid var(--border);font-size:13.5px;color:var(--ink-2);line-height:1.5}
+.mini-list li:last-child{border-bottom:none}
+.mini-list li:before{content:"";position:absolute;left:3px;top:17px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.checkgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:20px 0}
+.check{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--navy);border-radius:var(--r);padding:12px 15px;font-size:13.2px;color:var(--ink-2);line-height:1.5}
+.gloss{margin:20px 0}
+.gloss-item{border-bottom:1px solid var(--border)}
+.gloss-item:first-child{border-top:1px solid var(--border)}
+.gloss-q{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:12px 4px;font-size:14px;font-weight:700;color:var(--ink)}
+.gloss-q span{color:var(--muted);font-size:18px;transition:var(--t)}
+.gloss-item.open .gloss-q span{transform:rotate(45deg);color:var(--accent)}
+.gloss-a{display:none;padding:0 4px 13px;font-size:13.5px;color:var(--ink-2);line-height:1.6}
+.gloss-item.open .gloss-a{display:block}
+.final{background:var(--navy);border-radius:var(--rl);padding:30px 34px;color:#fff;position:relative;overflow:hidden;box-shadow:var(--sh-md);margin:26px 0}
+.final:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 55% 60% at 92% 8%,rgba(42,114,81,.2) 0%,transparent 55%),radial-gradient(ellipse 50% 55% at 8% 90%,rgba(199,75,44,.16) 0%,transparent 55%)}
+.final > *{position:relative;z-index:1}
+.final h2{font-family:Georgia,serif;font-weight:400;line-height:1.25;font-size:clamp(20px,3vw,30px);margin-bottom:16px}
+.final p{color:rgba(255,255,255,.74)}
+.footer{padding:26px 24px 42px;text-align:center;background:#14121E;color:rgba(255,255,255,.45);font-size:12px;letter-spacing:.05em;text-transform:uppercase}
+@media(max-width:900px){.hero-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:800px){
+  .grid-4{grid-template-columns:repeat(2,1fr)}.grid-3,.grid-2,.checkgrid{grid-template-columns:1fr}
+  .journey-row{grid-template-columns:1fr}.jr-time{height:auto}.jr-desc{border-left:none;border-top:1px solid var(--border)}
+  .flow-row{grid-template-columns:1fr}.flow-key{border-right:none;border-bottom:1px solid var(--border)}
+  .compare{grid-template-columns:1fr}.comp-col:first-child{border-right:none;border-bottom:1px solid var(--border)}
+}
+@media(max-width:560px){
+  .topnav{padding:0 14px}.nav-pill{display:none}.hero{padding:92px 20px 60px}section{padding:64px 20px}
+  .hero-grid{grid-template-columns:1fr}.coll-body{padding:18px}.final{padding:24px 22px}
+}
+@media print{.progress,.topnav{display:none}body{background:#fff}section,.hero{min-height:auto;padding:36px 20px}.collapse .coll-body,.gloss-a{display:block}.hero{background:var(--navy)}}
+</style>
+</head>
+<body>
+<div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+<nav class="topnav">
+  <div class="brand"><strong>Day 4</strong> · Student Handout</div>
+  <div class="nav-pill">Engineering Collaboration Systems</div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap hero-inner">
+    <div class="eyebrow">Day 4 · Engineering Collaboration Systems</div>
+    <h1 class="hero-title">One change.<br><em>Now it has to move.</em></h1>
+    <p class="hero-sub">The implementation reasoning is done. Now the same change enters the layer where teams collaborate: branches, commits, pull requests, review, merge, release, and environment awareness.</p>
+    <div class="carry">
+      <div class="carry-label">Carried forward from Day 3</div>
+      <p><strong>Auto-escalation trigger on SLA breach.</strong> Same support escalation project. Same feature. The question shifts from what should be built to how this change moves safely through a team engineering workflow.</p>
+    </div>
+    <div class="hero-grid">
+      <div class="hero-card"><div class="hc-label">01</div><div class="hc-name">Repo-ready change</div></div>
+      <div class="hero-card"><div class="hc-label">02</div><div class="hc-name">Branch strategy</div></div>
+      <div class="hero-card"><div class="hc-label">03</div><div class="hc-name">Commit discipline</div></div>
+      <div class="hero-card"><div class="hc-label">04</div><div class="hc-name">Pull request</div></div>
+      <div class="hero-card"><div class="hc-label">05</div><div class="hc-name">Code review</div></div>
+      <div class="hero-card"><div class="hc-label">06</div><div class="hc-name">Merge + release</div></div>
+    </div>
+  </div>
+</header>
+
+<section class="white" id="overview">
+  <div class="wrap">
+    <div class="label">Session Overview</div>
+    <h2 class="title">What Day 4 is really about.</h2>
+    <p class="sub">Day 4 is not a Git command lesson. It teaches the collaboration layer that makes engineering work visible, reviewable, safe to merge, and traceable after the work leaves one engineer’s machine.</p>
+
+    <div class="callout navy">
+      <p><strong>Core idea:</strong> A change is not ready because code exists. It becomes ready when it is isolated, explained, reviewed, approved, merged, and released with enough evidence that the team can trust it.</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="card top-navy">
+        <span class="tag navy">Before Day 4</span>
+        <h3>The work is defined</h3>
+        <p>Requirements, Jira structure, AI-assisted implementation thinking, and evidence have already shaped the work.</p>
+      </div>
+      <div class="card top-accent">
+        <span class="tag accent">During Day 4</span>
+        <h3>The change becomes collaborative</h3>
+        <p>The feature enters repository workflow: branch, commit history, pull request, review, merge, and release awareness.</p>
+      </div>
+      <div class="card top-green">
+        <span class="tag green">After Day 4</span>
+        <h3>The team can judge movement</h3>
+        <p>Learners can explain how a code change moves safely through team engineering systems without becoming hidden or chaotic.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="warm" id="journey">
+  <div class="wrap">
+    <div class="label">Day Journey</div>
+    <h2 class="title">The collaboration path.</h2>
+    <p class="sub">Use this journey as your map while reviewing the workshop. Each step answers a different collaboration question.</p>
+
+    <div class="journey">
+      <div class="journey-row">
+        <div class="jr-time">S1</div>
+        <div class="jr-title">Repo-ready change</div>
+        <div class="jr-desc">Can the work item be stated as one bounded, testable change that someone else can understand?</div>
+      </div>
+      <div class="journey-row">
+        <div class="jr-time">S2</div>
+        <div class="jr-title">Branch isolation</div>
+        <div class="jr-desc">Can the change live in a branch that protects the main line and clearly connects to the tracked work?</div>
+      </div>
+      <div class="journey-row">
+        <div class="jr-time">S3</div>
+        <div class="jr-title">Commit history</div>
+        <div class="jr-desc">Can the history explain the change step by step instead of forcing the reviewer to reconstruct it?</div>
+      </div>
+      <div class="journey-row">
+        <div class="jr-time">S4</div>
+        <div class="jr-title">Review-ready PR</div>
+        <div class="jr-desc">Does the PR title, summary, evidence, tests, and risk note help the reviewer before opening the diff?</div>
+      </div>
+      <div class="journey-row">
+        <div class="jr-time">S5</div>
+        <div class="jr-title">Code review</div>
+        <div class="jr-desc">Can reviewer and author reduce ambiguity through clear comments, responses, and decision-making?</div>
+      </div>
+      <div class="journey-row">
+        <div class="jr-time">S6</div>
+        <div class="jr-title">Merge + release</div>
+        <div class="jr-desc">Does the team understand that approval, merge, deployment, and production impact are related but not identical?</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="white" id="principles">
+  <div class="wrap">
+    <div class="label">Core Rules</div>
+    <h2 class="title">The rules to remember.</h2>
+    <p class="sub">These are the mental shortcuts learners should carry into assignments, interviews, onboarding, and real team work.</p>
+
+    <div class="grid-4">
+      <div class="card top-navy">
+        <span class="tag navy">Repo</span>
+        <h3>Define before branching</h3>
+        <p>If the change cannot be stated in one sentence, the branch will inherit the ambiguity.</p>
+      </div>
+      <div class="card top-blue">
+        <span class="tag blue">Branch</span>
+        <h3>One branch, one story</h3>
+        <p>A branch should isolate one bounded change, not become a container for unrelated discoveries.</p>
+      </div>
+      <div class="card top-accent">
+        <span class="tag accent">Commit</span>
+        <h3>History is communication</h3>
+        <p>A commit is a readable checkpoint, not just a save point. The message should reveal the step.</p>
+      </div>
+      <div class="card top-green">
+        <span class="tag green">Review</span>
+        <h3>PRs are handoffs</h3>
+        <p>A PR should frame the change for the reviewer before the reviewer reads the full diff.</p>
+      </div>
+    </div>
+
+    <div class="compare">
+      <div class="comp-col weak">
+        <div class="comp-head">Weak collaboration trail</div>
+        <div class="comp-item">Branch name hides the purpose.</div>
+        <div class="comp-item">Commit messages say “fix,” “changes,” or “final.”</div>
+        <div class="comp-item">PR description repeats the title and provides no evidence.</div>
+        <div class="comp-item">Review comments are vague or personal.</div>
+        <div class="comp-item">Merge is treated as the same thing as production release.</div>
+      </div>
+      <div class="comp-col strong">
+        <div class="comp-head">Stronger collaboration trail</div>
+        <div class="comp-item">Branch name connects to the exact behavior or ticket.</div>
+        <div class="comp-item">Commits show the feature progression step by step.</div>
+        <div class="comp-item">PR explains purpose, tests, risk, and reviewer focus.</div>
+        <div class="comp-item">Review comments reduce ambiguity and name the required action.</div>
+        <div class="comp-item">Merge, deploy, and release are understood as different moments.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="warm" id="sections">
+  <div class="wrap">
+    <div class="label">Detailed Notes</div>
+    <h2 class="title">Section-by-section handout.</h2>
+    <p class="sub">Click each section to review the key idea, what to remember, and what to avoid.</p>
+
+    <div class="collapse">
+      <div class="coll-head" onclick="toggleCollapse(this)">
+        <div class="coll-num">1</div><div class="coll-title">From ready work item to repo-ready change</div><div class="coll-toggle">+</div>
+      </div>
+      <div class="coll-body">
+        <p>A repository does not need a vague idea. It needs a bounded change that can be explained, isolated, reviewed, and tested.</p>
+        <ul class="mini-list">
+          <li>The carried-forward feature is the auto-escalation trigger on SLA breach.</li>
+          <li>A stronger change sentence names the condition, action, and observable outcome.</li>
+          <li>Repo readiness means the change is narrow enough to hand to someone else.</li>
+          <li>Do not use the branch to discover the requirement for the first time.</li>
+        </ul>
+        <div class="callout blue">Memory line: “A change becomes collaborative when someone else can understand what it is supposed to do before reading every line of code.”</div>
+      </div>
+    </div>
+
+    <div class="collapse">
+      <div class="coll-head" onclick="toggleCollapse(this)">
+        <div class="coll-num">2</div><div class="coll-title">Isolating the change with a branch</div><div class="coll-toggle">+</div>
+      </div>
+      <div class="coll-body">
+        <p>A branch protects the shared main line while the change is still being built and reviewed.</p>
+        <ul class="mini-list">
+          <li>Main is a shared line. Unreviewed work should not live there directly.</li>
+          <li>A good branch name makes purpose visible before the diff opens.</li>
+          <li>The same workflow logic appears in different vocabulary across GitHub, GitLab, and Bitbucket.</li>
+          <li>A branch is a decision, not a reflex.</li>
+        </ul>
+        <div class="flow">
+          <div class="flow-head">Branch-start check</div>
+          <div class="flow-row"><div class="flow-key">Scope</div><div class="flow-val">One bounded change, not multiple tickets compressed into one branch.</div></div>
+          <div class="flow-row"><div class="flow-key">Trace</div><div class="flow-val">The branch connects back to a work item, story, or ticket.</div></div>
+          <div class="flow-row"><div class="flow-key">Name</div><div class="flow-val">The branch name shows what behavior is being added, fixed, or changed.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="collapse">
+      <div class="coll-head" onclick="toggleCollapse(this)">
+        <div class="coll-num">3</div><div class="coll-title">Recording usable commit history</div><div class="coll-toggle">+</div>
+      </div>
+      <div class="coll-body">
+        <p>A well-isolated branch can still be hard to review if the history inside it is unreadable.</p>
+        <ul class="mini-list">
+          <li>A commit is a readable checkpoint in the change.</li>
+          <li>Commit messages should say what changed and why that step matters.</li>
+          <li>Weak messages push reconstruction work onto the reviewer.</li>
+          <li>Strong history makes PR writing and review easier.</li>
+        </ul>
+        <div class="compare">
+          <div class="comp-col weak">
+            <div class="comp-head">Weak messages</div>
+            <div class="comp-item">updates</div>
+            <div class="comp-item">fix</div>
+            <div class="comp-item">final changes</div>
+          </div>
+          <div class="comp-col strong">
+            <div class="comp-head">Stronger messages</div>
+            <div class="comp-item">add SLA breach detection logic</div>
+            <div class="comp-item">record escalation event on threshold breach</div>
+            <div class="comp-item">add tests for SLA auto-escalation trigger</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="collapse">
+      <div class="coll-head" onclick="toggleCollapse(this)">
+        <div class="coll-num">4</div><div class="coll-title">Turning the change into a review-ready PR</div><div class="coll-toggle">+</div>
+      </div>
+      <div class="coll-body">
+        <p>A pull request is a reviewer handoff surface, not a code dump.</p>
+        <ul class="mini-list">
+          <li>The title should name the behavior, not just say “update.”</li>
+          <li>The summary should explain what changed and why.</li>
+          <li>The PR should tell the reviewer where to focus.</li>
+          <li>Tests, screenshots, logs, risks, or known limits should be visible when relevant.</li>
+        </ul>
+        <div class="flow">
+          <div class="flow-head">Useful PR description structure</div>
+          <div class="flow-row"><div class="flow-key">Purpose</div><div class="flow-val">What problem or ticket does this change address?</div></div>
+          <div class="flow-row"><div class="flow-key">Change</div><div class="flow-val">What behavior, files, or modules changed?</div></div>
+          <div class="flow-row"><div class="flow-key">Evidence</div><div class="flow-val">What tests, checks, logs, or manual validations support it?</div></div>
+          <div class="flow-row"><div class="flow-key">Risk</div><div class="flow-val">What should the reviewer watch carefully?</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="collapse">
+      <div class="coll-head" onclick="toggleCollapse(this)">
+        <div class="coll-num">5</div><div class="coll-title">Code review as shared engineering judgment</div><div class="coll-toggle">+</div>
+      </div>
+      <div class="coll-body">
+        <p>Code review is not a personal audit. It is shared quality control around one specific change.</p>
+        <ul class="mini-list">
+          <li>The reviewer checks behavior, risk, readability, maintainability, and tests.</li>
+          <li>A review comment should reduce ambiguity, not add to it.</li>
+          <li>Comments can be questions, suggestions, or required changes.</li>
+          <li>Author responses should explain what changed and why, not only say “done.”</li>
+        </ul>
+        <div class="grid-3">
+          <div class="card top-blue"><span class="tag blue">Question</span><p>Used when the reviewer needs clarification.</p></div>
+          <div class="card top-accent"><span class="tag accent">Suggestion</span><p>Used when the reviewer proposes an improvement but may not block merge.</p></div>
+          <div class="card top-bad"><span class="tag bad">Request</span><p>Used when the reviewer identifies a blocking issue.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="collapse">
+      <div class="coll-head" onclick="toggleCollapse(this)">
+        <div class="coll-num">6</div><div class="coll-title">Merge, release, and environment awareness</div><div class="coll-toggle">+</div>
+      </div>
+      <div class="coll-body">
+        <p>Approval removes one barrier. It does not automatically mean the code is in production.</p>
+        <ul class="mini-list">
+          <li>A PR can be approved but still blocked by checks, conflicts, or pipeline failures.</li>
+          <li>Merge means the code joins the shared repository line.</li>
+          <li>Deployment moves code to an environment.</li>
+          <li>Release means users or teams are actually affected by the change.</li>
+          <li>Some decisions deserve a short ADR or release note so future readers understand why the change exists.</li>
+        </ul>
+        <div class="callout amber">Memory line: “Merged code is shared. Production code is live. Those are not the same thing.”</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="white" id="cheatsheet">
+  <div class="wrap">
+    <div class="label">Quick Reference</div>
+    <h2 class="title">Day 4 cheat sheet.</h2>
+    <p class="sub">Use this as the fast review before an assignment, PR review, or technical interview.</p>
+
+    <div class="checkgrid">
+      <div class="check"><strong>Repo-ready:</strong> one bounded behavior, known scope, visible test expectation, traceable to a work item.</div>
+      <div class="check"><strong>Branch:</strong> isolates the change and makes the purpose visible before the diff opens.</div>
+      <div class="check"><strong>Commit:</strong> records a meaningful step, not just a save point.</div>
+      <div class="check"><strong>PR:</strong> frames purpose, change, evidence, risk, and reviewer focus.</div>
+      <div class="check"><strong>Review:</strong> checks the change with shared judgment and precise feedback.</div>
+      <div class="check"><strong>Merge/release:</strong> separates approval, repository merge, deployment, and production impact.</div>
+    </div>
+
+    <div class="final">
+      <h2>The complete Day 4 move.</h2>
+      <p>Take one real change from the earlier days and make it safe for a team to collaborate around it. The goal is not to memorize tool buttons. The goal is to preserve the story, evidence, and responsibility of the change as it moves through the engineering system.</p>
+    </div>
+  </div>
+</section>
+
+<section class="warm" id="glossary">
+  <div class="wrap">
+    <div class="label">Glossary</div>
+    <h2 class="title">Key terms — click to expand.</h2>
+    <div class="gloss" id="glossaryList"></div>
+  </div>
+</section>
+
+<section class="white" id="selfcheck">
+  <div class="wrap">
+    <div class="label">Self Check</div>
+    <h2 class="title">Can you say yes to each of these?</h2>
+    <p class="sub">Click each item when you can answer it confidently. Use this at the end of the day or before submitting Day 4 work.</p>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:8px;"><span id="checkCount">0</span> / <span id="checkTotal">0</span> checked — <span id="checkMsg">keep going</span></div>
+    <div class="checkgrid" id="selfCheckList"></div>
+  </div>
+</section>
+
+<footer class="footer">Day 4 · Engineering Collaboration Systems · Student Handout</footer>
+
+<script>
+function toggleCollapse(head){
+  head.classList.toggle('open');
+  const body = head.nextElementSibling;
+  body.classList.toggle('open');
+}
+const glossary = [
+  ["Repo-ready change","A change that is precise, bounded, and understandable enough to enter repository workflow."],
+  ["Branch","An isolated line of work used to build and review a change without disturbing the shared main line."],
+  ["Main line","The shared repository line that the team depends on. It should not become a place for unfinished discovery work."],
+  ["Commit","A recorded checkpoint in the history of a change. A useful commit explains one meaningful step."],
+  ["Commit message","The short explanation attached to a commit. Strong messages make the change easier to review and trace."],
+  ["Pull request / Merge request","A handoff surface where a branch is proposed for review and possible merge."],
+  ["Diff","The visible difference between the branch and the target branch. Reviewers inspect the diff, not only the PR explanation."],
+  ["Code review","A shared engineering check on correctness, risk, readability, tests, and maintainability."],
+  ["Approval","A reviewer decision that the change is acceptable to proceed, assuming other checks and policies pass."],
+  ["Merge","The act of bringing branch changes into the target repository line."],
+  ["Deployment","Moving code into an environment such as staging or production."],
+  ["Release","Making the change available or active for users or teams."],
+  ["Pipeline","The automated checks or steps that run before or after merge, such as tests, linting, build, or deployment."],
+  ["ADR","Architecture Decision Record. A short note that records an important technical decision and why it was made."]
+];
+const glossContainer = document.getElementById('glossaryList');
+glossary.forEach(([term,def])=>{
+  const div=document.createElement('div');
+  div.className='gloss-item';
+  div.innerHTML=`<div class="gloss-q" onclick="this.parentElement.classList.toggle('open')">${term}<span>+</span></div><div class="gloss-a">${def}</div>`;
+  glossContainer.appendChild(div);
+});
+
+const checks = [
+  "I can explain why Day 4 continues the same SLA auto-escalation feature instead of starting a new example.",
+  "I can describe a repo-ready change in one clear sentence.",
+  "I can explain why main should not receive unfinished discovery work directly.",
+  "I can write or judge a branch name that reveals purpose.",
+  "I can tell the difference between a save point and a readable commit checkpoint.",
+  "I can explain why weak commit history makes review harder.",
+  "I can describe what a review-ready PR should include before the diff is opened.",
+  "I can separate a review question, suggestion, and required change.",
+  "I can explain why approval, merge, deployment, and release are not the same thing.",
+  "I can identify what evidence makes a change safer to move."
+];
+const selfList = document.getElementById('selfCheckList');
+const count = document.getElementById('checkCount');
+const total = document.getElementById('checkTotal');
+const msg = document.getElementById('checkMsg');
+total.textContent = checks.length;
+checks.forEach(text=>{
+  const div=document.createElement('div');
+  div.className='check';
+  div.style.cursor='pointer';
+  div.innerHTML=text;
+  div.addEventListener('click',()=>{
+    div.classList.toggle('selected');
+    div.style.borderLeftColor = div.classList.contains('selected') ? 'var(--green)' : 'var(--navy)';
+    div.style.background = div.classList.contains('selected') ? 'var(--good-bg)' : 'var(--surface)';
+    const n=document.querySelectorAll('#selfCheckList .selected').length;
+    count.textContent=n;
+    msg.textContent = n===checks.length ? 'ready' : n>=Math.ceil(checks.length*.7) ? 'almost there' : 'keep going';
+  });
+  selfList.appendChild(div);
+});
+
+const fill=document.getElementById('progressFill');
+window.addEventListener('scroll',()=>{
+  const max=document.documentElement.scrollHeight-window.innerHeight;
+  const pct=max>0 ? (window.scrollY/max)*100 : 0;
+  fill.style.width=pct+'%';
+});
+</script>
+</body>
+</html>
